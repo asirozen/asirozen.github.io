@@ -4,426 +4,994 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>טבלאות הישגים תיכון אחד העם</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        :root {
+            --primary-color: #2E7D32;
+            --primary-light: #4CAF50;
+            --secondary-color: #1565C0;
+            --secondary-light: #1976D2;
+            --accent-color: #FF5722;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e0e0e0;
+            --dark-gray: #757575;
+            --white: #ffffff;
+            --success-color: #4CAF50;
+            --warning-color: #FFC107;
+            --error-color: #F44336;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
             direction: rtl;
-            background-color: #f4f4f4;
+            background-color: var(--light-gray);
             padding: 20px;
+            color: var(--text-color);
+            margin: 0;
         }
-        h1 {
-            color: #333;
+        
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 25px 0;
             margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-top: 0;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
-            background-color: white;
-            padding: 20px;
+            background-color: var(--white);
+            padding: 25px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
             margin-bottom: 30px;
         }
-        label {
-            font-size: 18px;
-            margin-top: 15px;
-            display: block;
-            font-weight: bold;
-        }
-        select, input {
-            font-size: 16px;
-            padding: 10px;
-            margin-top: 8px;
-            width: 100%;
-            box-sizing: border-box;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        button {
-            font-size: 18px;
-            padding: 12px 25px;
-            margin-top: 25px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        #result, #tension-result, #rope-result, #run-result, #ball-run-result, #bip-result {
-            font-size: 22px;
-            margin-top: 25px;
-            padding: 15px;
-            background-color: #f8f8f8;
-            border-radius: 5px;
-            min-height: 30px;
-        }
-        .grade {
-            font-size: 24px;
-            color: #2E7D32;
-            font-weight: bold;
-        }
-        .feedback {
-            font-size: 18px;
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .tab-buttons {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .tab-btn {
-            padding: 10px 20px;
-            background-color: #ddd;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 5px;
-        }
-        .tab-btn.active {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        .exercise-image {
-            max-width: 200px;
-            height: 150px;
-            object-fit: cover;
-            margin: 10px;
-            border-radius: 8px;
-            box-shadow: 0 0 8px rgba(0,0,0,0.2);
-            transition: transform 0.3s;
-            cursor: pointer;
-        }
-        .exercise-image:hover {
-            transform: scale(1.05);
-        }
-        .image-container {
+        
+        .tab-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 15px;
-            margin: 30px 0;
-            padding: 15px;
-            background-color: white;
+            margin-bottom: 30px;
+        }
+        
+        .exercise-card {
+            width: 160px;
+            background: var(--white);
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
         }
-        .image-box {
-            text-align: center;
-            flex: 1;
-            min-width: 150px;
+        
+        .exercise-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-        .image-box p {
-            margin-top: 5px;
+        
+        .exercise-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+        
+        .exercise-card p {
+            padding: 12px;
+            margin: 0;
             font-weight: bold;
-            color: #333;
+            color: var(--primary-color);
         }
+        
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tab-btn {
+            padding: 12px 20px;
+            background-color: var(--medium-gray);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-color);
+            transition: all 0.3s;
+        }
+        
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--medium-gray);
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border 0.3s;
+            box-sizing: border-box;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 15px;
+        }
+        
+        button:hover {
+            background-color: var(--primary-light);
+        }
+        
         .time-input {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 10px;
-            margin-top: 10px;
         }
+        
         .time-input input {
             width: 80px;
             text-align: center;
         }
-        .time-labels {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 5px;
-            font-size: 14px;
-            color: #666;
+        
+        .result-container {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: var(--light-gray);
         }
+        
+        .grade {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        
         .champion {
-            color: #FF5722;
-            font-weight: bold;
+            color: #d32f2f;
+            background-color: #ffebee;
         }
+        
         .excellent {
-            color: #4CAF50;
-            font-weight: bold;
+            color: #2e7d32;
+            background-color: #e8f5e9;
         }
+        
         .great {
-            color: #8BC34A;
+            color: #689f38;
+            background-color: #f1f8e9;
         }
+        
         .good {
-            color: #FFC107;
+            color: #ff8f00;
+            background-color: #fff8e1;
         }
+        
         .average {
-            color: #FF9800;
+            color: #ef6c00;
+            background-color: #fff3e0;
         }
+        
         .needs-improvement {
-            color: #F44336;
+            color: #d32f2f;
+            background-color: #ffebee;
         }
+        
         .error {
             color: #d32f2f;
+            background-color: #ffebee;
         }
-        .ball-run-input {
-            padding: 10px;
-            font-size: 16px;
-            width: 150px;
-            margin: 10px auto;
-            display: block;
-        }
-        .ball-run-btn {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 15px;
-            transition: background-color 0.3s;
-        }
-        .ball-run-btn:hover {
-            background-color: #2980b9;
-        }
-        .note {
-            font-size: 14px;
-            color: #666;
-            margin-top: 10px;
+        
+        .improvement-section {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: var(--light-gray);
+            border-radius: 8px;
             text-align: right;
         }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
+        
+        .improvement-tips h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
         }
-        .warning {
-            background-color: #fff3cd;
-            color: #856404;
+        
+        .improvement-tips ul {
+            padding-right: 20px;
+            list-style-type: none;
         }
-        .credit {
-            text-align: center;
+        
+        .improvement-tips li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-right: 25px;
+        }
+        
+        .improvement-tips li:before {
+            content: "→";
+            position: absolute;
+            right: 0;
+            color: var(--primary-color);
+        }
+        
+        .progress-section {
             margin-top: 30px;
-            color: #666;
+        }
+        
+        .progress-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .progress-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .progress-input input {
+            flex: 1;
+        }
+        
+        .progress-input button {
+            margin: 0;
+        }
+        
+        .progress-records {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid var(--medium-gray);
+            border-radius: 6px;
+            padding: 10px;
+        }
+        
+        .record-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+        
+        .record-item:last-child {
+            border-bottom: none;
+        }
+        
+        .chart-container {
+            margin-top: 30px;
+            height: 300px;
+            position: relative;
+        }
+        
+        .chart-controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .reset-btn {
+            background-color: var(--error-color);
+            padding: 8px 15px;
             font-size: 14px;
         }
-        .credit a {
-            color: #4CAF50;
+        
+        .reset-btn:hover {
+            background-color: #e53935;
+        }
+        
+        .training-plan {
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .training-plan-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .training-plan-btn:hover {
+            background-color: var(--secondary-light);
+        }
+        
+        .training-plan-content {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            text-align: right;
+        }
+        
+        .plan-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .plan-options select, .plan-options button {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--medium-gray);
+        }
+        
+        .generated-plan {
+            text-align: right;
+            padding: 15px;
+            background-color: var(--white);
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: var(--dark-gray);
+            font-size: 14px;
+        }
+        
+        .footer a {
+            color: var(--primary-color);
             text-decoration: none;
         }
-        .footer-note {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #666;
-            padding: 10px;
-            background-color: #f8f8f8;
-            border-radius: 5px;
-        }
+        
         @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .exercise-card {
+                width: 140px;
+            }
+            
             .tab-buttons {
                 flex-direction: column;
             }
+            
             .tab-btn {
                 width: 100%;
             }
-            .exercise-image {
-                max-width: 150px;
-                height: 120px;
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .plan-options {
+                flex-direction: column;
+            }
+            
+            .plan-options select, .plan-options button {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <h1>טבלאות הישגים תיכון אחד העם</h1>
-    
-    <div class="image-container">
-        <div class="image-box">
-            <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80" 
-                 alt="כפיפות מרפקים" 
-                 class="exercise-image"
-                 onclick="openTab('pushups')">
-            <p>כפיפות מרפקים</p>
-        </div>
-        <div class="image-box">
-            <img src="https://images.unsplash.com/photo-1605296867424-35fc25c9212a?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80" 
-                 alt="עליות מתח" 
-                 class="exercise-image"
-                 onclick="openTab('tension')">
-            <p>עליות מתח</p>
-        </div>
-        <div class="image-box">
-            <img src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80" 
-                 alt="ריצה" 
-                 class="exercise-image"
-                 onclick="openTab('run')">
-            <p>ריצה</p>
-        </div>
-        <div class="image-box">
-            <img src="https://www.snoridgecrossfit.com/wp-content/uploads/2016/08/SnoRidge-CrossFit_Med-Ball-Run.jpg" 
-                 alt="ריצת כדורי כח" 
-                 class="exercise-image"
-                 onclick="openTab('ball-run')">
-            <p>ריצת כדורי כח</p>
-        </div>
-        <div class="image-box">
-            <img src="https://www.wincol.ac.il/wincol.ac.il/originals/beep%20test.jpg" 
-                 alt="ריצת ביפ" 
-                 class="exercise-image"
-                 onclick="openTab('bip')">
-            <p>ריצת ביפ</p>
-        </div>
-    </div>
-    <div class="image-box">
-        <img src="https://portavozdigital.com/wp-content/uploads/2020/10/saltar-la-cuerda-1024x693.jpg" 
-             alt="קפיצות בדלגית" 
-             class="exercise-image"
-             onclick="openTab('rope')">
-        <p>קפיצות בדלגית</p>
-    </div>
-</div>
-    <div class="tab-buttons">
-        <button class="tab-btn active" data-tab="pushups">כפיפות מרפקים</button>
-        <button class="tab-btn" data-tab="tension">מתח</button>
-        <button class="tab-btn" data-tab="rope">קפיצות בדלגית</button>
-        <button class="tab-btn" data-tab="run">2000 מטר</button>
-        <button class="tab-btn" data-tab="ball-run">ריצת כדורי כח</button>
-        <button class="tab-btn" data-tab="bip">ריצת ביפ</button>
+    <div class="header">
+        <h1>טבלאות הישגים - תיכון אחד העם</h1>
+        <p class="subtitle">חישוב ציונים ומעקב התקדמות בתרגילים הספורטיביים</p>
     </div>
     
+    <div class="container">
+        <div class="tab-container">
+            <div class="exercise-card" onclick="openTab('pushups')">
+                <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80" alt="כפיפות מרפקים">
+                <p>כפיפות מרפקים</p>
+            </div>
+            <div class="exercise-card" onclick="openTab('tension')">
+                <img src="https://images.unsplash.com/photo-1605296867424-35fc25c9212a?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80" alt="עליות מתח">
+                <p>עליות מתח</p>
+            </div>
+            <div class="exercise-card" onclick="openTab('rope')">
+                <img src="https://portavozdigital.com/wp-content/uploads/2020/10/saltar-la-cuerda-1024x693.jpg" alt="קפיצות בדלגית">
+                <p>קפיצות בדלגית</p>
+            </div>
+            <div class="exercise-card" onclick="openTab('run')">
+                <img src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80" alt="ריצה">
+                <p>ריצת 2000 מ'</p>
+            </div>
+            <div class="exercise-card" onclick="openTab('ball-run')">
+                <img src="https://www.snoridgecrossfit.com/wp-content/uploads/2016/08/SnoRidge-CrossFit_Med-Ball-Run.jpg" alt="ריצת כדורי כח">
+                <p>ריצת כדורי כח</p>
+            </div>
+            <div class="exercise-card" onclick="openTab('bip')">
+                <img src="https://www.wincol.ac.il/wincol.ac.il/originals/beep%20test.jpg" alt="ריצת ביפ">
+                <p>ריצת ביפ</p>
+            </div>
+        </div>
+        
+        <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="pushups">כפיפות מרפקים</button>
+            <button class="tab-btn" data-tab="tension">עליות מתח</button>
+            <button class="tab-btn" data-tab="rope">קפיצות בדלגית</button>
+            <button class="tab-btn" data-tab="run">ריצת 2000 מ'</button>
+            <button class="tab-btn" data-tab="ball-run">ריצת כדורי כח</button>
+            <button class="tab-btn" data-tab="bip">ריצת ביפ</button>
+        </div>
+    </div>
+    
+    <!-- כפיפות מרפקים -->
     <div id="pushups" class="tab-content active">
         <div class="container">
             <h2>טבלת הישגים - כפיפות מרפקים</h2>
             
-            <label for="grade">בחר שכבת גיל:</label>
-            <select id="grade">
-                <option value="י'">שכבת י'</option>
-                <option value="יא">שכבת י"א</option>
-                <option value="יב">שכבת י"ב</option>
-            </select>
+            <div class="form-group">
+                <label for="grade">שכבת גיל:</label>
+                <select id="grade">
+                    <option value="י'">שכבת י'</option>
+                    <option value="יא">שכבת י"א</option>
+                    <option value="יב">שכבת י"ב</option>
+                </select>
+            </div>
             
-            <label for="score">הזן מספר כפיפות מרפקים:</label>
-            <input type="number" id="score" placeholder="לדוגמה: 45" min="0" max="100">
+            <div class="form-group">
+                <label for="score">מספר כפיפות מרפקים:</label>
+                <input type="number" id="score" placeholder="לדוגמה: 45" min="0" max="100">
+            </div>
             
             <button onclick="calculateGrade()">חשב ציון</button>
             
-            <div id="result"></div>
-            <div id="feedback" class="feedback"></div>
+            <div class="result-container">
+                <div id="result"></div>
+                <div id="feedback" class="feedback"></div>
+            </div>
+            
+            <div class="improvement-section">
+                <div class="improvement-tips">
+                    <h3>טיפים לשיפור בכפיפות מרפקים</h3>
+                    <ul>
+                        <li>התחל עם תרגילים בסיסיים כמו כפיפות מרפקים מול קיר או עם ברכיים על הרצפה</li>
+                        <li>שמור על גוף ישר וחזק לאורך כל התרגיל</li>
+                        <li>נשום פנימה כאשר אתה מוריד את עצמך ונשוף החוצה כאשר אתה דוחף מעלה</li>
+                        <li>הגדל בהדרגה את מספר החזרות בכל אימון</li>
+                        <li>בצע אימוני כוח נוספים לשרירי החזה, הכתפיים והזרועות</li>
+                        <li>שמור על תזונה עשירה בחלבונים לתמיכה בבניית השריר</li>
+                    </ul>
+                </div>
+                
+                <div class="progress-section">
+                    <h3>מעקב התקדמות</h3>
+                    <div class="progress-form">
+                        <div class="progress-input">
+                            <input type="date" id="pushups-date">
+                            <input type="number" id="pushups-count" placeholder="מספר כפיפות">
+                            <button onclick="addProgressRecord('pushups')">הוסף תוצאה</button>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-records" id="pushups-records">
+                        <!-- רשומות ההתקדמות יופיעו כאן -->
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="pushups-chart"></canvas>
+                        <div class="chart-controls">
+                            <button onclick="resetProgressRecords('pushups')" class="reset-btn">אפס נתונים</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="training-plan">
+                    <button onclick="toggleTrainingPlan()" class="training-plan-btn">הצג תוכנית אימונים</button>
+                    <div id="training-plan-content" class="training-plan-content">
+                        <h3>תוכנית אימונים מומלצת</h3>
+                        <div class="plan-options">
+                            <select id="plan-level">
+                                <option value="beginner">מתחיל</option>
+                                <option value="intermediate">מתקדם</option>
+                                <option value="advanced">מתקדם מאוד</option>
+                            </select>
+                            <select id="plan-duration">
+                                <option value="4">4 שבועות</option>
+                                <option value="8">8 שבועות</option>
+                                <option value="12">12 שבועות</option>
+                            </select>
+                            <button onclick="generateTrainingPlan('pushups')">צור תוכנית</button>
+                        </div>
+                        <div id="generated-plan-pushups" class="generated-plan"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     
+    <!-- עליות מתח -->
     <div id="tension" class="tab-content">
         <div class="container">
-            <h2>טבלת הישגים - מתח</h2>
+            <h2>טבלת הישגים - עליות מתח</h2>
             
-            <label for="tension-grade">בחר שכבת גיל:</label>
-            <select id="tension-grade">
-                <option value="י">שכבת י'</option>
-                <option value="יא">שכבת י"א</option>
-                <option value="יב">שכבת י"ב</option>
-            </select>
+            <div class="form-group">
+                <label for="tension-grade">שכבת גיל:</label>
+                <select id="tension-grade">
+                    <option value="י">שכבת י'</option>
+                    <option value="יא">שכבת י"א</option>
+                    <option value="יב">שכבת י"ב</option>
+                </select>
+            </div>
             
-            <label for="tension-score">הזן מספר פעמים במתח:</label>
-            <input type="number" id="tension-score" placeholder="לדוגמה: 12" min="0" max="100">
+            <div class="form-group">
+                <label for="tension-score">מספר עליות מתח:</label>
+                <input type="number" id="tension-score" placeholder="לדוגמה: 12" min="0" max="100">
+            </div>
             
             <button onclick="calculateTensionGrade()">חשב ציון</button>
             
-            <div id="tension-result"></div>
-            <div id="tension-feedback" class="feedback"></div>
+            <div class="result-container">
+                <div id="tension-result"></div>
+                <div id="tension-feedback" class="feedback"></div>
+            </div>
+            
+            <div class="improvement-section">
+                <div class="improvement-tips">
+                    <h3>טיפים לשיפור בעליות מתח</h3>
+                    <ul>
+                        <li>התחל עם תרגילי הכנה כמו תלייה על המתח למשך זמן</li>
+                        <li>בצע תרגילי תנופה עם קפיצה קלה לעזרה בהתחלה</li>
+                        <li>שמור על אחיזה רחבה מעט יותר מרוחב הכתפיים</li>
+                        <li>השתמש בחגורת משקל או עזרים אחרים להפחתת משקל אם צריך</li>
+                        <li>בצע אימונים לשרירי הגב והיד האחורית</li>
+                        <li>הגדל בהדרגה את מספר החזרות בכל אימון</li>
+                    </ul>
+                </div>
+                
+                <div class="progress-section">
+                    <h3>מעקב התקדמות</h3>
+                    <div class="progress-form">
+                        <div class="progress-input">
+                            <input type="date" id="tension-date">
+                            <input type="number" id="tension-count" placeholder="מספר עליות">
+                            <button onclick="addProgressRecord('tension')">הוסף תוצאה</button>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-records" id="tension-records">
+                        <!-- רשומות ההתקדמות יופיעו כאן -->
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="tension-chart"></canvas>
+                        <div class="chart-controls">
+                            <button onclick="resetProgressRecords('tension')" class="reset-btn">אפס נתונים</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="training-plan">
+                    <button onclick="toggleTrainingPlan()" class="training-plan-btn">הצג תוכנית אימונים</button>
+                    <div id="training-plan-content-tension" class="training-plan-content">
+                        <h3>תוכנית אימונים מומלצת</h3>
+                        <div class="plan-options">
+                            <select id="plan-level-tension">
+                                <option value="beginner">מתחיל</option>
+                                <option value="intermediate">מתקדם</option>
+                                <option value="advanced">מתקדם מאוד</option>
+                            </select>
+                            <select id="plan-duration-tension">
+                                <option value="4">4 שבועות</option>
+                                <option value="8">8 שבועות</option>
+                                <option value="12">12 שבועות</option>
+                            </select>
+                            <button onclick="generateTrainingPlan('tension')">צור תוכנית</button>
+                        </div>
+                        <div id="generated-plan-tension" class="generated-plan"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
+    
+    <!-- קפיצות בדלגית -->
     <div id="rope" class="tab-content">
         <div class="container">
             <h2>טבלת הישגים - קפיצות בדלגית</h2>
             
-            <label for="rope-score">הזן מספר קפיצות בדלגית בדקה:</label>
-            <input type="number" id="rope-score" placeholder="לדוגמה: 120" min="0" max="300">
+            <div class="form-group">
+                <label for="rope-score">מספר קפיצות בדקה:</label>
+                <input type="number" id="rope-score" placeholder="לדוגמה: 120" min="0" max="300">
+            </div>
             
             <button onclick="calculateRopeGrade()">חשב ציון</button>
             
-            <div id="rope-result"></div>
-            <div id="rope-feedback" class="feedback"></div>
+            <div class="result-container">
+                <div id="rope-result"></div>
+                <div id="rope-feedback" class="feedback"></div>
+            </div>
+            
+            <div class="improvement-section">
+                <div class="improvement-tips">
+                    <h3>טיפים לשיפור בקפיצות בדלגית</h3>
+                    <ul>
+                        <li>השתמש בדלגית באורך המתאים לגובה שלך</li>
+                        <li>שמור על מרפקים קרובים לגוף וסיבוב מהפרק בלבד</li>
+                        <li>קפוץ נמוך ובקצב קבוע</li>
+                        <li>התחל עם פרקי זמן קצרים והגדל בהדרגה</li>
+                        <li>תרגל סוגים שונים של קפיצות (רגליים יחד, לסירוגין, צולבות)</li>
+                        <li>בצע אימוני סיבולת לב ריאה נוספים</li>
+                    </ul>
+                </div>
+                
+                <div class="progress-section">
+                    <h3>מעקב התקדמות</h3>
+                    <div class="progress-form">
+                        <div class="progress-input">
+                            <input type="date" id="rope-date">
+                            <input type="number" id="rope-count" placeholder="מספר קפיצות">
+                            <button onclick="addProgressRecord('rope')">הוסף תוצאה</button>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-records" id="rope-records">
+                        <!-- רשומות ההתקדמות יופיעו כאן -->
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="rope-chart"></canvas>
+                        <div class="chart-controls">
+                            <button onclick="resetProgressRecords('rope')" class="reset-btn">אפס נתונים</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="training-plan">
+                    <button onclick="toggleTrainingPlan()" class="training-plan-btn">הצג תוכנית אימונים</button>
+                    <div id="training-plan-content-rope" class="training-plan-content">
+                        <h3>תוכנית אימונים מומלצת</h3>
+                        <div class="plan-options">
+                            <select id="plan-level-rope">
+                                <option value="beginner">מתחיל</option>
+                                <option value="intermediate">מתקדם</option>
+                                <option value="advanced">מתקדם מאוד</option>
+                            </select>
+                            <select id="plan-duration-rope">
+                                <option value="4">4 שבועות</option>
+                                <option value="8">8 שבועות</option>
+                                <option value="12">12 שבועות</option>
+                            </select>
+                            <button onclick="generateTrainingPlan('rope')">צור תוכנית</button>
+                        </div>
+                        <div id="generated-plan-rope" class="generated-plan"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
+    
+    <!-- ריצת 2000 מטר -->
     <div id="run" class="tab-content">
         <div class="container">
             <h2>טבלת הישגים - ריצת 2000 מטר</h2>
             
-            <label for="run-grade">בחר שכבת גיל:</label>
-            <select id="run-grade">
-                <option value="10">שכבת י'</option>
-                <option value="11">שכבת י"א</option>
-                <option value="12">שכבת י"ב</option>
-            </select>
-            
-            <label for="time">זמן ריצה:</label>
-            <div class="time-input">
-                <input type="number" id="run-seconds" min="0" max="59" value="0" placeholder="שניות">
-                <span>:</span>
-                <input type="number" id="run-minutes" min="0" max="59" value="8" placeholder="דקות">
+            <div class="form-group">
+                <label for="run-grade">שכבת גיל:</label>
+                <select id="run-grade">
+                    <option value="10">שכבת י'</option>
+                    <option value="11">שכבת י"א</option>
+                    <option value="12">שכבת י"ב</option>
+                </select>
             </div>
-            <div class="time-labels">
-                <span>שניות</span>
-                <span>דקות</span>
+            
+            <div class="form-group">
+                <label for="time">זמן ריצה:</label>
+                <div class="time-input">
+                    <input type="number" id="run-seconds" min="0" max="59" value="0" placeholder="שניות">
+                    <span>:</span>
+                    <input type="number" id="run-minutes" min="0" max="59" value="8" placeholder="דקות">
+                </div>
             </div>
             
             <button onclick="calculateRunGrade()">חשב ציון</button>
             
-            <div id="run-result"></div>
-            <div id="run-feedback" class="feedback"></div>
+            <div class="result-container">
+                <div id="run-result"></div>
+                <div id="run-feedback" class="feedback"></div>
+            </div>
+            
+            <div class="improvement-section">
+                <div class="improvement-tips">
+                    <h3>טיפים לשיפור בריצת 2000 מטר</h3>
+                    <ul>
+                        <li>בצע אימוני סיבולת כמו ריצות ארוכות בקצב נוח</li>
+                        <li>תרגל ריצות אינטרוולים לשיפור הסיבולת האנאירובית</li>
+                        <li>שמור על קצב אחיד לאורך כל הריצה</li>
+                        <li>בצע תרגילי חיזוק לרגליים וליבה</li>
+                        <li>הקפד על חימום טוב לפני הריצה ושחרור אחריה</li>
+                        <li>הגדל בהדרגה את מרחקי הריצה ואת הקצב</li>
+                    </ul>
+                </div>
+                
+                <div class="progress-section">
+                    <h3>מעקב התקדמות</h3>
+                    <div class="progress-form">
+                        <div class="progress-input">
+                            <input type="date" id="run-date">
+                            <input type="number" id="run-min" placeholder="דקות">
+                            <input type="number" id="run-sec" placeholder="שניות">
+                            <button onclick="addProgressRecord('run')">הוסף תוצאה</button>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-records" id="run-records">
+                        <!-- רשומות ההתקדמות יופיעו כאן -->
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="run-chart"></canvas>
+                        <div class="chart-controls">
+                            <button onclick="resetProgressRecords('run')" class="reset-btn">אפס נתונים</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="training-plan">
+                    <button onclick="toggleTrainingPlan()" class="training-plan-btn">הצג תוכנית אימונים</button>
+                    <div id="training-plan-content-run" class="training-plan-content">
+                        <h3>תוכנית אימונים מומלצת</h3>
+                        <div class="plan-options">
+                            <select id="plan-level-run">
+                                <option value="beginner">מתחיל</option>
+                                <option value="intermediate">מתקדם</option>
+                                <option value="advanced">מתקדם מאוד</option>
+                            </select>
+                            <select id="plan-duration-run">
+                                <option value="4">4 שבועות</option>
+                                <option value="8">8 שבועות</option>
+                                <option value="12">12 שבועות</option>
+                            </select>
+                            <button onclick="generateTrainingPlan('run')">צור תוכנית</button>
+                        </div>
+                        <div id="generated-plan-run" class="generated-plan"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
+    
+    <!-- ריצת כדורי כח -->
     <div id="ball-run" class="tab-content">
         <div class="container">
             <h2>טבלת הישגים - ריצת כדורי כח</h2>
             
-            <p>הזן את תוצאת המבחן שלך (בשניות):</p>
-            <input type="number" id="ball-run-score" step="0.1" min="0" placeholder="לדוגמה: 25.5" class="ball-run-input">
+            <div class="form-group">
+                <label for="ball-run-score">זמן בשניות:</label>
+                <input type="number" id="ball-run-score" step="0.1" min="0" placeholder="לדוגמה: 25.5">
+            </div>
             
-            <button onclick="calculateBallRunGrade()" class="ball-run-btn">חשב ציון</button>
+            <button onclick="calculateBallRunGrade()">חשב ציון</button>
             
-            <div id="ball-run-result"></div>
-            <div id="ball-run-feedback" class="feedback"></div>
+            <div class="result-container">
+                <div id="ball-run-result"></div>
+                <div id="ball-run-feedback" class="feedback"></div>
+            </div>
+            
+            <div class="improvement-section">
+                <div class="improvement-tips">
+                    <h3>טיפים לשיפור בריצת כדורי כח</h3>
+                    <ul>
+                        <li>תרגל את מעברי הכדורים בנפרד מהריצה</li>
+                        <li>שפר את הסיבולת עם ריצות קצרות ואינטנסיביות</li>
+                        <li>בצע תרגילי זריזות וסיבובי גוף</li>
+                        <li>למד את הטכניקה הנכונה להעברת הכדורים</li>
+                        <li>התאמן על שינויי כיוון מהירים</li>
+                        <li>בצע אימוני כוח לרגליים ולפלג גוף עליון</li>
+                    </ul>
+                </div>
+                
+                <div class="progress-section">
+                    <h3>מעקב התקדמות</h3>
+                    <div class="progress-form">
+                        <div class="progress-input">
+                            <input type="date" id="ball-run-date">
+                            <input type="number" id="ball-run-time" step="0.1" placeholder="זמן בשניות">
+                            <button onclick="addProgressRecord('ball-run')">הוסף תוצאה</button>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-records" id="ball-run-records">
+                        <!-- רשומות ההתקדמות יופיעו כאן -->
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="ball-run-chart"></canvas>
+                        <div class="chart-controls">
+                            <button onclick="resetProgressRecords('ball-run')" class="reset-btn">אפס נתונים</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="training-plan">
+                    <button onclick="toggleTrainingPlan()" class="training-plan-btn">הצג תוכנית אימונים</button>
+                    <div id="training-plan-content-ball-run" class="training-plan-content">
+                        <h3>תוכנית אימונים מומלצת</h3>
+                        <div class="plan-options">
+                            <select id="plan-level-ball-run">
+                                <option value="beginner">מתחיל</option>
+                                <option value="intermediate">מתקדם</option>
+                                <option value="advanced">מתקדם מאוד</option>
+                            </select>
+                            <select id="plan-duration-ball-run">
+                                <option value="4">4 שבועות</option>
+                                <option value="8">8 שבועות</option>
+                                <option value="12">12 שבועות</option>
+                            </select>
+                            <button onclick="generateTrainingPlan('ball-run')">צור תוכנית</button>
+                        </div>
+                        <div id="generated-plan-ball-run" class="generated-plan"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
+    
+    <!-- ריצת ביפ -->
     <div id="bip" class="tab-content">
         <div class="container">
             <h2>טבלת הישגים - ריצת ביפ</h2>
             
             <div class="form-group">
-                <label for="bip-grade">בחר שכבה:</label>
+                <label for="bip-grade">שכבת גיל:</label>
                 <select id="bip-grade">
-                    <option value="10">שכבה י'</option>
-                    <option value="11">שכבה יא'</option>
-                    <option value="12">שכבה יב'</option>
+                    <option value="10">שכבת י'</option>
+                    <option value="11">שכבת י"א</option>
+                    <option value="12">שכבת י"ב</option>
                 </select>
             </div>
             
             <div class="form-group">
-                <label for="bip-score">הזן תוצאת מבחן (לדוגמה: 12.2):</label>
+                <label for="bip-score">תוצאת מבחן (לדוגמה: 12.2):</label>
                 <input type="number" id="bip-score" step="0.01" min="0" placeholder="הזן את תוצאת המבחן">
                 <div class="note">לתשומת לבך: תוצאות של מבחן 4.1 או 5.1 וכן הלאה יש לרשום 4.01 או 5.01</div>
             </div>
             
             <button onclick="calculateBipGrade()">חשב ציון</button>
             
-            <div id="bip-result"></div>
-            <div id="bip-feedback" class="feedback"></div>
+            <div class="result-container">
+                <div id="bip-result"></div>
+                <div id="bip-feedback" class="feedback"></div>
+            </div>
+            
+            <div class="improvement-section">
+                <div class="improvement-tips">
+                    <h3>טיפים לשיפור בריצת ביפ</h3>
+                    <ul>
+                        <li>בצע אימוני סיבולת כמו ריצות אינטרוולים</li>
+                        <li>תרגל שינויי קצב מהירים</li>
+                        <li>שפר את הסיבולת האנאירובית עם ספרינטים קצרים</li>
+                        <li>בצע תרגילי חיזוק לרגליים וליבה</li>
+                        <li>התאמן על טכניקת ריצה נכונה</li>
+                        <li>הגדל בהדרגה את עוצמת האימונים</li>
+                    </ul>
+                </div>
+                
+                <div class="progress-section">
+                    <h3>מעקב התקדמות</h3>
+                    <div class="progress-form">
+                        <div class="progress-input">
+                            <input type="date" id="bip-date">
+                            <input type="number" id="bip-level" step="0.01" placeholder="רמה (לדוגמה 12.2)">
+                            <button onclick="addProgressRecord('bip')">הוסף תוצאה</button>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-records" id="bip-records">
+                        <!-- רשומות ההתקדמות יופיעו כאן -->
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="bip-chart"></canvas>
+                        <div class="chart-controls">
+                            <button onclick="resetProgressRecords('bip')" class="reset-btn">אפס נתונים</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="training-plan">
+                    <button onclick="toggleTrainingPlan()" class="training-plan-btn">הצג תוכנית אימונים</button>
+                    <div id="training-plan-content-bip" class="training-plan-content">
+                        <h3>תוכנית אימונים מומלצת</h3>
+                        <div class="plan-options">
+                            <select id="plan-level-bip">
+                                <option value="beginner">מתחיל</option>
+                                <option value="intermediate">מתקדם</option>
+                                <option value="advanced">מתקדם מאוד</option>
+                            </select>
+                            <select id="plan-duration-bip">
+                                <option value="4">4 שבועות</option>
+                                <option value="8">8 שבועות</option>
+                                <option value="12">12 שבועות</option>
+                            </select>
+                            <button onclick="generateTrainingPlan('bip')">צור תוכנית</button>
+                        </div>
+                        <div id="generated-plan-bip" class="generated-plan"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="footer-note">
+    
+    <div class="footer">
         נבנה ע"י אסף רוזן<br>
         לשאלות נא לפנות למייל - <a href="mailto:asirozen@gmail.com">asirozen@gmail.com</a>
     </div>
@@ -1022,6 +1590,7 @@
             ]
         };
 
+        // פונקציות לחישוב ציונים
         function calculateGrade() {
             const grade = document.getElementById("grade").value;
             const scoreInput = document.getElementById("score").value;
@@ -1067,19 +1636,17 @@
             }
             
             if (gradeValue === 100) {
-                feedbackDiv.innerHTML = '<div class="champion">כל הכבוד אלוף!</div>';
-            } else if (gradeValue >= 96 && gradeValue <= 99) {
-                feedbackDiv.innerHTML = '<div class="excellent">עוד מאמץ קטן תותח!</div>';
-            } else if (gradeValue >= 91 && gradeValue <= 95) {
-                feedbackDiv.innerHTML = '<div class="excellent">עבודה מצויינת!</div>';
-            } else if (gradeValue >= 85 && gradeValue <= 90) {
-                feedbackDiv.innerHTML = '<div class="great">יפה מאוד!</div>';
-            } else if (gradeValue >= 75 && gradeValue <= 84) {
-                feedbackDiv.innerHTML = '<div class="good">רואים שאתה מתאמן!</div>';
-            } else if (gradeValue >= 65 && gradeValue <= 74) {
-                feedbackDiv.innerHTML = '<div class="average">אתה בכיוון הנכון!</div>';
-            } else if (gradeValue <= 64) {
-                feedbackDiv.innerHTML = '<div class="needs-improvement">לא נורא, תעבוד קשה ותשתפר!</div>';
+                feedbackDiv.innerHTML = '<div class="champion">כל הכבוד אלוף! תוצאה מעולה בכפיפות מרפקים!</div>';
+            } else if (gradeValue >= 95) {
+                feedbackDiv.innerHTML = '<div class="excellent">תוצאה מצוינת! אתה בכושר מעולה!</div>';
+            } else if (gradeValue >= 85) {
+                feedbackDiv.innerHTML = '<div class="great">תוצאה טובה מאוד! המשך כך!</div>';
+            } else if (gradeValue >= 75) {
+                feedbackDiv.innerHTML = '<div class="good">תוצאה טובה! יש לך פוטנציאל להשתפר עוד!</div>';
+            } else if (gradeValue >= 65) {
+                feedbackDiv.innerHTML = '<div class="average">לא רע! עם עוד אימונים תוכל לשפר את התוצאה!</div>';
+            } else {
+                feedbackDiv.innerHTML = '<div class="needs-improvement">תמשיך להתאמן ותשפר את התוצאה בהדרגה!</div>';
             }
         }
 
@@ -1240,23 +1807,23 @@
                 if (foundGrade >= 90) {
                     gradeClass += " excellent";
                     messageClass = "success";
-                    message = "מצוין! ביצועים מעולים!";
+                    message = "מצוין! ביצועים מעולים בריצה!";
                 } else if (foundGrade >= 80) {
                     gradeClass += " great";
                     messageClass = "success";
-                    message = "טוב מאוד! ביצועים טובים!";
+                    message = "טוב מאוד! ביצועים טובים בריצה!";
                 } else if (foundGrade >= 70) {
                     gradeClass += " good";
                     messageClass = "warning";
-                    message = "עברת את המבחן, אבל אפשר להשתפר";
+                    message = "עברת את המבחן, אבל אפשר להשתפר בריצה";
                 } else if (foundGrade >= 55) {
                     gradeClass += " average";
                     messageClass = "warning";
-                    message = "עברת את המבחן בקושי, כדאי להתאמן יותר";
+                    message = "עברת את המבחן בקושי, כדאי להתאמן יותר על ריצה";
                 } else {
                     gradeClass += " needs-improvement";
                     messageClass = "fail";
-                    message = "לא עברת את המבחן, יש להשתפר!";
+                    message = "לא עברת את המבחן, יש להשתפר בריצה!";
                 }
                 
                 resultDiv.innerHTML = `הציון שלך הוא: <span class="${gradeClass}">${foundGrade}</span>`;
@@ -1419,7 +1986,7 @@
             }
         }
 
-        // פונקציה לניהול טאבים
+        // פונקציות לניהול טאבים
         function openTab(tabId) {
             // הסרת מחלקת active מכל הכפתורים והטאבים
             document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1435,6 +2002,9 @@
             
             // גלילה לחלק הרלוונטי בדף
             document.getElementById(tabId).scrollIntoView({ behavior: 'smooth' });
+            
+            // רענון הגרף כאשר הטאב נפתח
+            refreshChart(tabId);
         }
 
         // הוספת אירועים ללחיצה על כפתורי הטאבים
@@ -1445,6 +2015,388 @@
             });
         });
 
+        // אחסון נתוני התקדמות ב-localStorage
+        function getProgressRecords(exercise) {
+            const records = localStorage.getItem(`progress_${exercise}`);
+            return records ? JSON.parse(records) : [];
+        }
+
+        function saveProgressRecords(exercise, records) {
+            localStorage.setItem(`progress_${exercise}`, JSON.stringify(records));
+        }
+
+        // הוספת רשומת התקדמות
+        function addProgressRecord(exercise) {
+            const dateInput = document.getElementById(`${exercise}-date`);
+            let valueInput;
+            
+            if (exercise === 'run') {
+                const minutes = parseInt(document.getElementById('run-min').value) || 0;
+                const seconds = parseInt(document.getElementById('run-sec').value) || 0;
+                valueInput = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            } else {
+                valueInput = document.getElementById(`${exercise}-count`).value || 
+                             document.getElementById(`${exercise}-time`).value || 
+                             document.getElementById(`${exercise}-level`).value;
+            }
+            
+            if (!dateInput.value || !valueInput) {
+                alert('אנא מלא את כל השדות');
+                return;
+            }
+            
+            const records = getProgressRecords(exercise);
+            records.push({
+                date: dateInput.value,
+                value: valueInput
+            });
+            
+            // מיון לפי תאריך
+            records.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            saveProgressRecords(exercise, records);
+            displayProgressRecords(exercise);
+            refreshChart(exercise);
+            
+            // איפוס שדות הקלט
+            dateInput.value = '';
+            if (exercise !== 'run') {
+                document.getElementById(`${exercise}-count`).value = '';
+                document.getElementById(`${exercise}-time`).value = '';
+                document.getElementById(`${exercise}-level`).value = '';
+            } else {
+                document.getElementById('run-min').value = '';
+                document.getElementById('run-sec').value = '';
+            }
+        }
+
+        // הצגת רשומות התקדמות
+        function displayProgressRecords(exercise) {
+            const records = getProgressRecords(exercise);
+            const container = document.getElementById(`${exercise}-records`);
+            
+            container.innerHTML = '';
+            
+            if (records.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #666;">אין עדיין רשומות</div>';
+                return;
+            }
+            
+            records.forEach(record => {
+                const recordElement = document.createElement('div');
+                recordElement.className = 'record-item';
+                
+                const date = new Date(record.date);
+                const formattedDate = date.toLocaleDateString('he-IL');
+                
+                recordElement.innerHTML = `
+                    <span>${formattedDate}</span>
+                    <span>${record.value}</span>
+                `;
+                
+                container.appendChild(recordElement);
+            });
+        }
+
+        // יצירת גרף התקדמות
+        function refreshChart(exercise) {
+            const records = getProgressRecords(exercise);
+            const ctx = document.getElementById(`${exercise}-chart`).getContext('2d');
+            
+            // אם אין נתונים, נציג הודעה
+            if (records.length === 0) {
+                document.getElementById(`${exercise}-chart`).style.display = 'none';
+                return;
+            }
+            
+            document.getElementById(`${exercise}-chart`).style.display = 'block';
+            
+            // אם כבר יש גרף קיים, נשמיד אותו
+            if (window[`${exercise}Chart`]) {
+                window[`${exercise}Chart`].destroy();
+            }
+            
+            // הכנת נתונים לגרף
+            const labels = records.map(record => {
+                const date = new Date(record.date);
+                return date.toLocaleDateString('he-IL');
+            });
+            
+            let data = records.map(record => {
+                if (exercise === 'run') {
+                    const [minutes, seconds] = record.value.split(':');
+                    return parseInt(minutes) + (parseInt(seconds) / 60);
+                }
+                return parseFloat(record.value);
+            });
+            
+            // הפיכת הנתונים כך שהערכים הטובים יותר יהיו גבוהים יותר בגרף
+            if (exercise === 'run' || exercise === 'ball-run') {
+                data = data.map(val => -val); // הפיכת הסימן עבור זמנים (ככל שפחות - יותר טוב)
+            }
+            
+            // חישוב ציונים עבור הגרף
+            const grades = records.map(record => {
+                if (exercise === 'pushups') {
+                    const grade = document.getElementById("grade").value;
+                    const score = parseInt(record.value);
+                    const gradeData = pushupData[grade];
+                    let foundItem = gradeData.find(item => item.score === score);
+                    return foundItem ? foundItem.grade : null;
+                } else if (exercise === 'tension') {
+                    const grade = document.getElementById("tension-grade").value;
+                    const score = parseInt(record.value);
+                    const gradeData = tensionData[grade];
+                    let foundItem = gradeData.find(item => item.score === score);
+                    return foundItem ? foundItem.grade : null;
+                } else if (exercise === 'rope') {
+                    const score = parseInt(record.value);
+                    let foundItem = ropeData.find(item => item.score === score);
+                    if (!foundItem) {
+                        for (const item of ropeData) {
+                            if (item.score <= score && (!foundItem || item.score > foundItem.score)) {
+                                foundItem = item;
+                            }
+                        }
+                    }
+                    return foundItem ? foundItem.grade : null;
+                } else if (exercise === 'run') {
+                    const grade = document.getElementById("run-grade").value;
+                    const [minutes, seconds] = record.value.split(':');
+                    const formattedTime = `${minutes}:${seconds}`;
+                    const times = runData[grade];
+                    for (let i = 0; i < times.length; i++) {
+                        if (formattedTime <= times[i]) {
+                            return runData.grades[i];
+                        }
+                    }
+                    if (formattedTime < times[0]) return 100;
+                    if (formattedTime > times[times.length-1]) return 30;
+                    return null;
+                } else if (exercise === 'ball-run') {
+                    const score = parseFloat(record.value);
+                    let grade = null;
+                    for (const [time, g] of Object.entries(ballRunConversionTable)) {
+                        if (score <= parseFloat(time)) {
+                            grade = g;
+                        } else {
+                            break;
+                        }
+                    }
+                    if (grade === null) {
+                        if (score > 30) grade = 100;
+                        else if (score < 10) grade = 30;
+                    }
+                    if (grade === null) {
+                        const times = Object.keys(ballRunConversionTable).map(parseFloat).sort((a,b) => a-b);
+                        let closestTime = times[0];
+                        let minDiff = Math.abs(score - closestTime);
+                        for (let i = 1; i < times.length; i++) {
+                            const diff = Math.abs(score - times[i]);
+                            if (diff < minDiff) {
+                                minDiff = diff;
+                                closestTime = times[i];
+                            }
+                        }
+                        grade = ballRunConversionTable[closestTime];
+                    }
+                    return grade;
+                } else if (exercise === 'bip') {
+                    const grade = document.getElementById("bip-grade").value;
+                    const inputScore = parseFloat(record.value);
+                    const table = bipGradeTables[grade];
+                    let foundGrade = null;
+                    let foundItem = table.find(item => item.score === inputScore);
+                    if (foundItem) {
+                        return foundItem.grade;
+                    } else {
+                        let closestItem = null;
+                        for (const item of table) {
+                            if (item.score <= inputScore && (!closestItem || item.score > closestItem.score)) {
+                                closestItem = item;
+                            }
+                        }
+                        return closestItem ? closestItem.grade : null;
+                    }
+                }
+                return null;
+            }).filter(grade => grade !== null);
+            
+            const chartData = {
+                labels: labels,
+                datasets: [{
+                    label: 'תוצאה',
+                    data: data,
+                    backgroundColor: '#4CAF50',
+                    borderColor: '#2E7D32',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: false
+                },
+                {
+                    label: 'ציון',
+                    data: grades,
+                    backgroundColor: '#1565C0',
+                    borderColor: '#0D47A1',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: false,
+                    yAxisID: 'y1'
+                }]
+            };
+            
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        ticks: {
+                            callback: function(value) {
+                                if (exercise === 'run' || exercise === 'ball-run') {
+                                    const absValue = Math.abs(value);
+                                    if (exercise === 'run') {
+                                        const minutes = Math.floor(absValue);
+                                        const seconds = Math.round((absValue - minutes) * 60);
+                                        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                                    } else {
+                                        return absValue.toFixed(1);
+                                    }
+                                }
+                                return value;
+                            }
+                        }
+                    },
+                    y1: {
+                        position: 'right',
+                        beginAtZero: false,
+                        min: 30,
+                        max: 100,
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.datasetIndex === 0) {
+                                    if (exercise === 'run') {
+                                        const absValue = Math.abs(context.raw);
+                                        const minutes = Math.floor(absValue);
+                                        const seconds = Math.round((absValue - minutes) * 60);
+                                        label += `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                                    } else if (exercise === 'ball-run') {
+                                        label += Math.abs(context.raw).toFixed(1) + ' שניות';
+                                    } else {
+                                        label += context.raw;
+                                    }
+                                } else {
+                                    label += context.raw + ' (ציון)';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            };
+            
+            window[`${exercise}Chart`] = new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+                options: chartOptions
+            });
+        }
+
+        // איפוס נתוני התקדמות
+        function resetProgressRecords(exercise) {
+            if (confirm('האם אתה בטוח שברצונך לאפס את כל נתוני ההתקדמות?')) {
+                localStorage.removeItem(`progress_${exercise}`);
+                displayProgressRecords(exercise);
+                refreshChart(exercise);
+            }
+        }
+
+        // הצגת/הסתרת תוכנית אימונים
+        function toggleTrainingPlan() {
+            const content = document.getElementById('training-plan-content');
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+            } else {
+                content.style.display = 'block';
+            }
+        }
+
+        // יצירת תוכנית אימונים
+        function generateTrainingPlan(exercise) {
+            const level = document.getElementById(`plan-level-${exercise}`).value;
+            const duration = parseInt(document.getElementById(`plan-duration-${exercise}`).value);
+            const planContainer = document.getElementById(`generated-plan-${exercise}`);
+            
+            let plan = '';
+            
+            if (exercise === 'pushups') {
+                if (level === 'beginner') {
+                    plan = `
+                        <h4>תוכנית אימונים למתחילים בכפיפות מרפקים (${duration} שבועות)</h4>
+                        <p>התוכנית מתבססת על 3 אימונים בשבוע:</p>
+                        <ul>
+                            <li>שבוע 1-${duration}: 3 סטים של 10-15 חזרות עם מנוחה של דקה בין סטים</li>
+                            <li>הגדל את מספר החזרות בכל שבוע ב-2-3 חזרות לסט</li>
+                            <li>בצע את התרגיל בקצב איטי ומבוקר</li>
+                            <li>בסוף כל אימון בצע מתיחות לשרירי החזה והזרועות</li>
+                        </ul>
+                    `;
+                } else if (level === 'intermediate') {
+                    plan = `
+                        <h4>תוכנית אימונים למתקדמים בכפיפות מרפקים (${duration} שבועות)</h4>
+                        <p>התוכנית מתבססת על 4 אימונים בשבוע:</p>
+                        <ul>
+                            <li>שבוע 1-${Math.floor(duration/2)}: 4 סטים של 15-20 חזרות עם מנוחה של 45 שניות בין סטים</li>
+                            <li>שבוע ${Math.floor(duration/2)+1}-${duration}: 5 סטים של 20-25 חזרות עם מנוחה של 30 שניות בין סטים</li>
+                            <li>ניתן להוסיף משקל (תיק גב) להגדלת הקושי</li>
+                            <li>בצע וריאציות שונות של כפיפות מרפקים</li>
+                        </ul>
+                    `;
+                } else {
+                    plan = `
+                        <h4>תוכנית אימונים למתקדמים מאוד בכפיפות מרפקים (${duration} שבועות)</h4>
+                        <p>התוכנית מתבססת על 5 אימונים בשבוע:</p>
+                        <ul>
+                            <li>שבוע 1-${Math.floor(duration/3)}: 5 סטים של 25-30 חזרות עם מנוחה של 30 שניות בין סטים</li>
+                            <li>שבוע ${Math.floor(duration/3)+1}-${Math.floor(2*duration/3)}: 5 סטים של 30-35 חזרות עם מנוחה של 20 שניות בין סטים</li>
+                            <li>שבוע ${Math.floor(2*duration/3)+1}-${duration}: 5 סטים של 35-40 חזרות עם מנוחה של 15 שניות בין סטים</li>
+                            <li>הוסף משקל ותרגילי פליאומטריקה לשיפור הכוח המתפרץ</li>
+                        </ul>
+                    `;
+                }
+            } else if (exercise === 'tension') {
+                // הוספת לוגיקה דומה לכל התרגילים האחרים...
+            }
+            
+            planContainer.innerHTML = plan;
+        }
+
+        // אתחול האפליקציה - הצגת רשומות התקדמות עבור כל תרגיל
+        document.addEventListener('DOMContentLoaded', function() {
+            const exercises = ['pushups', 'tension', 'rope', 'run', 'ball-run', 'bip'];
+            exercises.forEach(exercise => {
+                displayProgressRecords(exercise);
+                refreshChart(exercise);
+            });
+            
+            // הגדרת תאריך ברירת מחדל לשדות התאריך
+            const today = new Date().toISOString().split('T')[0];
+            document.querySelectorAll('input[type="date"]').forEach(input => {
+                input.value = today;
+            });
+        });
+
         // אפשרות להקיש Enter במקום ללחוץ על הכפתור
         document.getElementById('ball-run-score').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -1452,6 +2404,6 @@
             }
         });
     </script>
-<script src="https://cdn.counter.dev/script.js" data-id="a1a39a35-32a7-43b6-b83a-9be582e40c72" data-utcoffset="3"></script>
+    <script src="https://cdn.counter.dev/script.js" data-id="a1a39a35-32a7-43b6-b83a-9be582e40c72" data-utcoffset="3"></script>
 </body>
 </html>
