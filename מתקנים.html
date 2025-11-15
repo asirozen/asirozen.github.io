@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>טבלת מתקנים למורים - סינון מתקדם</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            direction: rtl;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+        .constraints {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ffeaa7;
+        }
+        .constraints h3 {
+            margin-top: 0;
+            color: #856404;
+        }
+        .constraints ul {
+            margin: 0;
+            padding-right: 20px;
+        }
+        .constraints li {
+            margin-bottom: 5px;
+        }
+        .filters {
+            background-color: #e9f7fe;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .filter-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        label {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        select, input {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            min-width: 150px;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .date-picker-container {
+            position: relative;
+            display: inline-block;
+        }
+        .calendar-popup {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+        }
+        .calendar {
+            width: 300px;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+        .calendar-day {
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 4px;
+            min-height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .calendar-day:hover {
+            background-color: #f0f0f0;
+        }
+        .calendar-day.selected {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .calendar-day.other-month {
+            color: #ccc;
+        }
+        .calendar-day.today {
+            background-color: #e0f7fa;
+            font-weight: bold;
+        }
+        .calendar-day.disabled {
+            color: #ccc;
+            cursor: not-allowed;
+            background-color: #f5f5f5;
+        }
+        .week-day {
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+            background-color: #f5f5f5;
+            font-size: 12px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #666;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border-radius: 8px;
+        }
+        .teacher-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: center;
+        }
+        .teacher-tag {
+            background-color: #e0e0e0;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .teacher-tag:hover {
+            background-color: #d0d0d0;
+            transform: translateY(-2px);
+        }
+        .teacher-tag.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .date-range {
+            color: #666;
+            margin-top: 5px;
+        }
+        .calendar-nav {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        .calendar-nav:hover {
+            background-color: #f0f0f0;
+        }
+        .date-display {
+            margin: 0 10px;
+            font-weight: bold;
+            min-width: 120px;
+            text-align: center;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: center;
+        }
+        .date-range-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .facility-limited {
+            background-color: #ffeaa7 !important;
+        }
+        .facility-alternative {
+            background-color: #e6f7ff !important;
+        }
+        .month-navigation {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .month-btn {
+            padding: 5px 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .month-btn:hover {
+            background-color: #e0e0e0;
+        }
+        .month-btn.active {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>טבלת מתקנים למורים - חנ"ג</h1>
+            <h2>נובמבר 2025 - יוני 2026</h2>
+            <div class="date-range">תאריכים: 02.11.2025 - 20.06.2026</div>
+            <div class="teacher-list">
+                <div class="teacher-tag active" data-teacher="all">כל המורים</div>
+                <div class="teacher-tag" data-teacher="ליאת">ליאת</div>
+                <div class="teacher-tag" data-teacher="אילת">אילת</div>
+                <div class="teacher-tag" data-teacher="סיגל">סיגל</div>
+                <div class="teacher-tag" data-teacher="שיר">שיר</div>
+                <div class="teacher-tag" data-teacher="יובל">יובל</div>
+                <div class="teacher-tag" data-teacher="יוסי">יוסי</div>
+                <div class="teacher-tag" data-teacher="בני">בני</div>
+                <div class="teacher-tag" data-teacher="עומר">עומר</div>
+                <div class="teacher-tag" data-teacher="אסף">אסף</div>
+            </div>
+            <div class="month-navigation">
+                <div class="month-btn" data-month="all">כל החודשים</div>
+                <div class="month-btn" data-month="11">נובמבר 2025</div>
+                <div class="month-btn" data-month="12">דצמבר 2025</div>
+                <div class="month-btn" data-month="1">ינואר 2026</div>
+                <div class="month-btn" data-month="2">פברואר 2026</div>
+                <div class="month-btn" data-month="3">מרץ 2026</div>
+                <div class="month-btn" data-month="4">אפריל 2026</div>
+                <div class="month-btn" data-month="5">מאי 2026</div>
+                <div class="month-btn" data-month="6">יוני 2026</div>
+            </div>
+        </div>
+
+        <div class="constraints">
+            <h3>🚧 אילוצי מתקנים:</h3>
+            <ul>
+                <li><strong>יום שלישי:</strong> חצי אולם בלבד מ-11:00 עד 13:30 (לפני 11:00 - אולם שלם)</li>
+                <li><strong>יום רביעי:</strong> חצי אולם בלבד עד 11:00, אולם שלם מ-11:00 עד 14:40</li>
+                <li><strong>יום חמישי:</strong> אולם שלם רק עד 11:00</li>
+                <li><strong>כל הימים:</strong> לא ניתן שילוב של מגרש שלם עם חצי מגרש באותו זמן</li>
+                <li><strong>כל הימים:</strong> ניתן שני מורים על חצי אולם (כל אחד בצד אחר) ושני מורים על חצי מגרש (כל אחד בצד אחר)</li>
+            </ul>
+        </div>
+
+        <div class="filters">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="teacherSelect">בחר מורה:</label>
+                    <select id="teacherSelect">
+                        <option value="all">כל המורים</option>
+                        <option value="ליאת">ליאת</option>
+                        <option value="אילת">אילת</option>
+                        <option value="סיגל">סיגל</option>
+                        <option value="שיר">שיר</option>
+                        <option value="יובל">יובל</option>
+                        <option value="יוסי">יוסי</option>
+                        <option value="בני">בני</option>
+                        <option value="עומר">עומר</option>
+                        <option value="אסף">אסף</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="monthSelect">בחר חודש:</label>
+                    <select id="monthSelect">
+                        <option value="all">כל החודשים</option>
+                        <option value="11">נובמבר 2025</option>
+                        <option value="12">דצמבר 2025</option>
+                        <option value="1">ינואר 2026</option>
+                        <option value="2">פברואר 2026</option>
+                        <option value="3">מרץ 2026</option>
+                        <option value="4">אפריל 2026</option>
+                        <option value="5">מאי 2026</option>
+                        <option value="6">יוני 2026</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-row">
+                <div class="date-range-title">סינון לפי טווח תאריכים</div>
+            </div>
+
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="dateFrom">מתאריך:</label>
+                    <div class="date-picker-container">
+                        <input type="text" id="dateFrom" readonly placeholder="בחר תאריך" style="min-width: 120px;">
+                        <div class="calendar-popup" id="calendarFrom">
+                            <div class="calendar">
+                                <div class="calendar-header">
+                                    <button class="calendar-nav" onclick="changeMonth('from', -1)"><i class="fas fa-chevron-right"></i> חודש קודם</button>
+                                    <span class="date-display" id="monthDisplayFrom"></span>
+                                    <button class="calendar-nav" onclick="changeMonth('from', 1)">חודש הבא <i class="fas fa-chevron-left"></i></button>
+                                </div>
+                                <div class="calendar-grid" id="calendarGridFrom">
+                                    <!-- ימי השבוע -->
+                                    <div class="week-day">ש</div>
+                                    <div class="week-day">ו</div>
+                                    <div class="week-day">ה</div>
+                                    <div class="week-day">ד</div>
+                                    <div class="week-day">ג</div>
+                                    <div class="week-day">ב</div>
+                                    <div class="week-day">א</div>
+                                    <!-- הימים יוטענו כאן -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label for="dateTo">עד תאריך:</label>
+                    <div class="date-picker-container">
+                        <input type="text" id="dateTo" readonly placeholder="בחר תאריך" style="min-width: 120px;">
+                        <div class="calendar-popup" id="calendarTo">
+                            <div class="calendar">
+                                <div class="calendar-header">
+                                    <button class="calendar-nav" onclick="changeMonth('to', -1)"><i class="fas fa-chevron-right"></i> חודש קודם</button>
+                                    <span class="date-display" id="monthDisplayTo"></span>
+                                    <button class="calendar-nav" onclick="changeMonth('to', 1)">חודש הבא <i class="fas fa-chevron-left"></i></button>
+                                </div>
+                                <div class="calendar-grid" id="calendarGridTo">
+                                    <!-- ימי השבוע -->
+                                    <div class="week-day">ש</div>
+                                    <div class="week-day">ו</div>
+                                    <div class="week-day">ה</div>
+                                    <div class="week-day">ד</div>
+                                    <div class="week-day">ג</div>
+                                    <div class="week-day">ב</div>
+                                    <div class="week-day">א</div>
+                                    <!-- הימים יוטענו כאן -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button onclick="filterTable()"><i class="fas fa-filter"></i> הצג נתונים</button>
+            <button onclick="resetFilters()"><i class="fas fa-redo"></i> אפס סינון</button>
+            <button onclick="exportToExcel()"><i class="fas fa-file-excel"></i> ייצא ל-Excel</button>
+        </div>
+
+        <div class="summary">
+            <strong>סיכום:</strong>
+            <span id="summaryText">הצג את הנתונים על ידי בחירת מורה ו/או חודש</span>
+        </div>
+
+        <table id="scheduleTable">
+            <thead>
+                <tr>
+                    <th>תאריך</th>
+                    <th>יום</th>
+                    <th>שעה</th>
+                    <th>מורה</th>
+                    <th>כיתה</th>
+                    <th>מתקן</th>
+                    <th>הערה</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- הנתונים יוטענו כאן באמצעות JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // רשימת מתקנים זמינים עם חלוקה לחצאים
+        const availableFacilities = [
+            'אולם',
+            'חצי אולם א',
+            'חצי אולם ב',
+            'מגרש שלם',
+            'חצי מגרש א',
+            'חצי מגרש ב',
+            'סטודיו',
+            'מתקנים'
+        ];
+
+        // פונקציה לבדיקת אילוצי מתקנים
+        function checkFacilityConstraints(dateStr, time, day, facility) {
+            const hour = parseInt(time.split(':')[0]);
+            const minutes = parseInt(time.split(':')[1]);
+            const totalMinutes = hour * 60 + minutes;
+
+            // יום שלישי - חצי אולם בלבד מ-11:00 עד 13:30
+            if (day === 'ג' && totalMinutes >= 11*60 && totalMinutes <= 13*60+30) {
+                if (facility === 'אולם') {
+                    return { allowed: false, message: 'ביום שלישי מ-11:00 עד 13:30 - חצי אולם בלבד' };
+                }
+            }
+
+            // יום רביעי - חצי אולם בלבד עד 11:00
+            if (day === 'ד' && totalMinutes < 11*60) {
+                if (facility === 'אולם') {
+                    return { allowed: false, message: 'ביום רביעי עד 11:00 - חצי אולם בלבד' };
+                }
+            }
+
+            // יום רביעי - אולם שלם מ-11:00 עד 14:40
+            if (day === 'ד' && totalMinutes >= 11*60 && totalMinutes <= 14*60+40) {
+                if (facility.includes('חצי אולם')) {
+                    return { allowed: false, message: 'ביום רביעי מ-11:00 עד 14:40 - אולם שלם בלבד' };
+                }
+            }
+
+            // יום חמישי - אולם שלם רק עד 11:00
+            if (day === 'ה' && totalMinutes >= 11*60) {
+                if (facility === 'אולם') {
+                    return { allowed: false, message: 'ביום חמישי מ-11:00 - אולם לא זמין' };
+                }
+            }
+
+            return { allowed: true, message: '' };
+        }
+
+        // פונקציה למציאת חלופה למתקן עם עדיפות לאולם
+        function findAlternativeFacility(dateStr, time, day, currentFacility, usedFacilities, allLessons) {
+            const hour = parseInt(time.split(':')[0]);
+            const minutes = parseInt(time.split(':')[1]);
+            const totalMinutes = hour * 60 + minutes;
+            
+            // בדיקה אם יש מגרש שלם בשימוש
+            const hasFullCourt = allLessons.some(lesson => lesson.facility === 'מגרש שלם');
+            const hasHalfCourt = allLessons.some(lesson => lesson.facility.includes('חצי מגרש'));
+            
+            // אם יש רק 2 מורים בסך הכל - עדיפות לאולם
+            if (allLessons.length === 2) {
+                // בדיקה אם אולם זמין לפי אילוצי זמן
+                const hallConstraint = checkFacilityConstraints(dateStr, time, day, 'אולם');
+                if (hallConstraint.allowed && !usedFacilities.includes('אולם')) {
+                    return 'אולם';
+                }
+                
+                // אם אולם לא זמין, ננסה חצאי אולם
+                const halfHallAConstraint = checkFacilityConstraints(dateStr, time, day, 'חצי אולם א');
+                const halfHallBConstraint = checkFacilityConstraints(dateStr, time, day, 'חצי אולם ב');
+                
+                if (halfHallAConstraint.allowed && !usedFacilities.includes('חצי אולם א')) {
+                    return 'חצי אולם א';
+                }
+                if (halfHallBConstraint.allowed && !usedFacilities.includes('חצי אולם ב')) {
+                    return 'חצי אולם ב';
+                }
+            }
+            
+            // רשימת מתקנים אפשריים לפי סדר עדיפות - אולם קודם
+            let preferredFacilities = {
+                'חצי אולם א': ['חצי אולם ב', 'אולם', 'מתקנים', 'סטודיו', 'חצי מגרש א', 'חצי מגרש ב'],
+                'חצי אולם ב': ['חצי אולם א', 'אולם', 'מתקנים', 'סטודיו', 'חצי מגרש א', 'חצי מגרש ב'],
+                'חצי מגרש א': ['חצי מגרש ב', 'אולם', 'מתקנים', 'סטודיו', 'חצי אולם א', 'חצי אולם ב'],
+                'חצי מגרש ב': ['חצי מגרש א', 'אולם', 'מתקנים', 'סטודיו', 'חצי אולם א', 'חצי אולם ב'],
+                'אולם': ['מגרש שלם', 'מתקנים', 'סטודיו'],
+                'מגרש שלם': ['אולם', 'מתקנים', 'סטודיו'],
+                'סטודיו': ['אולם', 'מתקנים', 'חצי אולם א', 'חצי אולם ב', 'חצי מגרש א', 'חצי מגרש ב'],
+                'מתקנים': ['אולם', 'סטודיו', 'חצי אולם א', 'חצי אולם ב', 'חצי מגרש א', 'חצי מגרש ב']
+            };
+            
+            // אם יש כבר מגרש שלם בשימוש, לא ניתן להשתמש בחצי מגרש
+            if (hasFullCourt && currentFacility.includes('חצי מגרש')) {
+                preferredFacilities[currentFacility] = preferredFacilities[currentFacility].filter(
+                    facility => !facility.includes('חצי מגרש')
+                );
+            }
+            
+            // אם יש כבר חצי מגרש בשימוש, לא ניתן להשתמש במגרש שלם
+            if (hasHalfCourt && currentFacility === 'מגרש שלם') {
+                preferredFacilities[currentFacility] = preferredFacilities[currentFacility].filter(
+                    facility => facility !== 'מגרש שלם'
+                );
+            }
+            
+            // קבלת רשימת מתקנים מועדפים למתקן הנוכחי
+            const alternatives = preferredFacilities[currentFacility] || ['אולם', 'מתקנים', 'סטודיו'];
+            
+            // מציאת מתקן פנוי
+            for (const altFacility of alternatives) {
+                // בדיקה אם המתקן פנוי
+                if (!usedFacilities.includes(altFacility)) {
+                    // בדיקת אילוצי זמן למתקן החלופי
+                    const constraintCheck = checkFacilityConstraints(dateStr, time, day, altFacility);
+                    if (constraintCheck.allowed) {
+                        return altFacility;
+                    }
+                }
+            }
+            
+            // אם לא נמצא מתקן חלופי, נחזיר את המקורי
+            return currentFacility;
+        }
+
+        // פונקציה לפתרון התנגשויות אוטומטי עם עדיפות לאולם
+        function resolveConflictsAutomatically(scheduleData) {
+            // יצירת עותק של הנתונים
+            const resolvedData = [...scheduleData];
+            
+            // מיון הנתונים לפי תאריך ושעה
+            const scheduleByDate = {};
+            resolvedData.forEach(item => {
+                if (!scheduleByDate[item.date]) {
+                    scheduleByDate[item.date] = {};
+                }
+                if (!scheduleByDate[item.date][item.time]) {
+                    scheduleByDate[item.date][item.time] = [];
+                }
+                scheduleByDate[item.date][item.time].push(item);
+            });
+            
+            // פתרון התנגשויות בכל תאריך ושעה
+            Object.keys(scheduleByDate).forEach(date => {
+                Object.keys(scheduleByDate[date]).forEach(time => {
+                    const lessons = scheduleByDate[date][time];
+                    const usedFacilities = [];
+                    
+                    // אם יש רק 2 מורים - ננסה לשים אותם באולם
+                    if (lessons.length === 2) {
+                        const day = lessons[0].day;
+                        const hallConstraint = checkFacilityConstraints(date, time, day, 'אולם');
+                        
+                        if (hallConstraint.allowed) {
+                            // ניתן להשתמש באולם - נשתמש בחצאי אולם
+                            lessons[0].facility = 'חצי אולם א';
+                            lessons[1].facility = 'חצי אולם ב';
+                            lessons[0].hasAlternative = true;
+                            lessons[1].hasAlternative = true;
+                            
+                            usedFacilities.push('חצי אולם א', 'חצי אולם ב');
+                        } else {
+                            // אולם לא זמין - נמשיך בטיפול רגיל
+                            lessons.forEach(lesson => {
+                                const currentFacility = lesson.facility;
+                                
+                                // בדיקת התנגשות עם מגרש שלם וחצי מגרש
+                                const hasFullCourtConflict = (currentFacility === 'מגרש שלם' && usedFacilities.some(f => f.includes('חצי מגרש')));
+                                const hasHalfCourtConflict = (currentFacility.includes('חצי מגרש') && usedFacilities.includes('מגרש שלם'));
+                                
+                                if (usedFacilities.includes(currentFacility) || hasFullCourtConflict || hasHalfCourtConflict) {
+                                    
+                                    const alternative = findAlternativeFacility(
+                                        date, time, lesson.day, currentFacility, usedFacilities, lessons
+                                    );
+                                    
+                                    // עדכון המתקן במקרה שנמצאה חלופה
+                                    if (alternative !== currentFacility) {
+                                        lesson.facility = alternative;
+                                        lesson.hasAlternative = true;
+                                    }
+                                }
+                                
+                                // הוספת המתקן לרשימת המתקנים המשומשים
+                                usedFacilities.push(lesson.facility);
+                            });
+                        }
+                    } else {
+                        // יותר מ-2 מורים - טיפול רגיל
+                        lessons.forEach(lesson => {
+                            const currentFacility = lesson.facility;
+                            
+                            // בדיקת התנגשות עם מגרש שלם וחצי מגרש
+                            const hasFullCourtConflict = (currentFacility === 'מגרש שלם' && usedFacilities.some(f => f.includes('חצי מגרש')));
+                            const hasHalfCourtConflict = (currentFacility.includes('חצי מגרש') && usedFacilities.includes('מגרש שלם'));
+                            
+                            if (usedFacilities.includes(currentFacility) || hasFullCourtConflict || hasHalfCourtConflict) {
+                                
+                                const alternative = findAlternativeFacility(
+                                    date, time, lesson.day, currentFacility, usedFacilities, lessons
+                                );
+                                
+                                // עדכון המתקן במקרה שנמצאה חלופה
+                                if (alternative !== currentFacility) {
+                                    lesson.facility = alternative;
+                                    lesson.hasAlternative = true;
+                                }
+                            }
+                            
+                            // הוספת המתקן לרשימת המתקנים המשומשים
+                            usedFacilities.push(lesson.facility);
+                        });
+                    }
+                });
+            });
+            
+            return resolvedData;
+        }
+
+        // פונקציה ליצירת תאריכים מהתקופה נובמבר 2025 - יוני 2026
+        function generateScheduleData() {
+            const scheduleData = [];
+            const startDate = new Date(2025, 10, 2); // 2 בנובמבר 2025
+            const endDate = new Date(2026, 5, 20);   // 20 ביוני 2026
+            
+            // הגדרת מערכת השעות לפי הקובץ המצורף - עם חלוקה נכונה של המתקנים
+            const weeklySchedule = [
+                // יום ראשון (0) - שיעור 0 (07:45) - רק המורים שצוינו
+                { day: 0, time: '7:45', teacher: 'עומר', class: 'יב12', facility: 'מתקנים' },
+                { day: 0, time: '7:45', teacher: 'אילת', class: 'יב10', facility: 'אולם' },
+                
+                // יום ראשון (0) - שיעור 1 (08:30) והלאה
+                { day: 0, time: '8:30', teacher: 'עומר', class: 'י2', facility: 'חצי אולם א' },
+                { day: 0, time: '8:30', teacher: 'אילת', class: 'י2', facility: 'סטודיו' },
+                
+                { day: 0, time: '9:15', teacher: 'עומר', class: 'י3+י4', facility: 'מגרש שלם' },
+                { day: 0, time: '9:15', teacher: 'שיר', class: 'י3+י4', facility: 'מתקנים' },
+                { day: 0, time: '9:15', teacher: 'בני', class: 'י5+י6', facility: 'מתקנים' },
+                { day: 0, time: '9:15', teacher: 'אילת', class: 'י5+י6', facility: 'אולם' },
+                
+                { day: 0, time: '10:15', teacher: 'עומר', class: 'יב3', facility: 'חצי אולם א' },
+                { day: 0, time: '10:15', teacher: 'שיר', class: 'יב3', facility: 'סטודיו' },
+                { day: 0, time: '10:15', teacher: 'אסף', class: 'יב7', facility: 'מגרש שלם' },
+                { day: 0, time: '10:15', teacher: 'אילת', class: 'יב7', facility: 'מתקנים' },
+                
+                { day: 0, time: '11:00', teacher: 'עומר', class: 'יב11', facility: 'מתקנים' },
+                
+                { day: 0, time: '12:00', teacher: 'אסף', class: 'יא1', facility: 'אולם' },
+                { day: 0, time: '12:00', teacher: 'אילת', class: 'יא1', facility: 'חצי אולם א' },
+                { day: 0, time: '12:00', teacher: 'בני', class: 'יא9', facility: 'סטודיו' },
+                { day: 0, time: '12:00', teacher: 'שיר', class: 'יא9', facility: 'מגרש שלם' },
+                
+                { day: 0, time: '12:45', teacher: 'אסף', class: 'יא6', facility: 'מתקנים' },
+                { day: 0, time: '12:45', teacher: 'שיר', class: 'יא6', facility: 'מתקנים' },
+                
+                { day: 0, time: '13:55', teacher: 'אסף', class: 'יא4+יא5', facility: 'אולם' },
+                { day: 0, time: '13:55', teacher: 'אילת', class: 'יא4+יא5', facility: 'חצי אולם א' },
+
+                // יום שני (1) - שיעור 0 (07:45) - רק המורים שצוינו
+                { day: 1, time: '7:45', teacher: 'עומר', class: 'יב11', facility: 'חצי אולם א' },
+                
+                // יום שני (1) - שיעור 1 (08:30) והלאה
+                { day: 1, time: '8:30', teacher: 'אסף', class: 'י11', facility: 'סטודיו' },
+                { day: 1, time: '8:30', teacher: 'יובל', class: 'י11', facility: 'מגרש שלם' },
+                { day: 1, time: '8:30', teacher: 'בני', class: 'יב2', facility: 'מתקנים' },
+                { day: 1, time: '8:30', teacher: 'אילת', class: 'יב2', facility: 'מתקנים' },
+                { day: 1, time: '8:30', teacher: 'שיר', class: 'יב4+יב10', facility: 'אולם' },
+                { day: 1, time: '8:30', teacher: 'עומר', class: 'יב10', facility: 'חצי אולם ב' },
+                { day: 1, time: '8:30', teacher: 'יוסי', class: 'יב4', facility: 'סטודיו' },
+                
+                { day: 1, time: '9:15', teacher: 'יוסי', class: 'י9', facility: 'מגרש שלם' },
+                { day: 1, time: '9:15', teacher: 'יובל', class: 'י9', facility: 'מתקנים' },
+                { day: 1, time: '9:15', teacher: 'שיר', class: 'יב3', facility: 'מתקנים' },
+                { day: 1, time: '9:15', teacher: 'עומר', class: 'יב3', facility: 'אולם' },
+                { day: 1, time: '9:15', teacher: 'אסף', class: 'יב7', facility: 'חצי אולם א' },
+                { day: 1, time: '9:15', teacher: 'אילת', class: 'יב7', facility: 'סטודיו' },
+                
+                { day: 1, time: '10:15', teacher: 'יוסי', class: 'י1', facility: 'מגרש שלם' },
+                { day: 1, time: '10:15', teacher: 'ליאת', class: 'י1', facility: 'מתקנים' },
+                { day: 1, time: '10:15', teacher: 'יובל', class: 'י8+י10', facility: 'מתקנים' },
+                { day: 1, time: '10:15', teacher: 'בני', class: 'י10', facility: 'אולם' },
+                { day: 1, time: '10:15', teacher: 'אסף', class: 'י8', facility: 'חצי אולם א' },
+                { day: 1, time: '10:15', teacher: 'שיר', class: 'יב1', facility: 'סטודיו' },
+                { day: 1, time: '10:15', teacher: 'עומר', class: 'יב1', facility: 'מגרש שלם' },
+                
+                { day: 1, time: '11:00', teacher: 'יוסי', class: 'י7', facility: 'מתקנים' },
+                { day: 1, time: '11:00', teacher: 'יובל', class: 'י7', facility: 'מתקנים' },
+                { day: 1, time: '11:00', teacher: 'אסף', class: 'יב9', facility: 'אולם' },
+                { day: 1, time: '11:00', teacher: 'סיגל', class: 'יב9', facility: 'חצי אולם א' },
+                { day: 1, time: '11:00', teacher: 'שיר', class: 'יב13', facility: 'סטודיו' },
+                
+                { day: 1, time: '12:00', teacher: 'יוסי', class: 'יא2', facility: 'מגרש שלם' },
+                { day: 1, time: '12:00', teacher: 'יובל', class: 'יא2', facility: 'מתקנים' },
+                
+                { day: 1, time: '12:45', teacher: 'אסף', class: 'יא10', facility: 'מגרש שלם' },
+                { day: 1, time: '12:45', teacher: 'שיר', class: 'יב12', facility: 'מתקנים' },
+                { day: 1, time: '12:45', teacher: 'יוסי', class: 'יב14', facility: 'מתקנים' },
+                { day: 1, time: '12:45', teacher: 'סיגל', class: 'יב11', facility: 'אולם' },
+                { day: 1, time: '12:45', teacher: 'בני', class: 'מגמת י מעשי', facility: 'חצי אולם א' },
+                
+                { day: 1, time: '13:55', teacher: 'שיר', class: 'יב5+יב8', facility: 'סטודיו' },
+                { day: 1, time: '13:55', teacher: 'אסף', class: 'יב5', facility: 'מגרש שלם' },
+                { day: 1, time: '13:55', teacher: 'יוסי', class: 'יב8', facility: 'מתקנים' },
+
+                // יום שלישי (2) - אין שיעור 0 (07:45)
+                
+                // יום שלישי (2) - שיעור 1 (08:30) והלאה
+                { day: 2, time: '8:30', teacher: 'אסף', class: 'יא4+יא5', facility: 'אולם' },
+                { day: 2, time: '8:30', teacher: 'אילת', class: 'יא4+יא5', facility: 'חצי אולם א' },
+                { day: 2, time: '8:30', teacher: 'בני', class: 'יא7', facility: 'סטודיו' },
+                { day: 2, time: '8:30', teacher: 'שיר', class: 'יא7', facility: 'מגרש שלם' },
+                
+                { day: 2, time: '9:15', teacher: 'שיר', class: 'יא3+יא8', facility: 'אולם' },
+                { day: 2, time: '9:15', teacher: 'אסף', class: 'יא3', facility: 'חצי אולם א' },
+                { day: 2, time: '9:15', teacher: 'בני', class: 'יא8', facility: 'סטודיו' },
+                
+                { day: 2, time: '10:15', teacher: 'אסף', class: 'יא1', facility: 'מגרש שלם' },
+                { day: 2, time: '10:15', teacher: 'אילת', class: 'יא1', facility: 'מתקנים' },
+                { day: 2, time: '10:15', teacher: 'בני', class: 'יא9', facility: 'מתקנים' },
+                { day: 2, time: '10:15', teacher: 'שיר', class: 'יא9', facility: 'אולם' },
+                
+                { day: 2, time: '11:00', teacher: 'אסף', class: 'יב6', facility: 'חצי אולם א' },
+                { day: 2, time: '11:00', teacher: 'שיר', class: 'יב6', facility: 'סטודיו' },
+                
+                { day: 2, time: '12:00', teacher: 'אסף', class: 'יא10', facility: 'מגרש שלם' },
+                { day: 2, time: '12:00', teacher: 'יוסי', class: 'יב14', facility: 'מתקנים' },
+                
+                { day: 2, time: '12:45', teacher: 'בני', class: 'יב2', facility: 'מתקנים' },
+                { day: 2, time: '12:45', teacher: 'אילת', class: 'יב2', facility: 'חצי אולם א' },
+
+                // יום רביעי (3) - אין שיעור 0 (07:45)
+                
+                // יום רביעי (3) - שיעור 1 (08:30) והלאה
+                { day: 3, time: '8:30', teacher: 'יוסי', class: 'י1', facility: 'חצי אולם א' },
+                { day: 3, time: '8:30', teacher: 'ליאת', class: 'י1', facility: 'מגרש שלם' },
+                { day: 3, time: '8:30', teacher: 'אסף', class: 'יב9', facility: 'סטודיו' },
+                { day: 3, time: '8:30', teacher: 'סיגל', class: 'יב9', facility: 'מגרש שלם' },
+                
+                { day: 3, time: '9:15', teacher: 'עומר', class: 'י2', facility: 'חצי אולם א' },
+                { day: 3, time: '9:15', teacher: 'אילת', class: 'י2', facility: 'סטודיו' },
+                
+                { day: 3, time: '10:15', teacher: 'עומר', class: 'י3+י4', facility: 'סטודיו' },
+                { day: 3, time: '10:15', teacher: 'שיר', class: 'י3+י4', facility: 'מגרש שלם' },
+                { day: 3, time: '10:15', teacher: 'בני', class: 'י5+י6', facility: 'מתקנים' },
+                { day: 3, time: '10:15', teacher: 'אילת', class: 'י5+י6', facility: 'מתקנים' },
+                
+                { day: 3, time: '11:00', teacher: 'שיר', class: 'יב5+יב8', facility: 'אולם' },
+                { day: 3, time: '11:00', teacher: 'אסף', class: 'יב5', facility: 'אולם' },
+                { day: 3, time: '11:00', teacher: 'יוסי', class: 'יב8', facility: 'אולם' },
+                { day: 3, time: '11:00', teacher: 'עומר', class: 'יב12', facility: 'מגרש שלם' },
+                { day: 3, time: '11:00', teacher: 'אילת', class: 'מגמת י מעשי', facility: 'מתקנים' },
+                
+                { day: 3, time: '12:00', teacher: 'שיר', class: 'יב4+יב10', facility: 'אולם' },
+                { day: 3, time: '12:00', teacher: 'עומר', class: 'יב10', facility: 'אולם' },
+                { day: 3, time: '12:00', teacher: 'יוסי', class: 'יב4', facility: 'אולם' },
+                
+                { day: 3, time: '12:45', teacher: 'עומר', class: 'יב1', facility: 'מגרש שלם' },
+                { day: 3, time: '12:45', teacher: 'שיר', class: 'יב1', facility: 'מתקנים' },
+                { day: 3, time: '12:45', teacher: 'אילת', class: 'מגמת י מעשי', facility: 'מתקנים' },
+                
+                { day: 3, time: '13:55', teacher: 'אסף', class: 'יב6', facility: 'מגרש שלם' },
+                { day: 3, time: '13:55', teacher: 'שיר', class: 'יב6', facility: 'מתקנים' },
+
+                // יום חמישי (4) - שיעור 0 (07:45) - רק המורים שצוינו
+                { day: 4, time: '7:45', teacher: 'שיר', class: 'יג13', facility: 'אולם' },
+                
+                // יום חמישי (4) - שיעור 1 (08:30) והלאה
+                { day: 4, time: '8:30', teacher: 'יוסי', class: 'י7', facility: 'חצי אולם א' },
+                { day: 4, time: '8:30', teacher: 'יובל', class: 'י7', facility: 'סטודיו' },
+                { day: 4, time: '8:30', teacher: 'אסף', class: 'יא6', facility: 'מגרש שלם' },
+                { day: 4, time: '8:30', teacher: 'שיר', class: 'יא6', facility: 'מתקנים' },
+                
+                { day: 4, time: '9:15', teacher: 'יוסי', class: 'י9', facility: 'אולם' },
+                { day: 4, time: '9:15', teacher: 'יובל', class: 'י9', facility: 'חצי אולם א' },
+                { day: 4, time: '9:15', teacher: 'שיר', class: 'יא3+יא8', facility: 'סטודיו' },
+                { day: 4, time: '9:15', teacher: 'אסף', class: 'יא3', facility: 'מגרש שלם' },
+                { day: 4, time: '9:15', teacher: 'בני', class: 'יא8', facility: 'מתקנים' },
+                
+                { day: 4, time: '10:15', teacher: 'יוסי', class: 'יא2', facility: 'אולם' },
+                { day: 4, time: '10:15', teacher: 'יובל', class: 'יא2', facility: 'חצי אולם א' },
+                { day: 4, time: '10:15', teacher: 'בני', class: 'יא7', facility: 'סטודיו' },
+                { day: 4, time: '10:15', teacher: 'שיר', class: 'יא7', facility: 'מגרש שלם' },
+                
+                { day: 4, time: '11:00', teacher: 'בני', class: 'יב14', facility: 'מתקנים' },
+                
+                { day: 4, time: '12:00', teacher: 'אסף', class: 'י11', facility: 'מגרש שלם' },
+                { day: 4, time: '12:00', teacher: 'יובל', class: 'י11', facility: 'חצי אולם א' },
+                { day: 4, time: '12:00', teacher: 'בני', class: 'יב13', facility: 'סטודיו' },
+                
+                { day: 4, time: '12:45', teacher: 'יובל', class: 'י8+י10', facility: 'מגרש שלם' },
+                { day: 4, time: '12:45', teacher: 'אסף', class: 'י8', facility: 'מתקנים' },
+                { day: 4, time: '12:45', teacher: 'בני', class: 'י10', facility: 'מתקנים' }
+            ];
+
+            const dayNames = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'];
+            
+            // יצירת הנתונים לכל התקופה
+            let currentDate = new Date(startDate);
+            while (currentDate <= endDate) {
+                const dayOfWeek = currentDate.getDay(); // 0=ראשון, 1=שני, ..., 6=שבת
+                
+                // רק ימי א'-ה' (ראשון-חמישי)
+                if (dayOfWeek >= 0 && dayOfWeek <= 4) {
+                    const dateStr = `${currentDate.getDate().toString().padStart(2, '0')}/${(currentDate.getMonth() + 1).toString().padStart(2, '0')}/${currentDate.getFullYear()}`;
+                    const hebrewDay = dayNames[dayOfWeek];
+                    
+                    // הוספת השיעורים ליום זה
+                    const dayLessons = weeklySchedule.filter(lesson => lesson.day === dayOfWeek);
+                    dayLessons.forEach(lesson => {
+                        const constraintCheck = checkFacilityConstraints(dateStr, lesson.time, hebrewDay, lesson.facility);
+                        scheduleData.push({
+                            date: dateStr,
+                            day: hebrewDay,
+                            time: lesson.time,
+                            teacher: lesson.teacher,
+                            class: lesson.class,
+                            facility: lesson.facility,
+                            constraintMessage: constraintCheck.message,
+                            hasConstraint: !constraintCheck.allowed
+                        });
+                    });
+                }
+                
+                // מעבר ליום הבא
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            
+            return scheduleData;
+        }
+
+        // יצירת נתוני המערכת ופתרון אוטומטי של התנגשויות עם עדיפות לאולם
+        let scheduleData = resolveConflictsAutomatically(generateScheduleData());
+
+        // משתנים גלובליים ללוחות שנה
+        let currentMonthFrom = new Date(2025, 10, 1); // נובמבר 2025
+        let currentMonthTo = new Date(2026, 5, 1);    // יוני 2026
+        let selectedDateFrom = null;
+        let selectedDateTo = null;
+
+        // פונקציות ללוח שנה
+        function formatDate(date) {
+            return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+        }
+
+        function getMonthName(date) {
+            const months = [
+                'ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני',
+                'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'
+            ];
+            return `${months[date.getMonth()]} ${date.getFullYear()}`;
+        }
+
+        function isDateInRange(date, startDate, endDate) {
+            return date >= startDate && date <= endDate;
+        }
+
+        function renderCalendar(type, date) {
+            const calendarGrid = document.getElementById(`calendarGrid${type}`);
+            const monthDisplay = document.getElementById(`monthDisplay${type}`);
+            
+            monthDisplay.textContent = getMonthName(date);
+            
+            // קביעת היום הראשון של החודש
+            const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            // קביעת היום האחרון של החודש
+            const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            const today = new Date();
+            
+            // טווח התאריכים המותר - מתוקן לכלול את כל החודשים
+            const minDate = new Date(2025, 10, 2); // 2 נובמבר 2025
+            const maxDate = new Date(2026, 5, 20); // 20 יוני 2026
+            
+            // ניקוי הלוח
+            while (calendarGrid.children.length > 7) {
+                calendarGrid.removeChild(calendarGrid.lastChild);
+            }
+            
+            // הוספת תאים ריקים לימים לפני תחילת החודש
+            const startDay = firstDay.getDay();
+            for (let i = 0; i < startDay; i++) {
+                const prevDate = new Date(firstDay);
+                prevDate.setDate(prevDate.getDate() - (startDay - i));
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day other-month';
+                dayElement.textContent = prevDate.getDate();
+                calendarGrid.appendChild(dayElement);
+            }
+            
+            // הוספת ימי החודש
+            for (let i = 1; i <= lastDay.getDate(); i++) {
+                const currentDate = new Date(date.getFullYear(), date.getMonth(), i);
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                
+                // בדיקה אם התאריך בטווח המותר
+                const isInRange = isDateInRange(currentDate, minDate, maxDate);
+                
+                if (!isInRange) {
+                    dayElement.classList.add('disabled');
+                } else {
+                    // סימון היום הנוכחי
+                    if (currentDate.toDateString() === today.toDateString()) {
+                        dayElement.classList.add('today');
+                    }
+                    
+                    // סימון תאריך נבחר
+                    if (type === 'From' && selectedDateFrom && 
+                        currentDate.toDateString() === selectedDateFrom.toDateString()) {
+                        dayElement.classList.add('selected');
+                    }
+                    if (type === 'To' && selectedDateTo && 
+                        currentDate.toDateString() === selectedDateTo.toDateString()) {
+                        dayElement.classList.add('selected');
+                    }
+                    
+                    dayElement.onclick = function() {
+                        selectDate(type, currentDate);
+                    };
+                }
+                
+                dayElement.textContent = i;
+                calendarGrid.appendChild(dayElement);
+            }
+            
+            // הוספת תאים ריקים לימים אחרי סוף החודש
+            const endDay = lastDay.getDay();
+            const totalCells = 42; // 6 שורות * 7 ימים
+            const currentCells = startDay + lastDay.getDate();
+            const remainingCells = totalCells - currentCells;
+            
+            for (let i = 1; i <= remainingCells; i++) {
+                const nextDate = new Date(lastDay);
+                nextDate.setDate(nextDate.getDate() + i);
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day other-month';
+                dayElement.textContent = nextDate.getDate();
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+
+        function selectDate(type, date) {
+            if (type === 'From') {
+                selectedDateFrom = date;
+                document.getElementById('dateFrom').value = formatDate(date);
+                document.getElementById('calendarFrom').style.display = 'none';
+                
+                // אם התאריך "עד" קטן מהתאריך "מ", עדכן אותו
+                if (selectedDateTo && date > selectedDateTo) {
+                    selectedDateTo = date;
+                    document.getElementById('dateTo').value = formatDate(date);
+                    renderCalendar('To', currentMonthTo);
+                }
+            } else {
+                selectedDateTo = date;
+                document.getElementById('dateTo').value = formatDate(date);
+                document.getElementById('calendarTo').style.display = 'none';
+                
+                // אם התאריך "מ" גדול מהתאריך "עד", עדכן אותו
+                if (selectedDateFrom && date < selectedDateFrom) {
+                    selectedDateFrom = date;
+                    document.getElementById('dateFrom').value = formatDate(date);
+                    renderCalendar('From', currentMonthFrom);
+                }
+            }
+        }
+
+        function changeMonth(type, direction) {
+            let currentMonth;
+            if (type === 'From') {
+                currentMonth = currentMonthFrom;
+            } else {
+                currentMonth = currentMonthTo;
+            }
+            
+            // יצירת תאריך חדש כדי לא לשנות את המקור
+            const newMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + direction, 1);
+            
+            // בדיקה שהחודש החדש בטווח המותר (נובמבר 2025 - יוני 2026)
+            const minMonth = new Date(2025, 10, 1); // נובמבר 2025
+            const maxMonth = new Date(2026, 5, 1);  // יוני 2026
+            
+            if (newMonth >= minMonth && newMonth <= maxMonth) {
+                if (type === 'From') {
+                    currentMonthFrom = newMonth;
+                    renderCalendar('From', currentMonthFrom);
+                } else {
+                    currentMonthTo = newMonth;
+                    renderCalendar('To', currentMonthTo);
+                }
+            }
+        }
+
+        // פונקציה לטעינת הטבלה
+        function loadTable(data = scheduleData) {
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+            
+            if (data.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="7" class="no-data">לא נמצאו נתונים לפי הסינון שנבחר</td></tr>';
+                return;
+            }
+            
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                if (item.hasConstraint) {
+                    row.classList.add('facility-limited');
+                }
+                if (item.hasAlternative) {
+                    row.classList.add('facility-alternative');
+                }
+                
+                // יצירת הודעה משולבת - רק הערות על אילוצים
+                let message = item.constraintMessage || '';
+                
+                row.innerHTML = `
+                    <td>${item.date}</td>
+                    <td>${item.day}</td>
+                    <td>${item.time}</td>
+                    <td>${item.teacher}</td>
+                    <td>${item.class}</td>
+                    <td>${item.facility}</td>
+                    <td>${message}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            // עדכון סיכום
+            updateSummary(data);
+        }
+        
+        // פונקציה לעדכון סיכום
+        function updateSummary(data) {
+            const summaryText = document.getElementById('summaryText');
+            const teacher = document.getElementById('teacherSelect').value;
+            const month = document.getElementById('monthSelect').value;
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+            
+            let summary = '';
+            if (teacher === 'all' && month === 'all' && !dateFrom && !dateTo) {
+                summary = `מציג את כל הנתונים: ${data.length} שיעורים`;
+            } else {
+                let filters = [];
+                if (teacher !== 'all') filters.push(`מורה: ${teacher}`);
+                if (month !== 'all') {
+                    const monthNames = {
+                        '11': 'נובמבר 2025', '12': 'דצמבר 2025',
+                        '1': 'ינואר 2026', '2': 'פברואר 2026', '3': 'מרץ 2026',
+                        '4': 'אפריל 2026', '5': 'מאי 2026', '6': 'יוני 2026'
+                    };
+                    filters.push(`חודש: ${monthNames[month]}`);
+                }
+                if (dateFrom) filters.push(`מתאריך: ${dateFrom}`);
+                if (dateTo) filters.push(`עד תאריך: ${dateTo}`);
+                
+                summary = `מציג ${data.length} שיעורים (${filters.join(', ')})`;
+            }
+            
+            summaryText.textContent = summary;
+        }
+        
+        // פונקציה לסינון הטבלה
+        function filterTable() {
+            const teacher = document.getElementById('teacherSelect').value;
+            const month = document.getElementById('monthSelect').value;
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+            
+            let filteredData = scheduleData;
+            
+            // סינון לפי מורה
+            if (teacher !== 'all') {
+                filteredData = filteredData.filter(item => item.teacher === teacher);
+            }
+            
+            // סינון לפי חודש - תיקון: השוואה לפורמט הנכון
+            if (month !== 'all') {
+                filteredData = filteredData.filter(item => {
+                    const dateParts = item.date.split('/');
+                    // המרת חודש לפורמט דו-ספרתי
+                    const itemMonth = dateParts[1].padStart(2, '0');
+                    const filterMonth = month.padStart(2, '0');
+                    return itemMonth === filterMonth;
+                });
+            }
+            
+            // סינון לפי טווח תאריכים
+            if (dateFrom) {
+                filteredData = filteredData.filter(item => {
+                    const itemDate = new Date(item.date.split('/').reverse().join('-'));
+                    const fromDate = new Date(dateFrom.split('/').reverse().join('-'));
+                    return itemDate >= fromDate;
+                });
+            }
+            
+            if (dateTo) {
+                filteredData = filteredData.filter(item => {
+                    const itemDate = new Date(item.date.split('/').reverse().join('-'));
+                    const toDate = new Date(dateTo.split('/').reverse().join('-'));
+                    return itemDate <= toDate;
+                });
+            }
+            
+            loadTable(filteredData);
+        }
+        
+        // פונקציה לאיפוס סינון
+        function resetFilters() {
+            document.getElementById('teacherSelect').value = 'all';
+            document.getElementById('monthSelect').value = 'all';
+            document.getElementById('dateFrom').value = '';
+            document.getElementById('dateTo').value = '';
+            selectedDateFrom = null;
+            selectedDateTo = null;
+            
+            // איפוס לוחות שנה לתאריכי ברירת מחדל
+            currentMonthFrom = new Date(2025, 10, 1);
+            currentMonthTo = new Date(2026, 5, 1);
+            renderCalendar('From', currentMonthFrom);
+            renderCalendar('To', currentMonthTo);
+            
+            // איפוס כפתורי המורים
+            document.querySelectorAll('.teacher-tag').forEach(tag => {
+                tag.classList.remove('active');
+            });
+            document.querySelector('.teacher-tag[data-teacher="all"]').classList.add('active');
+            
+            // איפוס כפתורי החודשים
+            document.querySelectorAll('.month-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector('.month-btn[data-month="all"]').classList.add('active');
+            
+            loadTable();
+        }
+        
+        // פונקציה לייצוא ל-Excel
+        function exportToExcel() {
+            let csv = 'תאריך,יום,שעה,מורה,כיתה,מתקן,הערה\n';
+            const dataToExport = getFilteredData();
+            
+            dataToExport.forEach(item => {
+                // יצירת הודעה משולבת - רק הערות על אילוצים
+                let message = item.constraintMessage || '';
+                
+                csv += `"${item.date}","${item.day}","${item.time}","${item.teacher}","${item.class}","${item.facility}","${message}"\n`;
+            });
+            
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'טבלת_מתקנים_למורים.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // פונקציה לקבלת הנתונים המסוננים
+        function getFilteredData() {
+            const teacher = document.getElementById('teacherSelect').value;
+            const month = document.getElementById('monthSelect').value;
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+            
+            let filteredData = scheduleData;
+            
+            if (teacher !== 'all') {
+                filteredData = filteredData.filter(item => item.teacher === teacher);
+            }
+            
+            if (month !== 'all') {
+                filteredData = filteredData.filter(item => {
+                    const dateParts = item.date.split('/');
+                    // המרת חודש לפורמט דו-ספרתי
+                    const itemMonth = dateParts[1].padStart(2, '0');
+                    const filterMonth = month.padStart(2, '0');
+                    return itemMonth === filterMonth;
+                });
+            }
+            
+            if (dateFrom) {
+                filteredData = filteredData.filter(item => {
+                    const itemDate = new Date(item.date.split('/').reverse().join('-'));
+                    const fromDate = new Date(dateFrom.split('/').reverse().join('-'));
+                    return itemDate >= fromDate;
+                });
+            }
+            
+            if (dateTo) {
+                filteredData = filteredData.filter(item => {
+                    const itemDate = new Date(item.date.split('/').reverse().join('-'));
+                    const toDate = new Date(dateTo.split('/').reverse().join('-'));
+                    return itemDate <= toDate;
+                });
+            }
+            
+            return filteredData;
+        }
+
+        // פונקציה לבחירת מורה מהרשימה
+        function selectTeacher(teacherName) {
+            document.getElementById('teacherSelect').value = teacherName;
+            
+            // עדכון המראה הוויזואלי
+            document.querySelectorAll('.teacher-tag').forEach(tag => {
+                tag.classList.remove('active');
+            });
+            document.querySelector(`.teacher-tag[data-teacher="${teacherName}"]`).classList.add('active');
+            
+            filterTable();
+        }
+
+        // פונקציה לבחירת חודש מהרשימה
+        function selectMonth(monthNumber) {
+            document.getElementById('monthSelect').value = monthNumber;
+            
+            // עדכון המראה הוויזואלי
+            document.querySelectorAll('.month-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.month-btn[data-month="${monthNumber}"]`).classList.add('active');
+            
+            filterTable();
+        }
+
+        // אתחול לוחות שנה ואירועים
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCalendar('From', currentMonthFrom);
+            renderCalendar('To', currentMonthTo);
+            
+            // הצגת לוח שנה בלחיצה על שדה תאריך
+            document.getElementById('dateFrom').addEventListener('click', function() {
+                document.getElementById('calendarFrom').style.display = 'block';
+                document.getElementById('calendarTo').style.display = 'none';
+            });
+            
+            document.getElementById('dateTo').addEventListener('click', function() {
+                document.getElementById('calendarTo').style.display = 'block';
+                document.getElementById('calendarFrom').style.display = 'none';
+            });
+            
+            // סגירת לוח שנה בלחיצה מחוץ לו
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.date-picker-container')) {
+                    document.getElementById('calendarFrom').style.display = 'none';
+                    document.getElementById('calendarTo').style.display = 'none';
+                }
+            });
+
+            // הוספת אירועים לכפתורי המורים
+            document.querySelectorAll('.teacher-tag').forEach(tag => {
+                tag.addEventListener('click', function() {
+                    const teacher = this.getAttribute('data-teacher');
+                    selectTeacher(teacher);
+                });
+            });
+
+            // הוספת אירועים לכפתורי החודשים
+            document.querySelectorAll('.month-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const month = this.getAttribute('data-month');
+                    selectMonth(month);
+                });
+            });
+
+            // בדיקה שהנתונים נוצרו נכון
+            console.log('מספר שיעורים כולל:', scheduleData.length);
+            
+            // בדיקת נתונים לחודשים שונים
+            const monthsToCheck = ['11', '12', '1', '2', '3', '4', '5', '6'];
+            monthsToCheck.forEach(month => {
+                const monthData = scheduleData.filter(item => {
+                    const dateParts = item.date.split('/');
+                    const itemMonth = dateParts[1].padStart(2, '0');
+                    const filterMonth = month.padStart(2, '0');
+                    return itemMonth === filterMonth;
+                });
+                console.log(`חודש ${month}: ${monthData.length} שיעורים`);
+            });
+        });
+
+        // טעינת הטבלה הראשונית
+        window.onload = function() {
+            loadTable();
+        };
+    </script>
+</body>
+</html>
