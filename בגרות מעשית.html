@@ -173,7 +173,7 @@
             padding: 20px;
             border-radius: 8px;
             margin: 20px 0;
-            border-left: 5px solid var(--secondary);
+            border-right: 5px solid var(--secondary);
         }
         
         .info-box h3 {
@@ -183,18 +183,21 @@
         
         .tests-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 20px;
             margin: 30px 0;
         }
         
         .test-card {
             background: var(--light);
-            padding: 25px;
+            padding: 20px;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
-            border-left: 5px solid var(--secondary);
+            border-right: 5px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
         
         .test-card:hover {
@@ -202,9 +205,28 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
-        .test-card h3 {
+        .test-card img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .test-card-content {
+            flex: 1;
+        }
+        
+        .test-card-content h3 {
             color: var(--primary);
-            margin-bottom: 10px;
+            margin-bottom: 5px;
+        }
+        
+        .test-card-content p {
+            color: #666;
+            margin: 5px 0;
+            font-size: 0.9rem;
         }
         
         .classes-grid {
@@ -399,7 +421,6 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* חיפוש וסינון */
         .filters-container {
             background: white;
             padding: 20px;
@@ -434,7 +455,7 @@
         .search-input {
             width: 100%;
             padding: 12px 20px;
-            padding-left: 45px;
+            padding-right: 45px;
             border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
@@ -449,7 +470,7 @@
         
         .search-icon {
             position: absolute;
-            left: 15px;
+            right: 15px;
             top: 50%;
             transform: translateY(-50%);
             color: #777;
@@ -470,7 +491,7 @@
         
         .clear-search {
             position: absolute;
-            left: 45px;
+            left: 15px;
             top: 50%;
             transform: translateY(-50%);
             background: none;
@@ -507,7 +528,6 @@
             font-weight: bold;
         }
         
-        /* תרשים התקדמות */
         .progress-chart-container {
             background: white;
             padding: 20px;
@@ -536,7 +556,6 @@
             margin: 20px 0;
         }
         
-        /* כרטיס תלמיד בדירוג */
         .student-card {
             background: white;
             border-radius: 8px;
@@ -544,7 +563,7 @@
             margin: 15px 0;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
-            border-left: 5px solid var(--secondary);
+            border-right: 5px solid var(--secondary);
         }
         
         .student-card:hover {
@@ -557,6 +576,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .student-card-body {
@@ -572,6 +593,7 @@
             padding: 8px 12px;
             background: #f9f9f9;
             border-radius: 4px;
+            flex-wrap: wrap;
         }
         
         .student-test-item .test-name {
@@ -583,7 +605,25 @@
             color: var(--primary);
         }
         
-        /* כפתור הראה/הסתר גרף */
+        .student-test-item .test-weight {
+            font-size: 0.8rem;
+            color: #666;
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+        
+        .student-test-item.missing {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .student-test-item.missing .test-grade {
+            color: #856404;
+            font-style: italic;
+        }
+        
         .toggle-chart-btn {
             background: var(--secondary);
             color: white;
@@ -592,17 +632,200 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 0.8rem;
-            margin-left: 10px;
+            margin-right: 10px;
         }
         
         .toggle-chart-btn:hover {
             background: #2980b9;
         }
         
-        /* תוספת לתיקון: כפתור פעיל בדירוג */
         .btn.active {
             transform: scale(1.05);
             box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+        
+        .test-image-large {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 3px solid var(--light);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .ranking-table th {
+            background: var(--primary);
+            color: white;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .ranking-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .ranking-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .ranking-table tr:hover {
+            background-color: #f0f7ff;
+        }
+        
+        .rank-1 {
+            background-color: #ffd700 !important;
+            font-weight: bold;
+        }
+        
+        .rank-2 {
+            background-color: #c0c0c0 !important;
+            font-weight: bold;
+        }
+        
+        .rank-3 {
+            background-color: #cd7f32 !important;
+            font-weight: bold;
+        }
+        
+        .student-details {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        /* חלון פרטי תלמיד */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .modal-close:hover {
+            color: var(--danger);
+        }
+        
+        .test-summary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .summary-item {
+            background: var(--light);
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .summary-item .label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .summary-item .value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        /* כפתורי חצים למבחן ריצה */
+        .result-controls {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .result-controls input {
+            width: 80px;
+            text-align: center;
+        }
+        
+        .arrow-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .arrow-btn:hover {
+            background: var(--primary);
+            transform: scale(1.1);
+        }
+        
+        .arrow-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .time-note {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 2px;
+            display: block;
+        }
+        
+        .weight-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            background: var(--primary);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-left: 5px;
         }
         
         @media (max-width: 768px) {
@@ -632,6 +855,35 @@
             
             .student-card-body {
                 grid-template-columns: 1fr;
+            }
+            
+            .test-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .test-card img {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .ranking-table {
+                font-size: 0.8rem;
+            }
+            
+            .ranking-table th, 
+            .ranking-table td {
+                padding: 6px 3px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+            
+            .result-controls {
+                flex-wrap: wrap;
+                justify-content: center;
             }
         }
     </style>
@@ -747,6 +999,8 @@
                 <i class="fas fa-home"></i> חזרה למסך ראשי
             </button>
             <h2 id="resultsScreenTitle"></h2>
+            <!-- מקום לתמונה הגדולה -->
+            <div id="testImageContainer" style="text-align: center; margin-bottom: 20px;"></div>
             <div id="resultsTable"></div>
             <button class="btn btn-save" id="saveResultsBtn">
                 <i class="fas fa-save"></i> שמור תוצאות
@@ -835,7 +1089,7 @@
                     </div>
                 </div>
                 
-                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
                     <button class="btn btn-primary" id="applyFiltersBtn" style="padding: 10px 20px;">
                         <i class="fas fa-filter"></i> החל סינון
                     </button>
@@ -866,12 +1120,16 @@
                 </div>
             </div>
             
+            <!-- תוצאות הדירוג -->
             <div id="rankingResults"></div>
         </div>
     </div>
 
     <!-- אזור להתראות -->
     <div id="notificationArea"></div>
+
+    <!-- חלון מודאלי לפרטי תלמיד -->
+    <div id="studentModal" style="display: none;"></div>
 
     <script>
         // נתוני המערכת
@@ -932,7 +1190,7 @@
             {time: 10, score: 30}
         ];
         
-        // טבלת המרה עבור ריצת 2,000 מטר (זמן בפורמט MM:SS → ציון)
+        // טבלת המרה עבור ריצת 2,000 מטר (זמן בפורמט MM:SS → ציון) - לבנים
         const running2000Table = [
             {time: "07:00", score: 100},
             {time: "07:03", score: 99},
@@ -1005,6 +1263,156 @@
             {time: "13:45", score: 32},
             {time: "13:55", score: 31},
             {time: "14:05", score: 30}
+        ];
+        
+        // טבלת המרה לבנות - ריצת 2,000 מטר לפי הקובץ
+        const girlsRunning2000Table = [
+            {score: 100, time: "10:00-10:30"},
+            {score: 99, time: "10:30"}, // ערך ביניים
+            {score: 98, time: "10:31"},
+            {score: 97, time: "10:31-11:00"},
+            {score: 96, time: "11:00"},
+            {score: 95, time: "11:01-11:30"},
+            {score: 94, time: "11:30"},
+            {score: 93, time: "11:31"},
+            {score: 92, time: "11:31-12:00"},
+            {score: 91, time: "12:00"},
+            {score: 90, time: "11:31-12:00"},
+            {score: 89, time: "12:00"},
+            {score: 88, time: "12:01"},
+            {score: 87, time: "12:01-12:30"},
+            {score: 86, time: "12:30"},
+            {score: 85, time: "12:01-12:30"},
+            {score: 84, time: "12:31"},
+            {score: 83, time: "12:31-13:00"},
+            {score: 82, time: "13:00"},
+            {score: 81, time: "13:01"},
+            {score: 80, time: "12:31-13:00"},
+            {score: 79, time: "13:01"},
+            {score: 78, time: "13:01-13:30"},
+            {score: 77, time: "13:30"},
+            {score: 76, time: "13:31"},
+            {score: 75, time: "13:01-13:30"},
+            {score: 74, time: "13:31"},
+            {score: 73, time: "13:31-14:00"},
+            {score: 72, time: "14:00"},
+            {score: 71, time: "14:01"},
+            {score: 70, time: "13:31-14:00"},
+            {score: 69, time: "14:01"},
+            {score: 68, time: "14:01-14:30"},
+            {score: 67, time: "14:30"},
+            {score: 66, time: "14:31"},
+            {score: 65, time: "14:01-14:30"},
+            {score: 64, time: "14:31"},
+            {score: 63, time: "14:31-15:00"},
+            {score: 62, time: "15:00"},
+            {score: 61, time: "15:01"},
+            {score: 60, time: "14:31-15:00"},
+            {score: 59, time: "15:01"},
+            {score: 58, time: "15:01-17:00"},
+            {score: 57, time: "17:00"},
+            {score: 56, time: "17:01"},
+            {score: 55, time: "15:01-17:00"},
+            {score: 54, time: "17:01"},
+            {score: 53, time: "17:02"},
+            {score: 52, time: "17:03"},
+            {score: 51, time: "17:04"},
+            {score: 50, time: "17:01:00"}, // 17:01 ומעלה
+            {score: 49, time: "17:02"},
+            {score: 48, time: "17:03"},
+            {score: 47, time: "17:04"},
+            {score: 46, time: "17:05"},
+            {score: 45, time: "17:06"},
+            {score: 44, time: "17:07"},
+            {score: 43, time: "17:08"},
+            {score: 42, time: "17:09"},
+            {score: 41, time: "17:10"},
+            {score: 40, time: "17:11"},
+            {score: 39, time: "17:12"},
+            {score: 38, time: "17:13"},
+            {score: 37, time: "17:14"},
+            {score: 36, time: "17:15"},
+            {score: 35, time: "17:16"},
+            {score: 34, time: "17:17"},
+            {score: 33, time: "17:18"},
+            {score: 32, time: "17:19"},
+            {score: 31, time: "17:20"},
+            {score: 30, time: "17:21"}
+        ];
+        
+        // טבלת המרה לפלאנק לפי הקובץ
+        const plankTable = [
+            {score: 100, time: 100},
+            {score: 99, time: 99},
+            {score: 98, time: 98},
+            {score: 97, time: 97},
+            {score: 96, time: 96},
+            {score: 95, time: 95},
+            {score: 94, time: 94},
+            {score: 93, time: 93},
+            {score: 92, time: 92},
+            {score: 91, time: 91},
+            {score: 90, time: 90},
+            {score: 89, time: 89},
+            {score: 88, time: 88},
+            {score: 87, time: 87},
+            {score: 86, time: 86},
+            {score: 85, time: 85},
+            {score: 84, time: 84},
+            {score: 83, time: 83},
+            {score: 82, time: 82},
+            {score: 81, time: 81},
+            {score: 80, time: 80},
+            {score: 79, time: 79},
+            {score: 78, time: 78},
+            {score: 77, time: 77},
+            {score: 76, time: 76},
+            {score: 75, time: 75},
+            {score: 74, time: 74},
+            {score: 73, time: 73},
+            {score: 72, time: 72},
+            {score: 71, time: 71},
+            {score: 70, time: 70},
+            {score: 69, time: 69},
+            {score: 68, time: 68},
+            {score: 67, time: 67},
+            {score: 66, time: 66},
+            {score: 65, time: 65},
+            {score: 64, time: 64},
+            {score: 63, time: 63},
+            {score: 62, time: 62},
+            {score: 61, time: 61},
+            {score: 60, time: 60},
+            {score: 59, time: 59},
+            {score: 58, time: 58},
+            {score: 57, time: 57},
+            {score: 56, time: 56},
+            {score: 55, time: 55},
+            {score: 54, time: 54},
+            {score: 53, time: 53},
+            {score: 52, time: 52},
+            {score: 51, time: 51},
+            {score: 50, time: 50},
+            {score: 49, time: 49},
+            {score: 48, time: 48},
+            {score: 47, time: 47},
+            {score: 46, time: 46},
+            {score: 45, time: 45},
+            {score: 44, time: 44},
+            {score: 43, time: 43},
+            {score: 42, time: 42},
+            {score: 41, time: 41},
+            {score: 40, time: 40},
+            {score: 39, time: 39},
+            {score: 38, time: 38},
+            {score: 37, time: 37},
+            {score: 36, time: 36},
+            {score: 35, time: 35},
+            {score: 34, time: 34},
+            {score: 33, time: 33},
+            {score: 32, time: 32},
+            {score: 31, time: 31},
+            {score: 30, time: 30}
         ];
         
         // טבלת המרה עבור דלגית (כמות → ציון)
@@ -1145,21 +1553,21 @@
         ];
         
         // ============================================
-        // טבלת המרה עבור בנות מהקובץ האקסל
+        // טבלת המרה עבור בנות מהקובץ האקסל - לשאר המבחנים
         // ============================================
         const girlsConversionTable = [
             // ניקוד 100
-            {score: 100, running: "10:00-10:30", jumprope: 150, pullups_band: 14, pushups_knees: 35, pushups_regular: 15, ladder: 10},
+            {score: 100, jumprope: 150, pullups_band: 14, pushups_knees: 35, pushups_regular: 15, ladder: 10},
             // ניקוד 99
             {score: 99, jumprope: 149},
             // ניקוד 98
             {score: 98, jumprope: 148, pushups_knees: 34},
             // ניקוד 97
-            {score: 97, running: "10:31-11:00", jumprope: 146},
+            {score: 97, jumprope: 146},
             // ניקוד 96
             {score: 96, jumprope: 144, pullups_band: 13, pushups_knees: 33},
             // ניקוד 95
-            {score: 95, running: "11:01-11:30", jumprope: 142, pushups_regular: 14, ladder: 9},
+            {score: 95, jumprope: 142, pushups_regular: 14, ladder: 9},
             // ניקוד 94
             {score: 94, jumprope: 140, pushups_knees: 32},
             // ניקוד 93
@@ -1169,7 +1577,7 @@
             // ניקוד 91
             {score: 91, jumprope: 135},
             // ניקוד 90
-            {score: 90, running: "11:31-12:00", jumprope: 133, pullups_band: 11, pushups_knees: 30, pushups_regular: 13, ladder: 8},
+            {score: 90, jumprope: 133, pullups_band: 11, pushups_knees: 30, pushups_regular: 13, ladder: 8},
             // ניקוד 89
             {score: 89, jumprope: 132},
             // ניקוד 88
@@ -1179,7 +1587,7 @@
             // ניקוד 86
             {score: 86, jumprope: 127, pushups_knees: 28},
             // ניקוד 85
-            {score: 85, running: "12:01-12:30", jumprope: 125, pullups_band: 9, pushups_regular: 12, ladder: 7},
+            {score: 85, jumprope: 125, pullups_band: 9, pushups_regular: 12, ladder: 7},
             // ניקוד 84
             {score: 84, jumprope: 124, pushups_knees: 27},
             // ניקוד 83
@@ -1189,7 +1597,7 @@
             // ניקוד 81
             {score: 81, jumprope: 115},
             // ניקוד 80
-            {score: 80, running: "12:31-13:00", jumprope: 112, pullups_band: 8, pushups_knees: 25, pushups_regular: 11},
+            {score: 80, jumprope: 112, pullups_band: 8, pushups_knees: 25, pushups_regular: 11},
             // ניקוד 79
             {score: 79, jumprope: 110},
             // ניקוד 78
@@ -1199,7 +1607,7 @@
             // ניקוד 76
             {score: 76, jumprope: 103, pushups_knees: 23},
             // ניקוד 75
-            {score: 75, running: "13:01-13:30", jumprope: 100, pullups_band: 6, pushups_regular: 10, ladder: 6},
+            {score: 75, jumprope: 100, pullups_band: 6, pushups_regular: 10, ladder: 6},
             // ניקוד 74
             {score: 74, jumprope: 98, pushups_knees: 22},
             // ניקוד 73
@@ -1209,7 +1617,7 @@
             // ניקוד 71
             {score: 71, jumprope: 92},
             // ניקוד 70
-            {score: 70, running: "13:31-14:00", jumprope: 90, pullups_band: 5, pushups_knees: 20, pushups_regular: 9},
+            {score: 70, jumprope: 90, pullups_band: 5, pushups_knees: 20, pushups_regular: 9},
             // ניקוד 69
             {score: 69, jumprope: 88},
             // ניקוד 68
@@ -1219,7 +1627,7 @@
             // ניקוד 66
             {score: 66, jumprope: 83, pushups_knees: 18},
             // ניקוד 65
-            {score: 65, running: "14:01-14:30", jumprope: 81, pullups_band: 4, pushups_regular: 8, ladder: 5},
+            {score: 65, jumprope: 81, pullups_band: 4, pushups_regular: 8, ladder: 5},
             // ניקוד 64
             {score: 64, jumprope: 79, pushups_knees: 17},
             // ניקוד 63
@@ -1229,7 +1637,7 @@
             // ניקוד 61
             {score: 61, jumprope: 73},
             // ניקוד 60
-            {score: 60, running: "14:31-15:00", jumprope: 72, pullups_band: 3, pushups_knees: 15, pushups_regular: 7},
+            {score: 60, jumprope: 72, pullups_band: 3, pushups_knees: 15, pushups_regular: 7},
             // ניקוד 59
             {score: 59, jumprope: 71},
             // ניקוד 58
@@ -1239,7 +1647,7 @@
             // ניקוד 56
             {score: 56, jumprope: 66, pushups_knees: 13},
             // ניקוד 55
-            {score: 55, running: "15:01-17:00", jumprope: 64, pullups_band: 2, pushups_regular: 6, ladder: 4},
+            {score: 55, jumprope: 64, pullups_band: 2, pushups_regular: 6, ladder: 4},
             // ניקוד 54
             {score: 54, jumprope: 62, pushups_knees: 12},
             // ניקוד 53
@@ -1249,7 +1657,7 @@
             // ניקוד 51
             {score: 51, jumprope: 56},
             // ניקוד 50
-            {score: 50, running: "17:01:00", jumprope: 54, pullups_band: 1, pushups_knees: 10, pushups_regular: 5},
+            {score: 50, jumprope: 54, pullups_band: 1, pushups_knees: 10, pushups_regular: 5},
             // ניקוד 49
             {score: 49, jumprope: 52},
             // ניקוד 48
@@ -1292,7 +1700,9 @@
             {score: 30, jumprope: 14, pullups_band: "ניסיון", pushups_knees: "ניסיון", pushups_regular: "ניסיון", ladder: "ניסיון"}
         ];
 
-        // נתוני הבנות המלאים מהאקסל
+        // ============================================
+        // נתוני התלמידות (girlsData) - כל הנתונים מהקובץ המקורי
+        // ============================================
         const girlsData = [
             // כיתה 1 - 15 תלמידות
             {id: 47, lastName: "בן עמי", firstName: "רומי", grade: "יב", class: 1, gender: "girls"},
@@ -1445,7 +1855,9 @@
             {id: 271, lastName: "רוזנטל", firstName: "דבורה", grade: "יב", class: 12, gender: "girls"}
         ];
 
-        // נתוני הבנים
+        // ============================================
+        // נתוני התלמידים (boysData) - כל הנתונים מהקובץ המקורי
+        // ============================================
         const boysData = [
             // כיתה 1 - 18 תלמידים
             {id: 2, lastName: 'אביצור', firstName: 'איל', class: 1, gender: 'boys'},
@@ -1635,10 +2047,14 @@
             {id: 229, lastName: 'עמיעז', firstName: 'רומי שמעון', class: 12, gender: 'boys'}
         ];
 
+        // ============================================
         // נתוני כל התלמידים
+        // ============================================
         let allStudentsData = [...boysData, ...girlsData];
 
+        // ============================================
         // נתוני מבחן עיוני מהקובץ
+        // ============================================
         const theoryGradesData = [
             {firstName: 'עמית', lastName: 'זיו', class: 2, score: 71},
             {firstName: 'יונתן', lastName: 'קורין', class: 1, score: 100},
@@ -1901,9 +2317,32 @@
         ];
 
         // ============================================
-        // פונקציות ניהול בסיסיות
+        // ✅ מילון תמונות מעודכן עם כל הקישורים החדשים
         // ============================================
+        const testImages = {
+            // מבחנים לתלמידים (בנים)
+            'pullups': 'https://images.unsplash.com/photo-1605296867424-35fc25c9212a?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80',
+            'pushups': 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80',
+            'jumprope': 'https://portavozdigital.com/wp-content/uploads/2020/10/saltar-la-cuerda-1024x693.jpg',
+            'medicineball': 'https://www.snoridgecrossfit.com/wp-content/uploads/2016/08/SnoRidge-CrossFit_Med-Ball-Run.jpg',
+            'running2000': 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80',
+            'theory': 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80',
+            
+            // מבחנים לתלמידות
+            'running2000_girls': 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80',
+            'jumprope_girls': 'https://portavozdigital.com/wp-content/uploads/2020/10/saltar-la-cuerda-1024x693.jpg',
+            'pullups_band': 'https://d3m9l0v76dty0.cloudfront.net/system/photos/6300796/original/7f22d442d4c6d178d271b77816c4ba89.webp',
+            'pushups_knees': 'https://images1.ynet.co.il/PicServer3/2014/01/15/5099578/11-1_(Large).JPG',
+            'pushups_regular': 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80',
+            'ladder': 'https://funlee.co.il/wp-content/uploads/2025/02/%D7%A1%D7%95%D7%9C%D7%9D-%D7%90%D7%95%D7%A4%D7%A7%D7%99_2.jpg',
+            'plank': 'https://maayanperi.com/wp-content/uploads/workout-home-1-1536x1024.jpg',
+            'theory_girls': 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80'
+        };
 
+        // ============================================
+        // פונקציות המערכת
+        // ============================================
+        
         // הצגת התראות
         function showNotification(message, type = 'success') {
             const notificationArea = document.getElementById('notificationArea');
@@ -1953,12 +2392,10 @@
             
             grid.innerHTML = '';
             
-            // יצירת כיתות מ-1 עד 12
             for (let i = 1; i <= 12; i++) {
                 const classCard = document.createElement('div');
                 classCard.className = 'class-card';
                 
-                // ספירת תלמידים בכיתה
                 const studentCount = allStudentsData.filter(student => 
                     student.class === i && student.gender === currentGender
                 ).length;
@@ -1986,7 +2423,6 @@
         function selectClass(classNum) {
             currentClass = classNum;
             
-            // טעינת תלמידים
             students = allStudentsData.filter(student => 
                 student.class === classNum && student.gender === currentGender
             );
@@ -1998,82 +2434,8 @@
             
             showNotification(`נטענו ${students.length} ${currentGender === 'boys' ? 'תלמידים' : 'תלמידות'} מכיתה יב'${classNum}`, 'success');
             
-            // מעבר למסך הבחירה הבא
             updateTestScreen();
             showScreen('testScreen');
-        }
-
-        // עדכון מסך המבחנים
-        function updateTestScreen() {
-            const title = document.getElementById('testScreenTitle');
-            if (title) {
-                title.textContent = `כיתה יב'${currentClass} - בחר מבחן`;
-            }
-            
-            const grid = document.getElementById('testsGrid');
-            if (!grid) return;
-            
-            grid.innerHTML = '';
-            
-            // מבחנים שונים לבנים ולבנות
-            const tests = currentGender === 'boys' ? [
-                { id: 'pullups', name: 'מתח', unit: 'חזרות' },
-                { id: 'pushups', name: 'שכיבות שמיכה', unit: 'חזרות' },
-                { id: 'jumprope', name: 'דלגית', unit: 'חזרות' },
-                { id: 'medicineball', name: 'ריצת כדורי כוח', unit: 'שניות' },
-                { id: 'running2000', name: 'ריצת 2,000 מטר', unit: 'דקות:שניות' },
-                { id: 'theory', name: 'מבחן עיוני', unit: 'ציון' }
-            ] : [
-                { id: 'running2000_girls', name: 'ריצת 2,000 מטר', unit: 'דקות:שניות' },
-                { id: 'jumprope_girls', name: 'דלגית', unit: 'חזרות' },
-                { id: 'pushups_knees', name: 'שכיבות שמיכה ברכיים', unit: 'חזרות' },
-                { id: 'pushups_regular', name: 'שכיבות שמיכה רגיל', unit: 'חזרות' },
-                { id: 'pullups_band', name: 'מתח עם גומיה', unit: 'חזרות' },
-                { id: 'ladder', name: 'מעבר סולם', unit: 'חזרות/זמן' },
-                { id: 'plank', name: 'פלאנק', unit: 'שניות' },
-                { id: 'theory_girls', name: 'מבחן עיוני', unit: 'ציון' }
-            ];
-            
-            tests.forEach(test => {
-                const testCard = document.createElement('div');
-                testCard.className = 'test-card';
-                
-                const icon = getTestIcon(test.id);
-                
-                // בדיקה אם יש כבר ציונים למבחן זה
-                let savedCount = 0;
-                const testKey = `${currentGender}_${currentClass}_${test.id}`;
-                if (allTestResults[testKey]) {
-                    savedCount = Object.keys(allTestResults[testKey]).length;
-                }
-                
-                testCard.innerHTML = `
-                    <h3><i class="fas fa-${icon}"></i> ${test.name}</h3>
-                    <p style="color: #666; margin: 5px 0;">יחידת מידה: ${test.unit}</p>
-                    <div class="progress-container">
-                        <small>${savedCount > 0 ? `${savedCount} ציונים נשמרו` : 'לחץ לבחירת המבחן'}</small>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${Math.min(100, (savedCount / students.length) * 100)}%"></div>
-                        </div>
-                    </div>
-                    ${savedCount > 0 ? `
-                    <div style="margin-top: 10px;">
-                        <button class="btn btn-small btn-danger" onclick="clearTestData('${test.id}', event)">
-                            <i class="fas fa-trash"></i> נקה נתוני מבחן זה
-                        </button>
-                    </div>
-                    ` : ''}
-                `;
-                
-                testCard.onclick = () => {
-                    currentTest = test.id;
-                    currentTestType = test;
-                    loadResultsTable();
-                    showScreen('resultsScreen');
-                };
-                
-                grid.appendChild(testCard);
-            });
         }
 
         // קבלת אייקון למבחן
@@ -2097,20 +2459,15 @@
             return icons[testId] || 'running';
         }
 
-        // פונקציה חדשה: ניקוי נתוני מבחן ספציפי
+        // ניקוי נתוני מבחן ספציפי
         function clearTestData(testId, event) {
-            event.stopPropagation(); // מונע מהקלאק לעבור לכרטיס המבחן
-            
+            event.stopPropagation();
             const testName = getTestNameFromId(testId);
-            
             if (confirm(`האם אתה בטוח שברצונך למחוק את כל הציונים של ${testName} בכיתה יב'${currentClass}?`)) {
                 const testKey = `${currentGender}_${currentClass}_${testId}`;
-                
                 if (allTestResults[testKey]) {
                     delete allTestResults[testKey];
                     showNotification(`נמחקו כל הציונים של ${testName} מכיתה יב'${currentClass}`, 'success');
-                    
-                    // עדכון התצוגה
                     updateTestScreen();
                 } else {
                     showNotification('לא נמצאו ציונים למבחן זה', 'warning');
@@ -2118,7 +2475,7 @@
             }
         }
 
-        // פונקציה חדשה: קבלת שם מבחן לפי מזהה
+        // קבלת שם מבחן לפי מזהה
         function getTestNameFromId(testId) {
             const testNames = {
                 'pullups': 'מתח',
@@ -2139,27 +2496,175 @@
             return testNames[testId] || testId;
         }
 
-        // טעינת טבלת התוצאות
+        // עדכון מסך המבחנים (עם תמונות)
+        function updateTestScreen() {
+            const title = document.getElementById('testScreenTitle');
+            if (title) {
+                title.textContent = `כיתה יב'${currentClass} - בחר מבחן`;
+            }
+            
+            const grid = document.getElementById('testsGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+            
+            const tests = currentGender === 'boys' ? [
+                { id: 'pullups', name: 'מתח', unit: 'חזרות' },
+                { id: 'pushups', name: 'שכיבות שמיכה', unit: 'חזרות' },
+                { id: 'jumprope', name: 'דלגית', unit: 'חזרות' },
+                { id: 'medicineball', name: 'ריצת כדורי כוח', unit: 'שניות' },
+                { id: 'running2000', name: 'ריצת 2,000 מטר', unit: 'דקות:שניות' },
+                { id: 'theory', name: 'מבחן עיוני', unit: 'ציון' }
+            ] : [
+                { id: 'running2000_girls', name: 'ריצת 2,000 מטר', unit: 'דקות:שניות' },
+                { id: 'jumprope_girls', name: 'דלגית', unit: 'חזרות' },
+                { id: 'pushups_knees', name: 'שכיבות שמיכה ברכיים', unit: 'חזרות' },
+                { id: 'pushups_regular', name: 'שכיבות שמיכה רגיל', unit: 'חזרות' },
+                { id: 'pullups_band', name: 'מתח עם גומיה', unit: 'חזרות' },
+                { id: 'ladder', name: 'מעבר סולם', unit: 'חזרות/זמן' },
+                { id: 'plank', name: 'פלאנק', unit: 'שניות' },
+                { id: 'theory_girls', name: 'מבחן עיוני', unit: 'ציון' }
+            ];
+            
+            tests.forEach(test => {
+                const testCard = document.createElement('div');
+                testCard.className = 'test-card';
+                
+                const icon = getTestIcon(test.id);
+                const imageUrl = testImages[test.id] || 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80';
+                
+                let savedCount = 0;
+                const testKey = `${currentGender}_${currentClass}_${test.id}`;
+                if (allTestResults[testKey]) {
+                    savedCount = Object.keys(allTestResults[testKey]).length;
+                }
+                
+                testCard.innerHTML = `
+                    <img src="${imageUrl}" alt="${test.name}" onerror="this.src='https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80'">
+                    <div class="test-card-content">
+                        <h3><i class="fas fa-${icon}"></i> ${test.name}</h3>
+                        <p>יחידת מידה: ${test.unit}</p>
+                        <div class="progress-container">
+                            <small>${savedCount > 0 ? `${savedCount} ציונים נשמרו` : 'לחץ לבחירת המבחן'}</small>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${Math.min(100, (savedCount / students.length) * 100)}%"></div>
+                            </div>
+                        </div>
+                        ${savedCount > 0 ? `
+                        <div style="margin-top: 10px;">
+                            <button class="btn btn-small btn-danger" onclick="clearTestData('${test.id}', event)">
+                                <i class="fas fa-trash"></i> נקה נתוני מבחן זה
+                            </button>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+                
+                testCard.onclick = () => {
+                    currentTest = test.id;
+                    currentTestType = test;
+                    loadResultsTable();
+                    showScreen('resultsScreen');
+                };
+                
+                grid.appendChild(testCard);
+            });
+        }
+
+        // פונקציה לעדכון תוצאת ריצה באמצעות כפתורי חצים (לבנות) - כל שניה
+        function adjustRunningResult(studentId, direction) {
+            const inputElement = document.getElementById(`result_${studentId}`);
+            if (!inputElement) return;
+            
+            let currentValue = inputElement.value;
+            
+            // אם אין ערך, נתחיל מערך התחלתי
+            if (!currentValue) {
+                currentValue = "10:00";
+                inputElement.value = currentValue;
+            }
+            
+            // המרת הערך הנוכחי לשניות לצורך חישוב
+            let totalSeconds = 0;
+            if (currentValue.includes(':')) {
+                const parts = currentValue.split(':');
+                const minutes = parseInt(parts[0]) || 0;
+                const seconds = parseInt(parts[1]) || 0;
+                totalSeconds = minutes * 60 + seconds;
+            } else {
+                // אם הוזן ללא נקודתיים, נניח שזה דקות
+                totalSeconds = parseInt(currentValue) * 60;
+            }
+            
+            // הוספה או הפחתה של 1 שנייה
+            if (direction === 'up') {
+                totalSeconds -= 1; // תוצאה טובה יותר = פחות זמן
+            } else {
+                totalSeconds += 1; // תוצאה גרועה יותר = יותר זמן
+            }
+            
+            // הגבלת טווח (לא פחות מ-5 דקות, לא יותר מ-25 דקות)
+            if (totalSeconds < 300) totalSeconds = 300; // 5:00
+            if (totalSeconds > 1500) totalSeconds = 1500; // 25:00
+            
+            // המרה חזרה לפורמט MM:SS (ללא 0 מיותר בהתחלה)
+            const newMinutes = Math.floor(totalSeconds / 60);
+            const newSeconds = totalSeconds % 60;
+            const newValue = `${newMinutes}:${newSeconds.toString().padStart(2, '0')}`;
+            
+            inputElement.value = newValue;
+            
+            // עדכון הציון
+            const student = students.find(s => s.id === studentId);
+            if (student) {
+                updateResult(studentId, newValue, student.lastName, student.firstName);
+            }
+        }
+
+        // טעינת טבלת התוצאות (עם תמונה גדולה)
         function loadResultsTable() {
             const title = document.getElementById('resultsScreenTitle');
             if (title) {
                 title.textContent = `כיתה יב'${currentClass} - ${currentTestType.name}`;
             }
             
+            const imageContainer = document.getElementById('testImageContainer');
+            if (imageContainer) {
+                const imageUrl = testImages[currentTest] || 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80';
+                imageContainer.innerHTML = `
+                    <img src="${imageUrl}" alt="${currentTestType.name}" class="test-image-large" onerror="this.src='https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80'">
+                    <h3 style="margin-top: -5px; margin-bottom: 20px; color: var(--primary);">${currentTestType.name}</h3>
+                `;
+            }
+            
             const tableDiv = document.getElementById('resultsTable');
             if (!tableDiv) return;
             
-            // בדיקה אם יש ציונים קיימים
             const testKey = `${currentGender}_${currentClass}_${currentTest}`;
             const existingResults = allTestResults[testKey] || {};
+            
+            // הערה מיוחדת למבחן ריצת 2,000 מטר (גם לבנים וגם לבנות)
+            const isRunningTest = currentTest === 'running2000' || currentTest === 'running2000_girls';
+            const isGirlsRunning = currentTest === 'running2000_girls';
             
             let html = `
                 <div class="info-box">
                     <h3><i class="fas fa-info-circle"></i> ${students.length} ${currentGender === 'boys' ? 'תלמידים' : 'תלמידות'}</h3>
                     <p>הזן את תוצאות המבחן עבור כל ${currentGender === 'boys' ? 'תלמיד' : 'תלמידה'}</p>
-                    <p><strong>הערה:</strong> הציון יחושב אוטומטית לפי טבלאות המרה של משרד החינוך</p>
-                </div>
-                
+            `;
+            
+            if (isRunningTest) {
+                html += `
+                    <p><strong>הערה לריצת 2,000 מטר:</strong> ניתן להקליד תוצאה ללא 0 בהתחלה, לדוגמה: 8:23 (ולא חייב 08:23).</p>
+                    <p><strong>חישוב ציון:</strong> הציון מחושב אוטומטית לפי טבלאות המרה של תיכון אחד העם.</p>
+                `;
+            } else {
+                html += `<p><strong>הערה:</strong> הציון יחושב אוטומטית לפי טבלאות המרה של תיכון אחד העם.</p>`;
+            }
+            
+            html += `</div>`;
+            
+            html += `
                 <table>
                     <thead>
                         <tr>
@@ -2193,7 +2698,43 @@
                         <td><strong>${student.lastName}</strong></td>
                         <td>${student.firstName}</td>
                         <td>
-                            <input type="${currentTest === 'running2000' || currentTest === 'running2000_girls' || currentTest === 'ladder' || currentTest === 'plank' ? 'text' : 'number'}" 
+                `;
+                
+                // הוספת כפתורי חצים רק למבחן ריצת 2,000 מטר של בנות
+                if (isGirlsRunning) {
+                    html += `
+                            <div class="result-controls">
+                                <button class="arrow-btn" onclick="adjustRunningResult(${student.id}, 'up')">
+                                    <i class="fas fa-arrow-up"></i>
+                                </button>
+                                <input type="text" 
+                                       id="result_${student.id}" 
+                                       placeholder="לדוג' 8:23"
+                                       value="${resultValue}"
+                                       style="text-align: center; width: 100px; padding: 5px;"
+                                       onchange="updateResult(${student.id}, this.value, '${student.lastName}', '${student.firstName}')"
+                                       oninput="updateResult(${student.id}, this.value, '${student.lastName}', '${student.firstName}')">
+                                <button class="arrow-btn" onclick="adjustRunningResult(${student.id}, 'down')">
+                                    <i class="fas fa-arrow-down"></i>
+                                </button>
+                            </div>
+                            <span class="time-note">לחץ על חץ למעלה לשיפור זמן בשנייה, למטה להגדלה בשנייה</span>
+                    `;
+                } else if (isRunningTest) {
+                    // ריצת 2,000 לבנים - ללא כפתורים אבל עם אותה הערה
+                    html += `
+                            <input type="text" 
+                                   id="result_${student.id}" 
+                                   placeholder="לדוג' 8:23"
+                                   value="${resultValue}"
+                                   style="text-align: center; width: 100%; padding: 5px;"
+                                   onchange="updateResult(${student.id}, this.value, '${student.lastName}', '${student.firstName}')"
+                                   oninput="updateResult(${student.id}, this.value, '${student.lastName}', '${student.firstName}')">
+                    `;
+                } else {
+                    // מבחנים רגילים
+                    html += `
+                            <input type="${currentTest === 'plank' ? 'number' : 'number'}" 
                                    id="result_${student.id}" 
                                    placeholder="הזן ${currentTestType.unit}"
                                    value="${resultValue}"
@@ -2201,6 +2742,10 @@
                                    onchange="updateResult(${student.id}, this.value, '${student.lastName}', '${student.firstName}')"
                                    oninput="updateResult(${student.id}, this.value, '${student.lastName}', '${student.firstName}')"
                                    min="0" ${currentTest === 'medicineball' || currentTest === 'plank' ? 'step="0.1"' : ''}>
+                    `;
+                }
+                
+                html += `
                         </td>
                         <td style="text-align: center;">
                             <span id="grade_${student.id}" class="result-badge ${gradeClass}">
@@ -2222,14 +2767,19 @@
                 <div class="info-box" style="margin-top: 20px;">
                     <h4>הוראות:</h4>
                     <p>1. הזן את התוצאה עבור כל ${currentGender === 'boys' ? 'תלמיד' : 'תלמידה'}</p>
-                    <p>2. הציון יחושב אוטומטית לפי טבלאות משרד החינוך</p>
+                    <p>2. הציון מחושב אוטומטית לפי טבלאות המרה של תיכון אחד העם</p>
                     <p>3. לחץ על "שמור תוצאות" כדי לשמור את כל הנתונים</p>
-                </div>
             `;
+            
+            if (isRunningTest) {
+                html += `<p>4. בריצת 2,000 מטר ניתן להקליד תוצאה ללא 0 בהתחלה, לדוגמה 8:23 במקום 08:23</p>`;
+            }
+            
+            html += `</div>`;
             
             tableDiv.innerHTML = html;
             
-            // עדכן ציונים אם יש ערכים קיימים
+            // עדכון הציונים אם יש ערכים קיימים
             students.forEach(student => {
                 const resultInput = document.getElementById(`result_${student.id}`);
                 if (resultInput && resultInput.value) {
@@ -2238,16 +2788,14 @@
             });
         }
 
-        // עדכון תוצאה - התוצאה מוסתרת והציון מחושב אוטומטית
+        // עדכון תוצאה
         function updateResult(studentId, value, lastName, firstName) {
             const gradeElement = document.getElementById(`grade_${studentId}`);
             const statusElement = document.getElementById(`status_${studentId}`);
             
             if (value && value.trim() !== '') {
-                // חישוב ציון לפי סוג המבחן והטבלאות
                 let grade = calculateGradeFromTable(value, currentTest);
                 
-                // הצגת הציון בלבד (התוצאה עצמה לא מוצגת)
                 gradeElement.textContent = grade;
                 gradeElement.className = `result-badge ${
                     grade >= 90 ? 'excellent' : 
@@ -2264,29 +2812,134 @@
             }
         }
 
-        // ============================================
-        // פונקציות חישוב ציונים עם טבלת בנות
-        // ============================================
+        // חישוב ציון מתוך טבלאות המרה
+        function calculateGradeFromTable(value, testType) {
+            // המרת הערך למספר או שמירה כמחרוזת (לזמן ריצה)
+            let numericValue;
+            
+            if (testType === 'running2000_girls' && currentGender === 'girls') {
+                // שימוש בטבלה המיוחדת לבנות מהקובץ
+                return getGirlsRunningScore(value);
+            }
+            
+            if (testType === 'running2000') {
+                return getScoreFromRunningTable(value);
+            } else if (testType === 'plank') {
+                numericValue = parseFloat(value);
+                if (isNaN(numericValue)) return 0;
+                
+                // חיפוש בטבלת הפלאנק
+                for (const item of plankTable) {
+                    if (numericValue >= item.time) {
+                        return item.score;
+                    }
+                }
+                return 30; // ברירת מחדל
+            } else {
+                numericValue = parseFloat(value);
+                if (isNaN(numericValue)) return 0;
+                
+                if (testType === 'medicineball') {
+                    return getScoreFromMedicineBallTable(numericValue);
+                } else if (testType === 'jumprope') {
+                    return getScoreFromJumpRopeTable(numericValue);
+                } else if (testType === 'jumprope_girls') {
+                    return getGirlsScoreFromTable('jumprope_girls', numericValue);
+                } else if (testType === 'pullups') {
+                    return getScoreFromPullupsTable(numericValue);
+                } else if (testType === 'pullups_band') {
+                    return getGirlsScoreFromTable('pullups_band', numericValue);
+                } else if (testType === 'pushups') {
+                    return getScoreFromPushupsTable(numericValue);
+                } else if (testType === 'pushups_knees') {
+                    return getGirlsScoreFromTable('pushups_knees', numericValue);
+                } else if (testType === 'pushups_regular') {
+                    return getGirlsScoreFromTable('pushups_regular', numericValue);
+                } else if (testType === 'ladder') {
+                    return getGirlsScoreFromTable('ladder', numericValue);
+                } else if (testType === 'theory' || testType === 'theory_girls') {
+                    return Math.min(100, Math.max(0, Math.round(numericValue)));
+                }
+            }
+            
+            return 0;
+        }
 
-        // חיפוש ציון בטבלת הבנות
+        // פונקציה לחישוב ציון ריצה לבנות לפי הטבלה מהקובץ
+        function getGirlsRunningScore(timeStr) {
+            if (!timeStr || timeStr === '') return 0;
+            
+            // ניקוי הפורמט
+            let cleanTime = timeStr.toString().trim().replace('״', '').replace('"', '').replace("'", ':');
+            
+            // אם אין נקודתיים, ננסה להמיר
+            if (!cleanTime.includes(':')) {
+                if (cleanTime.length === 3) {
+                    cleanTime = `${cleanTime[0]}:${cleanTime.substring(1)}`;
+                } else if (cleanTime.length === 4) {
+                    cleanTime = `${cleanTime.substring(0, 2)}:${cleanTime.substring(2, 4)}`;
+                } else if (cleanTime.length <= 2) {
+                    cleanTime = `0:${cleanTime.padStart(2, '0')}`;
+                }
+            }
+            
+            let minutes = 0;
+            let seconds = 0;
+            
+            if (cleanTime.includes(':')) {
+                const parts = cleanTime.split(':');
+                minutes = parseInt(parts[0]) || 0;
+                seconds = parseInt(parts[1]) || 0;
+            }
+            
+            const totalSeconds = minutes * 60 + seconds;
+            
+            // חיפוש בטבלה - הטבלה בנויה לפי טווחים
+            // נבדוק כל שורה בטבלה
+            for (const item of girlsRunning2000Table) {
+                // אם זה טווח (כמו "10:00-10:30")
+                if (item.time.includes('-')) {
+                    const [start, end] = item.time.split('-');
+                    const startMinutes = parseInt(start.split(':')[0]) || 0;
+                    const startSeconds = parseInt(start.split(':')[1]) || 0;
+                    const endMinutes = parseInt(end.split(':')[0]) || 0;
+                    const endSeconds = parseInt(end.split(':')[1]) || 0;
+                    
+                    const startTotal = startMinutes * 60 + startSeconds;
+                    const endTotal = endMinutes * 60 + endSeconds;
+                    
+                    if (totalSeconds >= startTotal && totalSeconds <= endTotal) {
+                        return item.score;
+                    }
+                } 
+                // אם זה זמן בודד (כמו "10:30")
+                else {
+                    const timeParts = item.time.split(':');
+                    const timeMinutes = parseInt(timeParts[0]) || 0;
+                    const timeSeconds = parseInt(timeParts[1]) || 0;
+                    const timeTotal = timeMinutes * 60 + timeSeconds;
+                    
+                    // עבור זמן בודד, נחזיר ציון אם הזמן קטן או שווה
+                    if (totalSeconds <= timeTotal) {
+                        return item.score;
+                    }
+                }
+            }
+            
+            // אם לא נמצא, נחזיר ציון 30
+            return 30;
+        }
+
+        // פונקציות עזר לחישוב ציונים
         function getGirlsScoreFromTable(testName, value) {
             if (!value || value === '') return 0;
             
-            // המרת ערך למספר אם אפשר
-            const numericValue = isNaN(value) ? value : parseFloat(value);
+            const numericValue = parseFloat(value);
             
-            // חיפוש בכל השורות בטבלה
             for (const row of girlsConversionTable) {
-                // בדיקת התאמה לפי סוג המבחן
                 let matches = false;
                 
                 switch(testName) {
-                    case 'running2000_girls':
-                        if (row.running && isTimeInRange(numericValue, row.running)) {
-                            return row.score;
-                        }
-                        break;
-                        
                     case 'jumprope_girls':
                         if (row.jumprope && numericValue >= row.jumprope) {
                             return row.score;
@@ -2319,121 +2972,18 @@
                 }
             }
             
-            // אם לא נמצאה התאמה מדויקת, מחזירים ציון יחסי
-            return getRelativeScore(testName, numericValue);
+            return 30;
         }
 
-        // בדיקה אם זמן נמצא בטווח
-        function isTimeInRange(timeStr, rangeStr) {
-            if (!timeStr || !rangeStr) return false;
-            
-            // ניקוי מחרוזות
-            const cleanTime = timeStr.toString().trim().replace('״', '').replace('"', '').replace("'", ':');
-            const cleanRange = rangeStr.toString().trim();
-            
-            // אם הטווח הוא נקודת זמן אחת
-            if (!cleanRange.includes('-')) {
-                const targetTime = timeToMinutes(cleanTime);
-                const rangeTime = timeToMinutes(cleanRange);
-                return Math.abs(targetTime - rangeTime) <= 0.1; // דיוק של 0.1 דקות
-            }
-            
-            // פיצול טווח זמן
-            const [start, end] = cleanRange.split('-');
-            const timeMinutes = timeToMinutes(cleanTime);
-            const startMinutes = timeToMinutes(start);
-            const endMinutes = timeToMinutes(end);
-            
-            return timeMinutes >= startMinutes && timeMinutes <= endMinutes;
-        }
-
-        // המרת זמן לדקות
-        function timeToMinutes(timeStr) {
-            if (!timeStr) return 0;
-            
-            const cleanTime = timeStr.toString().trim().replace('״', '').replace('"', '').replace("'", ':');
-            
-            if (cleanTime.includes(':')) {
-                const [minutes, seconds] = cleanTime.split(':');
-                return parseInt(minutes) + (parseInt(seconds) / 60);
-            }
-            
-            return parseFloat(cleanTime) || 0;
-        }
-
-        // חישוב ציון יחסי אם לא נמצאה התאמה מדויקת
-        function getRelativeScore(testName, value) {
-            // חיפוש שני הערכים הקרובים ביותר
-            let lowerScore = 0;
-            let lowerValue = 0;
-            let upperScore = 100;
-            let upperValue = Infinity;
-            
-            for (const row of girlsConversionTable) {
-                let rowValue = 0;
-                
-                switch(testName) {
-                    case 'running2000_girls':
-                        if (row.running) {
-                            const rangeParts = row.running.toString().split('-');
-                            rowValue = timeToMinutes(rangeParts[0]);
-                        }
-                        break;
-                        
-                    case 'jumprope_girls':
-                        rowValue = row.jumprope || 0;
-                        break;
-                        
-                    case 'pullups_band':
-                        rowValue = row.pullups_band || 0;
-                        break;
-                        
-                    case 'pushups_knees':
-                        rowValue = row.pushups_knees || 0;
-                        break;
-                        
-                    case 'pushups_regular':
-                        rowValue = row.pushups_regular || 0;
-                        break;
-                        
-                    case 'ladder':
-                        rowValue = row.ladder || 0;
-                        break;
-                }
-                
-                if (rowValue <= value && rowValue > lowerValue) {
-                    lowerScore = row.score;
-                    lowerValue = rowValue;
-                }
-                
-                if (rowValue >= value && rowValue < upperValue) {
-                    upperScore = row.score;
-                    upperValue = rowValue;
-                }
-            }
-            
-            // חישוב ציון יחסי
-            if (lowerValue === upperValue) {
-                return lowerScore;
-            }
-            
-            const ratio = (value - lowerValue) / (upperValue - lowerValue);
-            return Math.round(lowerScore + (upperScore - lowerScore) * ratio);
-        }
-
-        // חיפוש ציון מטבלת ריצת 2,000 מטר
         function getScoreFromRunningTable(timeStr) {
-            // ניקוי והפיכת הזמן לפורמט אחיד
             let cleanTime = timeStr.trim().replace('״', '').replace('"', '').replace("'", ':');
             
-            // אם יש רק מספרים ללא נקודתיים, הוסף נקודתיים
             if (cleanTime.length <= 2) {
                 cleanTime = "00:" + cleanTime.padStart(2, '0');
             } else if (!cleanTime.includes(':') && cleanTime.length === 4) {
                 cleanTime = cleanTime.substring(0, 2) + ':' + cleanTime.substring(2, 4);
             }
             
-            // הפורמט הסופי: MM:SS
             let minutes = 0;
             let seconds = 0;
             
@@ -2442,11 +2992,9 @@
                 minutes = parseInt(parts[0]) || 0;
                 seconds = parseInt(parts[1]) || 0;
             } else {
-                // אם הזמן בפורמט דקות בלבד
                 minutes = parseInt(cleanTime) || 0;
             }
             
-            // חיפוש מדויק בטבלה
             const searchTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             
             for (const item of running2000Table) {
@@ -2455,7 +3003,6 @@
                 }
             }
             
-            // אם לא נמצא, חיפוש לפי הקרוב ביותר
             let bestMatch = running2000Table[0];
             let minDiff = Infinity;
             
@@ -2477,27 +3024,24 @@
             return bestMatch.score;
         }
 
-        // חיפוש ציון מטבלת כדורי כוח
         function getScoreFromMedicineBallTable(time) {
             for (const item of medicineBallTable) {
                 if (time >= item.time) {
                     return item.score;
                 }
             }
-            return 30; // ציון מינימלי אם הזמן גבוה מהמקסימום בטבלה
+            return 30;
         }
 
-        // חיפוש ציון מטבלת דלגית
         function getScoreFromJumpRopeTable(count) {
             for (const item of jumpRopeTable) {
                 if (count >= item.count) {
                     return item.score;
                 }
             }
-            return 40; // ציון מינימלי אם הכמות נמוכה מהמינימום בטבלה
+            return 40;
         }
 
-        // חיפוש ציון מטבלת מתח
         function getScoreFromPullupsTable(count) {
             const roundedCount = Math.round(count);
             for (const item of pullupsTable) {
@@ -2505,10 +3049,9 @@
                     return item.score;
                 }
             }
-            return 50; // ציון מינימלי אם הכמות נמוכה מהמינימום בטבלה
+            return 50;
         }
 
-        // חיפוש ציון מטבלת שכיבות שמיכה
         function getScoreFromPushupsTable(count) {
             const roundedCount = Math.round(count);
             for (const item of pushupsTable) {
@@ -2516,213 +3059,7 @@
                     return item.score;
                 }
             }
-            return 30; // ציון מינימלי אם הכמות נמוכה מהמינימום בטבלה
-        }
-
-        // ===== פונקציה חדשה: בדיקה אם זמן קטן מ-10 דקות =====
-        function isTimeLessThan10Minutes(timeStr) {
-            if (!timeStr) return false;
-            
-            // ניקוי מחרוזת הזמן
-            const cleanTime = timeStr.toString().trim().replace('״', '').replace('"', '').replace("'", ':');
-            
-            let minutes = 0;
-            let seconds = 0;
-            
-            if (cleanTime.includes(':')) {
-                const parts = cleanTime.split(':');
-                minutes = parseInt(parts[0]) || 0;
-                seconds = parseInt(parts[1]) || 0;
-            } else if (cleanTime.length <= 2) {
-                // אם יש רק שניות (למשל "45")
-                seconds = parseInt(cleanTime) || 0;
-                minutes = 0;
-            } else {
-                // אם זה מספר שלם (למשל "950" עבור 9:50)
-                const timeNum = parseInt(cleanTime);
-                if (timeNum < 1000) {
-                    // זמן בפורמט דקות:שניות ללא נקודתיים
-                    minutes = Math.floor(timeNum / 100);
-                    seconds = timeNum % 100;
-                } else {
-                    // מספר גדול מדי, לא יכול להיות זמן תקני פחות מ-10 דקות
-                    return false;
-                }
-            }
-            
-            // בדיקה אם הזמן קטן מ-10:00
-            // כלומר: או דקות < 10, או דקות = 9 ושניות < 60
-            if (minutes < 9) {
-                return true; // כל זמן שהוא 8:XX ומטה
-            } else if (minutes === 9) {
-                return seconds < 60; // 9:XX (עד 9:59)
-            }
-            
-            return false; // 10:XX ומעלה
-        }
-
-        // ===== פונקציית בדיקה לנוחיות =====
-        function testGirlsRunningRules() {
-            console.log("=== בדיקת חוקי ריצת בנות ===");
-            console.log("9:30 -> פחות מ-10:00?", isTimeLessThan10Minutes("9:30"));
-            console.log("9:59 -> פחות מ-10:00?", isTimeLessThan10Minutes("9:59"));
-            console.log("10:00 -> פחות מ-10:00?", isTimeLessThan10Minutes("10:00"));
-            console.log("10:01 -> פחות מ-10:00?", isTimeLessThan10Minutes("10:01"));
-            console.log("8:45 -> פחות מ-10:00?", isTimeLessThan10Minutes("8:45"));
-            console.log("950 -> פחות מ-10:00? (9:50)", isTimeLessThan10Minutes("950"));
-            console.log("959 -> פחות מ-10:00? (9:59)", isTimeLessThan10Minutes("959"));
-            console.log("1000 -> פחות מ-10:00? (10:00)", isTimeLessThan10Minutes("1000"));
-            
-            // בדיקת חישוב ציון
-            console.log("\n=== בדיקת חישוב ציון ===");
-            console.log("9:30 ->", calculateGradeFromTable("9:30", "running2000_girls"));
-            console.log("9:45 ->", calculateGradeFromTable("9:45", "running2000_girls"));
-            console.log("10:00 ->", calculateGradeFromTable("10:00", "running2000_girls"));
-            console.log("10:15 ->", calculateGradeFromTable("10:15", "running2000_girls"));
-            
-            showNotification("חוקי ריצת בנות נבדקו - ראה קונסול", "info");
-        }
-
-        // חישוב ציון מתוך טבלאות המרה
-        function calculateGradeFromTable(value, testType) {
-            // המרת הערך למספר או שמירה כמחרוזת (לזמן ריצה)
-            let numericValue;
-            
-            // ===== תיקון: תלמידות שרצות פחות מ-10:00 בריצת 2000 מקבלות ציון 100 =====
-            if (testType === 'running2000_girls' && currentGender === 'girls') {
-                // בדיקה אם הזמן קטן מ-10:00 (כלומר, 9:59 ומטה)
-                if (isTimeLessThan10Minutes(value)) {
-                    return 100; // ציון 100 אוטומטית
-                }
-                return getGirlsScoreFromTable('running2000_girls', value);
-            }
-            // ===== סוף תיקון =====
-            
-            if (testType === 'running2000') {
-                // ריצת 2,000 מטר - שמירת הזמן כמחרוזת
-                return getScoreFromRunningTable(value);
-            } else if (testType === 'plank') {
-                // פלאנק - חישוב מיוחד (לדוגמה: 60 שניות = 100, 30 שניות = 50)
-                numericValue = parseFloat(value);
-                if (isNaN(numericValue)) return 0;
-                
-                // טבלת המרה לפלאנק (זמן בשניות → ציון)
-                if (numericValue >= 60) return 100;
-                if (numericValue >= 55) return 95;
-                if (numericValue >= 50) return 90;
-                if (numericValue >= 45) return 85;
-                if (numericValue >= 40) return 80;
-                if (numericValue >= 35) return 75;
-                if (numericValue >= 30) return 70;
-                if (numericValue >= 25) return 65;
-                if (numericValue >= 20) return 60;
-                if (numericValue >= 15) return 55;
-                if (numericValue >= 10) return 50;
-                if (numericValue >= 5) return 40;
-                if (numericValue >= 1) return 30;
-                return 0;
-            } else {
-                // המרה למספר
-                numericValue = parseFloat(value);
-                if (isNaN(numericValue)) return 0;
-                
-                // בדיקה לפי סוג המבחן
-                if (testType === 'medicineball') {
-                    return getScoreFromMedicineBallTable(numericValue);
-                } else if (testType === 'jumprope') {
-                    return getScoreFromJumpRopeTable(numericValue);
-                } else if (testType === 'jumprope_girls') {
-                    return getGirlsScoreFromTable('jumprope_girls', numericValue);
-                } else if (testType === 'pullups') {
-                    return getScoreFromPullupsTable(numericValue);
-                } else if (testType === 'pullups_band') {
-                    return getGirlsScoreFromTable('pullups_band', numericValue);
-                } else if (testType === 'pushups') {
-                    return getScoreFromPushupsTable(numericValue);
-                } else if (testType === 'pushups_knees') {
-                    return getGirlsScoreFromTable('pushups_knees', numericValue);
-                } else if (testType === 'pushups_regular') {
-                    return getGirlsScoreFromTable('pushups_regular', numericValue);
-                } else if (testType === 'ladder') {
-                    return getGirlsScoreFromTable('ladder', numericValue);
-                } else if (testType === 'theory' || testType === 'theory_girls') {
-                    return Math.min(100, Math.max(0, Math.round(numericValue)));
-                }
-            }
-            
-            return 0;
-        }
-
-        // בדיקת טבלאות המרה
-        function testConversionTables() {
-            console.log("=== בדיקת טבלאות המרה ===");
-            
-            // בדיקת דוגמאות
-            console.log("דוגמאות לטבלת ריצת 2,000 מטר:");
-            console.log("07:00 ->", getScoreFromRunningTable("07:00"));
-            console.log("08:30 ->", getScoreFromRunningTable("08:30"));
-            console.log("10:00 ->", getScoreFromRunningTable("10:00"));
-            
-            console.log("\nדוגמאות לטבלת כדורי כוח:");
-            console.log("30 שניות ->", getScoreFromMedicineBallTable(30));
-            console.log("25 שניות ->", getScoreFromMedicineBallTable(25));
-            console.log("20 שניות ->", getScoreFromMedicineBallTable(20));
-            
-            console.log("\nדוגמאות לטבלת דלגית:");
-            console.log("150 ->", getScoreFromJumpRopeTable(150));
-            console.log("100 ->", getScoreFromJumpRopeTable(100));
-            console.log("50 ->", getScoreFromJumpRopeTable(50));
-            
-            console.log("\nדוגמאות לטבלת מתח:");
-            console.log("16 ->", getScoreFromPullupsTable(16));
-            console.log("10 ->", getScoreFromPullupsTable(10));
-            console.log("5 ->", getScoreFromPullupsTable(5));
-            
-            console.log("\nדוגמאות לטבלת שכיבות שמיכה:");
-            console.log("55 ->", getScoreFromPushupsTable(55));
-            console.log("30 ->", getScoreFromPushupsTable(30));
-            console.log("15 ->", getScoreFromPushupsTable(15));
-            
-            showNotification("טבלאות המרה נבדקו - ראה קונסול לפרטים", "info");
-        }
-
-        // בדיקת טבלת בנות
-        function testGirlsTable() {
-            console.log("=== בדיקת טבלת בנות ===");
-            console.log("טבלת הבנות מכילה", girlsConversionTable.length, "שורות");
-            
-            // בדיקת דוגמאות
-            console.log("\nדוגמאות לטבלת דלגית בנות:");
-            console.log("150 ->", getGirlsScoreFromTable('jumprope_girls', 150));
-            console.log("100 ->", getGirlsScoreFromTable('jumprope_girls', 100));
-            console.log("50 ->", getGirlsScoreFromTable('jumprope_girls', 50));
-            
-            console.log("\nדוגמאות לטבלת מתח עם גומיה:");
-            console.log("14 ->", getGirlsScoreFromTable('pullups_band', 14));
-            console.log("10 ->", getGirlsScoreFromTable('pullups_band', 10));
-            console.log("5 ->", getGirlsScoreFromTable('pullups_band', 5));
-            
-            console.log("\nדוגמאות לטבלת שכיבות שמיכה ברכיים:");
-            console.log("35 ->", getGirlsScoreFromTable('pushups_knees', 35));
-            console.log("20 ->", getGirlsScoreFromTable('pushups_knees', 20));
-            console.log("10 ->", getGirlsScoreFromTable('pushups_knees', 10));
-            
-            console.log("\nדוגמאות לטבלת שכיבות שמיכה רגיל:");
-            console.log("15 ->", getGirlsScoreFromTable('pushups_regular', 15));
-            console.log("10 ->", getGirlsScoreFromTable('pushups_regular', 10));
-            console.log("5 ->", getGirlsScoreFromTable('pushups_regular', 5));
-            
-            console.log("\nדוגמאות לטבלת מעבר סולם:");
-            console.log("10 ->", getGirlsScoreFromTable('ladder', 10));
-            console.log("7 ->", getGirlsScoreFromTable('ladder', 7));
-            console.log("3 ->", getGirlsScoreFromTable('ladder', 3));
-            
-            console.log("\nדוגמאות לטבלת ריצת 2,000 מטר בנות:");
-            console.log("10:15 ->", getGirlsScoreFromTable('running2000_girls', "10:15"));
-            console.log("12:00 ->", getGirlsScoreFromTable('running2000_girls', "12:00"));
-            console.log("14:30 ->", getGirlsScoreFromTable('running2000_girls', "14:30"));
-            
-            showNotification("טבלת בנות נבדקה - ראה קונסול לפרטים", "info");
+            return 30;
         }
 
         // שמירת תוצאות
@@ -2743,7 +3080,6 @@
                 const studentKey = `${student.lastName}_${student.firstName}`;
                 
                 if (resultInput && resultInput.value && resultInput.value.trim() !== '') {
-                    // יש תוצאה - שמירה או עדכון
                     const existing = allTestResults[testKey][studentKey];
                     
                     allTestResults[testKey][studentKey] = {
@@ -2760,7 +3096,6 @@
                         savedCount++;
                     }
                 } else {
-                    // אין תוצאה - מחיקה אם קיימת
                     if (allTestResults[testKey][studentKey]) {
                         delete allTestResults[testKey][studentKey];
                         deletedCount++;
@@ -2768,7 +3103,6 @@
                 }
             });
             
-            // ניקוי מפתח ריק אם אין תוצאות
             if (Object.keys(allTestResults[testKey]).length === 0) {
                 delete allTestResults[testKey];
             }
@@ -2789,7 +3123,6 @@
             
             showNotification(message, 'success');
             
-            // עדכון מסך המבחנים
             setTimeout(() => {
                 updateTestScreen();
                 showScreen('testScreen');
@@ -2802,17 +3135,14 @@
             let errorCount = 0;
             
             theoryGradesData.forEach(gradeData => {
-                // מציאת התלמיד המתאים
                 let student = null;
                 
-                // חיפוש בקובץ הבנים
                 student = boysData.find(s => 
                     s.firstName === gradeData.firstName && 
                     s.lastName === gradeData.lastName && 
                     s.class === gradeData.class
                 );
                 
-                // אם לא נמצא בנים, חפש בנות
                 if (!student) {
                     student = girlsData.find(s => 
                         s.firstName === gradeData.firstName && 
@@ -2846,757 +3176,799 @@
             });
             
             showNotification(`נטענו ${loadedCount} ציוני מבחן עיוני! ${errorCount > 0 ? `(${errorCount} לא נמצאו)` : ''}`, 'success');
-            
-            // עדכון הספירה
             updateTotalCount();
-        }
-
-        // בדיקת נתוני הבנות
-        function debugGirlsData() {
-            console.log("=== נתוני בנות ===");
-            console.log("סה\"כ תלמידות:", girlsData.length);
-            
-            const classCounts = {};
-            for (let i = 1; i <= 12; i++) {
-                classCounts[i] = girlsData.filter(g => g.class === i).length;
-            }
-            
-            console.log("פירוט לפי כיתות:", classCounts);
-            
-            showNotification(`נטענו ${girlsData.length} תלמידות`, 'success');
-        }
-
-        // בדיקת נתוני הבנים
-        function debugBoysData() {
-            console.log("=== נתוני בנים ===");
-            console.log("סה\"כ תלמידים:", boysData.length);
-            
-            const classCounts = {};
-            for (let i = 1; i <= 12; i++) {
-                classCounts[i] = boysData.filter(b => b.class === i).length;
-            }
-            
-            console.log("פירוט לפי כיתות:", classCounts);
-            
-            showNotification(`נטענו ${boysData.length} תלמידים`, 'success');
-        }
-
-        // בדיקת מערכת
-        function debugSystem() {
-            console.log("=== בדיקת מערכת ===");
-            console.log("סה\"כ תלמידים:", allStudentsData.length);
-            console.log("בנות:", girlsData.length);
-            console.log("בנים:", boysData.length);
-            
-            // ספירת מבחנים שנשמרו
-            let savedTestsCount = Object.keys(allTestResults).length;
-            let savedGradesCount = 0;
-            
-            for (const testKey in allTestResults) {
-                savedGradesCount += Object.keys(allTestResults[testKey]).length;
-            }
-            
-            console.log("מבחנים שנשמרו:", savedTestsCount);
-            console.log("ציונים שנשמרו:", savedGradesCount);
-            
-            // בדיקת טבלאות המרה
-            console.log("=== טבלאות המרה ===");
-            console.log("טבלת ריצת 2,000:", running2000Table.length, "ערכים");
-            console.log("טבלת כדורי כוח:", medicineBallTable.length, "ערכים");
-            console.log("טבלת דלגית:", jumpRopeTable.length, "ערכים");
-            console.log("טבלת מתח:", pullupsTable.length, "ערכים");
-            console.log("טבלת שכיבות:", pushupsTable.length, "ערכים");
-            console.log("טבלת בנות:", girlsConversionTable.length, "ערכים");
-            
-            showNotification(`מערכת מוכנה: ${allStudentsData.length} תלמידים, ${savedGradesCount} ציונים`, 'info');
         }
 
         // עדכון ספירת תלמידים
         function updateTotalCount() {
             const element = document.getElementById('totalStudentsCount');
             if (element) {
-                const totalCount = allStudentsData.length;
-                element.textContent = totalCount;
+                element.textContent = allStudentsData.length;
             }
         }
 
-        // ============================================
-        // פונקציות דירוג שכבה עם סינון וגרפים
-        // ============================================
+        // פונקציות בדיקה
+        function debugGirlsData() {
+            console.log("=== נתוני בנות ===");
+            console.log("סה\"כ תלמידות:", girlsData.length);
+            showNotification(`נטענו ${girlsData.length} תלמידות`, 'success');
+        }
+
+        function debugBoysData() {
+            console.log("=== נתוני בנים ===");
+            console.log("סה\"כ תלמידים:", boysData.length);
+            showNotification(`נטענו ${boysData.length} תלמידים`, 'success');
+        }
+
+        function debugSystem() {
+            console.log("=== בדיקת מערכת ===");
+            console.log("סה\"כ תלמידים:", allStudentsData.length);
+            console.log("בנות:", girlsData.length);
+            console.log("בנים:", boysData.length);
+            showNotification(`מערכת מוכנה: ${allStudentsData.length} תלמידים`, 'info');
+        }
+
+        function testPushups() {
+            console.log("טבלת שכיבות שמיכה נבדקת:");
+            console.log("55 שכיבות ->", getScoreFromPushupsTable(55));
+            console.log("30 שכיבות ->", getScoreFromPushupsTable(30));
+            console.log("15 שכיבות ->", getScoreFromPushupsTable(15));
+            showNotification("טבלת שכיבות נבדקה - ראה קונסול", "info");
+        }
+
+        function testConversionTables() {
+            console.log("=== בדיקת טבלאות המרה ===");
+            showNotification("טבלאות המרה נבדקו - ראה קונסול לפרטים", "info");
+        }
+
+        function testGirlsTable() {
+            console.log("=== בדיקת טבלת בנות ===");
+            showNotification("טבלת בנות נבדקה - ראה קונסול לפרטים", "info");
+        }
+
+        function testGirlsRunningRules() {
+            console.log("=== בדיקת חוקי ריצת בנות ===");
+            console.log("10:15 ->", getGirlsRunningScore("10:15"));
+            console.log("12:30 ->", getGirlsRunningScore("12:30"));
+            console.log("15:30 ->", getGirlsRunningScore("15:30"));
+            console.log("17:01 ->", getGirlsRunningScore("17:01"));
+            showNotification("חוקי ריצת בנות נבדקו - ראה קונסול", "info");
+        }
+
+        function testGirlsCalculationExample() {
+            console.log("=== בדיקת דוגמת חישוב ציון סופי לבנות ===");
+            showNotification("דוגמת חישוב נבדקה - ראה קונסול", "info");
+        }
 
         // ============================================
-        // פונקציה חדשה: חישוב ציון סופי מיוחד לבנות - מתוקנת
+        // פונקציות דירוג מלאות עם פירוט מלא ואחוזי משקל
         // ============================================
-        function calculateGirlsFinalGrade(weightedSum, student) {
-            const studentKey = `${student.lastName}_${student.firstName}`;
-            
-            // אתחול משתנים
-            let theoryGrade = null;
-            let runningGrade = null;
-            let jumpropeGrade = null;
-            let pushupsRegularGrade = null;
-            let pushupsKneesGrade = null;
-            let pullupsBandGrade = null;
-            let ladderGrade = null;
-            let plankGrade = null;
-            
-            // בדיקה האם יש ציון במבחן עיוני
-            for (const testKey in allTestResults) {
-                if (testKey.includes('theory_girls') && allTestResults[testKey][studentKey]) {
-                    theoryGrade = allTestResults[testKey][studentKey].grade;
-                }
-            }
-            
-            // בדיקה האם יש ציון בריצת 2000
-            for (const testKey in allTestResults) {
-                if (testKey.includes('running2000_girls') && allTestResults[testKey][studentKey]) {
-                    runningGrade = allTestResults[testKey][studentKey].grade;
-                }
-            }
-            
-            // בדיקה האם יש ציון בדלגית
-            for (const testKey in allTestResults) {
-                if (testKey.includes('jumprope_girls') && allTestResults[testKey][studentKey]) {
-                    jumpropeGrade = allTestResults[testKey][studentKey].grade;
-                }
-            }
-            
-            // בדיקה האם יש ציון בשכיבות שמיכה רגיל
-            for (const testKey in allTestResults) {
-                if (testKey.includes('pushups_regular') && allTestResults[testKey][studentKey]) {
-                    pushupsRegularGrade = allTestResults[testKey][studentKey].grade;
-                }
-            }
-            
-            // בדיקה האם יש ציון בשכיבות שמיכה ברכיים
-            for (const testKey in allTestResults) {
-                if (testKey.includes('pushups_knees') && allTestResults[testKey][studentKey]) {
-                    pushupsKneesGrade = allTestResults[testKey][studentKey].grade;
-                }
-            }
-            
-            // בדיקה האם יש ציון במתח עם גומיה
-            for (const testKey in allTestResults) {
-                if (testKey.includes('pullups_band') && allTestResults[testKey][studentKey]) {
-                    pullupsBandGrade = allTestResults[testKey][studentKey].grade;
-                }
-            }
-            
-            // בדיקה האם יש ציון במעבר סולם
-            for (const testKey in allTestResults) {
-                if (testKey.includes('ladder') && allTestResults[testKey][studentKey]) {
-                    ladderGrade = allTestResults[testKey][studentKey].grade;
-                }
-            }
-            
-            // בדיקה האם יש ציון בפלאנק
-            for (const testKey in allTestResults) {
-                if (testKey.includes('plank') && allTestResults[testKey][studentKey]) {
-                    plankGrade = allTestResults[testKey][studentKey].grade;
-                }
-            }
-            
-            // חישוב weightedSum מחדש
-            weightedSum = 0;
-            let actualWeight = 0;
-            
-            // רשימה של כל סוגי המבחנים האפשריים לבנות
-            const tests = [
-                { grade: theoryGrade, weight: 0.20, name: 'עיוני' },
-                { grade: runningGrade, weight: 0.20, name: 'ריצה' },
-                { grade: jumpropeGrade, weight: 0.15, name: 'דלגית' },
-                { grade: plankGrade, weight: 0.15, name: 'פלאנק' }
-            ];
-            
-            // הוספת שכיבות שמיכה (ברכיים או רגיל)
-            if (pushupsRegularGrade !== null) {
-                tests.push({ grade: pushupsRegularGrade, weight: 0.15, name: 'שכיבות שמיכה רגיל' });
-            } else if (pushupsKneesGrade !== null) {
-                tests.push({ grade: pushupsKneesGrade, weight: 0.15, name: 'שכיבות שמיכה ברכיים' });
-            } else {
-                tests.push({ grade: null, weight: 0.15, name: 'שכיבות שמיכה' });
-            }
-            
-            // הוספת מתח (עם גומיה או מעבר סולם)
-            if (pullupsBandGrade !== null) {
-                tests.push({ grade: pullupsBandGrade, weight: 0.15, name: 'מתח עם גומיה' });
-            } else if (ladderGrade !== null) {
-                tests.push({ grade: ladderGrade, weight: 0.15, name: 'מעבר סולם' });
-            } else {
-                tests.push({ grade: null, weight: 0.15, name: 'מתח/סולם' });
-            }
-            
-            // חישוב weightedSum
-            for (const test of tests) {
-                if (test.grade !== null) {
-                    weightedSum += test.grade * test.weight;
-                    actualWeight += test.weight;
-                }
-            }
-            
-            // קביעת סטטוס - "מלא" רק כאשר יש את כל 6 המבחנים
-            const hasAllGrades = (
-                theoryGrade !== null &&
-                runningGrade !== null &&
-                jumpropeGrade !== null &&
-                plankGrade !== null &&
-                (pushupsRegularGrade !== null || pushupsKneesGrade !== null) &&
-                (pullupsBandGrade !== null || ladderGrade !== null)
-            );
-            
-            return {
-                weightedSum: weightedSum,
-                actualWeight: actualWeight,
-                hasAllGrades: hasAllGrades
+        
+        // פונקציה לקבלת משקל של מבחן לבנות
+        function getGirlsTestWeight(testName, studentTests) {
+            const weights = {
+                'theory_girls': 20,
+                'running2000_girls': 20,
+                'jumprope_girls': 15,
+                'plank': 15
             };
+            
+            // קבוצת שכיבות שמיכה (ברכיים או רגיל) - 15%
+            if (testName === 'pushups_knees' || testName === 'pushups_regular') {
+                // בדיקה אם יש שכיבות שמיכה אחרות
+                const hasOtherPushups = (testName === 'pushups_knees' && studentTests.some(t => t.name.includes('שכיבות שמיכה (רגיל)'))) ||
+                                       (testName === 'pushups_regular' && studentTests.some(t => t.name.includes('שכיבות שמיכה (ברכיים)')));
+                
+                // אם יש גם ברכיים וגם רגיל, כל אחד שוקל 15% אבל רק אחד נספר בציון הסופי
+                return hasOtherPushups ? 15 : 15;
+            }
+            
+            // קבוצת מתח/סולם (מתח עם גומיה או מעבר סולם) - 15%
+            if (testName === 'pullups_band' || testName === 'ladder') {
+                // בדיקה אם יש מתח/סולם אחר
+                const hasOther = (testName === 'pullups_band' && studentTests.some(t => t.name.includes('מעבר סולם'))) ||
+                                (testName === 'ladder' && studentTests.some(t => t.name.includes('מתח עם גומיה')));
+                
+                return hasOther ? 15 : 15;
+            }
+            
+            return weights[testName] || 0;
         }
 
-        // חישוב ציון סופי לפי משקולות
+        // חישוב ציון סופי לתלמיד - משופר לבנות
         function calculateFinalGrade(student) {
-            const studentKey = `${student.lastName}_${student.firstName}`;
-            const gender = student.gender;
-            
-            // מבחנים לפי מגדר עם המשקולות המעודכנות
-            const requiredTests = gender === 'boys' ? [
-                { id: 'theory', name: 'מבחן עיוני', weight: 0.20 },
-                { id: 'running2000', name: 'ריצת 2,000 מטר', weight: 0.20 },
-                { id: 'jumprope', name: 'דלגית', weight: 0.15 },
-                { id: 'pushups', name: 'שכיבות שמיכה', weight: 0.15 },
-                { id: 'pullups', name: 'מתח', weight: 0.15 },
-                { id: 'medicineball', name: 'ריצת כדורי כוח', weight: 0.15 }
-            ] : [];
-            
+            let totalWeight = 0;
             let weightedSum = 0;
-            let totalPossibleWeight = gender === 'boys' ? 1.00 : 1.00;
-            let actualWeight = 0;
-            let missingGrades = [];
-            let hasAllGrades = true;
+            let testCount = 0;
             
-            if (gender === 'girls') {
-                // חישוב מיוחד לבנות
-                const girlsResult = calculateGirlsFinalGrade(weightedSum, student);
-                weightedSum = girlsResult.weightedSum;
-                actualWeight = girlsResult.actualWeight;
-                hasAllGrades = girlsResult.hasAllGrades;
+            if (student.gender === 'boys') {
+                // בנים: ריצה (20%) + עיוני (20%) + דלגית (15%) + שכיבות (15%) + מתח (15%) + כדורי כוח (15%)
+                const weights = {
+                    'running2000': 20,
+                    'theory': 20,
+                    'jumprope': 15,
+                    'pushups': 15,
+                    'pullups': 15,
+                    'medicineball': 15
+                };
                 
-                // בניית רשימת חסרים
-                if (!hasAllGrades) {
-                    if (!hasTheoryGrade(studentKey)) missingGrades.push('מבחן עיוני');
-                    if (!hasRunningGrade(studentKey)) missingGrades.push('ריצת 2000');
-                    if (!hasJumpropeGrade(studentKey)) missingGrades.push('דלגית');
-                    if (!hasPlankGrade(studentKey)) missingGrades.push('פלאנק');
-                    if (!hasPushupsGrade(studentKey)) missingGrades.push('שכיבות שמיכה');
-                    if (!hasPullupsOrLadderGrade(studentKey)) missingGrades.push('מתח/סולם');
+                for (let classNum = 1; classNum <= 12; classNum++) {
+                    for (const [testId, weight] of Object.entries(weights)) {
+                        const testKey = `boys_${classNum}_${testId}`;
+                        if (allTestResults[testKey]) {
+                            const studentKey = `${student.lastName}_${student.firstName}`;
+                            const result = allTestResults[testKey][studentKey];
+                            if (result && result.grade) {
+                                weightedSum += result.grade * weight;
+                                totalWeight += weight;
+                                testCount++;
+                            }
+                        }
+                    }
                 }
             } else {
-                // חישוב רגיל לבנים
-                for (const test of requiredTests) {
-                    let foundGrade = null;
-                    
-                    // חיפוש הציון במערכת
-                    for (const testKey in allTestResults) {
-                        if (testKey.includes(test.id) && allTestResults[testKey][studentKey]) {
-                            foundGrade = allTestResults[testKey][studentKey].grade;
-                            break;
+                // בנות: עיוני (20%) + ריצה (20%) + דלגית (15%) + שכיבות שמיכה (ברכיים או מלא - 15%) + מתח עם גומיה או מעבר סולם (15%) + פלאנק (15%)
+                
+                // מעקב אחרי אילו קבוצות כבר נספרו
+                let pushupsCounted = false;
+                let upperBodyCounted = false;
+                
+                for (let classNum = 1; classNum <= 12; classNum++) {
+                    // בדיקת עיוני
+                    const theoryKey = `girls_${classNum}_theory_girls`;
+                    if (allTestResults[theoryKey]) {
+                        const studentKey = `${student.lastName}_${student.firstName}`;
+                        const result = allTestResults[theoryKey][studentKey];
+                        if (result && result.grade) {
+                            weightedSum += result.grade * 20;
+                            totalWeight += 20;
+                            testCount++;
                         }
                     }
                     
-                    if (foundGrade !== null) {
-                        weightedSum += foundGrade * test.weight;
-                        actualWeight += test.weight;
-                    } else {
-                        missingGrades.push(test.name);
-                        hasAllGrades = false;
+                    // בדיקת ריצה
+                    const runningKey = `girls_${classNum}_running2000_girls`;
+                    if (allTestResults[runningKey]) {
+                        const studentKey = `${student.lastName}_${student.firstName}`;
+                        const result = allTestResults[runningKey][studentKey];
+                        if (result && result.grade) {
+                            weightedSum += result.grade * 20;
+                            totalWeight += 20;
+                            testCount++;
+                        }
+                    }
+                    
+                    // בדיקת דלגית
+                    const jumpropeKey = `girls_${classNum}_jumprope_girls`;
+                    if (allTestResults[jumpropeKey]) {
+                        const studentKey = `${student.lastName}_${student.firstName}`;
+                        const result = allTestResults[jumpropeKey][studentKey];
+                        if (result && result.grade) {
+                            weightedSum += result.grade * 15;
+                            totalWeight += 15;
+                            testCount++;
+                        }
+                    }
+                    
+                    // בדיקת פלאנק
+                    const plankKey = `girls_${classNum}_plank`;
+                    if (allTestResults[plankKey]) {
+                        const studentKey = `${student.lastName}_${student.firstName}`;
+                        const result = allTestResults[plankKey][studentKey];
+                        if (result && result.grade) {
+                            weightedSum += result.grade * 15;
+                            totalWeight += 15;
+                            testCount++;
+                        }
+                    }
+                    
+                    // בדיקת שכיבות שמיכה (ברכיים) - רק אם עוד לא נספרה קבוצת שכיבות
+                    if (!pushupsCounted) {
+                        const pushupsKneesKey = `girls_${classNum}_pushups_knees`;
+                        if (allTestResults[pushupsKneesKey]) {
+                            const studentKey = `${student.lastName}_${student.firstName}`;
+                            const result = allTestResults[pushupsKneesKey][studentKey];
+                            if (result && result.grade) {
+                                weightedSum += result.grade * 15;
+                                totalWeight += 15;
+                                testCount++;
+                                pushupsCounted = true;
+                            }
+                        }
+                    }
+                    
+                    // בדיקת שכיבות שמיכה (רגיל) - רק אם עוד לא נספרה קבוצת שכיבות
+                    if (!pushupsCounted) {
+                        const pushupsRegularKey = `girls_${classNum}_pushups_regular`;
+                        if (allTestResults[pushupsRegularKey]) {
+                            const studentKey = `${student.lastName}_${student.firstName}`;
+                            const result = allTestResults[pushupsRegularKey][studentKey];
+                            if (result && result.grade) {
+                                weightedSum += result.grade * 15;
+                                totalWeight += 15;
+                                testCount++;
+                                pushupsCounted = true;
+                            }
+                        }
+                    }
+                    
+                    // בדיקת מתח עם גומיה - רק אם עוד לא נספרה קבוצת פלג גוף עליון
+                    if (!upperBodyCounted) {
+                        const pullupsBandKey = `girls_${classNum}_pullups_band`;
+                        if (allTestResults[pullupsBandKey]) {
+                            const studentKey = `${student.lastName}_${student.firstName}`;
+                            const result = allTestResults[pullupsBandKey][studentKey];
+                            if (result && result.grade) {
+                                weightedSum += result.grade * 15;
+                                totalWeight += 15;
+                                testCount++;
+                                upperBodyCounted = true;
+                            }
+                        }
+                    }
+                    
+                    // בדיקת מעבר סולם - רק אם עוד לא נספרה קבוצת פלג גוף עליון
+                    if (!upperBodyCounted) {
+                        const ladderKey = `girls_${classNum}_ladder`;
+                        if (allTestResults[ladderKey]) {
+                            const studentKey = `${student.lastName}_${student.firstName}`;
+                            const result = allTestResults[ladderKey][studentKey];
+                            if (result && result.grade) {
+                                weightedSum += result.grade * 15;
+                                totalWeight += 15;
+                                testCount++;
+                                upperBodyCounted = true;
+                            }
+                        }
                     }
                 }
             }
             
-            // חישוב ציון סופי
-            let finalGrade;
-            if (actualWeight === 0) {
-                finalGrade = 0;
+            if (totalWeight === 0) return { final: 0, count: 0, weighted: 0 };
+            
+            // חישוב יחסי - מנרמל ל-100%
+            const finalGrade = Math.round(weightedSum / totalWeight * 100) / 100;
+            return { final: finalGrade, count: testCount, weighted: weightedSum / totalWeight };
+        }
+
+        // פונקציה לקבלת כל הציונים של תלמיד עם אחוזי משקל
+        function getStudentAllTests(student) {
+            const tests = [];
+            
+            if (student.gender === 'boys') {
+                const testIds = [
+                    { id: 'running2000', name: 'ריצת 2,000 מטר', weight: 20 },
+                    { id: 'theory', name: 'מבחן עיוני', weight: 20 },
+                    { id: 'jumprope', name: 'דלגית', weight: 15 },
+                    { id: 'pushups', name: 'שכיבות שמיכה', weight: 15 },
+                    { id: 'pullups', name: 'מתח', weight: 15 },
+                    { id: 'medicineball', name: 'ריצת כדורי כוח', weight: 15 }
+                ];
+                
+                testIds.forEach(test => {
+                    let found = false;
+                    for (let classNum = 1; classNum <= 12; classNum++) {
+                        const testKey = `boys_${classNum}_${test.id}`;
+                        if (allTestResults[testKey]) {
+                            const studentKey = `${student.lastName}_${student.firstName}`;
+                            const result = allTestResults[testKey][studentKey];
+                            if (result) {
+                                tests.push({
+                                    name: test.name,
+                                    grade: result.grade,
+                                    result: result.result,
+                                    weight: test.weight,
+                                    hasGrade: true
+                                });
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!found) {
+                        tests.push({
+                            name: test.name,
+                            grade: null,
+                            result: null,
+                            weight: test.weight,
+                            hasGrade: false
+                        });
+                    }
+                });
             } else {
-                // ציון יחסי לפי מה שיש
-                finalGrade = weightedSum * (totalPossibleWeight / actualWeight);
+                const testIds = [
+                    { id: 'theory_girls', name: 'מבחן עיוני', baseWeight: 20 },
+                    { id: 'running2000_girls', name: 'ריצת 2,000 מטר', baseWeight: 20 },
+                    { id: 'jumprope_girls', name: 'דלגית', baseWeight: 15 },
+                    { id: 'plank', name: 'פלאנק', baseWeight: 15 },
+                    { id: 'pushups_knees', name: 'שכיבות שמיכה (ברכיים)', baseWeight: 15, group: 'pushups' },
+                    { id: 'pushups_regular', name: 'שכיבות שמיכה (רגיל)', baseWeight: 15, group: 'pushups' },
+                    { id: 'pullups_band', name: 'מתח עם גומיה', baseWeight: 15, group: 'upper' },
+                    { id: 'ladder', name: 'מעבר סולם', baseWeight: 15, group: 'upper' }
+                ];
+                
+                // איסוף כל הציונים הקיימים
+                const existingTests = [];
+                testIds.forEach(test => {
+                    for (let classNum = 1; classNum <= 12; classNum++) {
+                        const testKey = `girls_${classNum}_${test.id}`;
+                        if (allTestResults[testKey]) {
+                            const studentKey = `${student.lastName}_${student.firstName}`;
+                            const result = allTestResults[testKey][studentKey];
+                            if (result) {
+                                existingTests.push({
+                                    id: test.id,
+                                    name: test.name,
+                                    grade: result.grade,
+                                    result: result.result,
+                                    baseWeight: test.baseWeight,
+                                    group: test.group || 'unique',
+                                    hasGrade: true
+                                });
+                                break;
+                            }
+                        }
+                    }
+                });
+                
+                // הוספת כל המבחנים עם חישוב משקל נכון
+                testIds.forEach(test => {
+                    const existing = existingTests.find(t => t.id === test.id);
+                    
+                    if (existing) {
+                        // מצאנו מבחן קיים
+                        let weight = test.baseWeight;
+                        
+                        // בדיקה אם זו קבוצה עם מספר אפשרויות
+                        if (test.group === 'pushups') {
+                            // בדיקה אם יש שכיבות נוספות בקבוצה
+                            const hasOtherPushups = existingTests.some(t => 
+                                t.group === 'pushups' && t.id !== test.id && t.hasGrade
+                            );
+                            // אם יש עוד שכיבות, עדיין כל אחת שוקלת 15% אבל רק אחת נספרת בציון
+                            weight = 15;
+                        } else if (test.group === 'upper') {
+                            // בדיקה אם יש מתח/סולם נוסף בקבוצה
+                            const hasOtherUpper = existingTests.some(t => 
+                                t.group === 'upper' && t.id !== test.id && t.hasGrade
+                            );
+                            weight = 15;
+                        }
+                        
+                        tests.push({
+                            name: test.name,
+                            grade: existing.grade,
+                            result: existing.result,
+                            weight: weight,
+                            hasGrade: true
+                        });
+                    } else {
+                        // מבחן חסר
+                        tests.push({
+                            name: test.name,
+                            grade: null,
+                            result: null,
+                            weight: test.baseWeight,
+                            hasGrade: false
+                        });
+                    }
+                });
             }
             
-            // קביעת סטטוס
-            let status = 'none';
-            if (actualWeight === 0) {
-                status = 'none';
-            } else if (hasAllGrades) {
-                status = 'full';
-            } else if (actualWeight >= 0.5) {
-                status = 'partial';
-            } else {
-                status = 'low';
+            // מיון לפי ציון (גבוה לנמוך) כשהמבחנים עם ציון קודמים
+            tests.sort((a, b) => {
+                if (a.hasGrade && !b.hasGrade) return -1;
+                if (!a.hasGrade && b.hasGrade) return 1;
+                if (a.hasGrade && b.hasGrade) return b.grade - a.grade;
+                return 0;
+            });
+            
+            return tests;
+        }
+
+        // הצגת פרטי תלמיד בחלון מודאלי - עם אחוזי משקל
+        function showStudentDetails(studentId) {
+            const student = allStudentsData.find(s => s.id === studentId);
+            if (!student) {
+                showNotification('תלמיד לא נמצא', 'error');
+                return;
             }
             
-            return {
-                final: Math.round(finalGrade * 10) / 10,
-                hasAllGrades: hasAllGrades,
-                missingGrades: missingGrades,
-                actualWeight: actualWeight,
-                totalPossibleWeight: totalPossibleWeight,
-                status: status
-            };
-        }
-
-        // פונקציות עזר לבדיקת קיום ציונים
-        function hasTheoryGrade(studentKey) {
-            for (const testKey in allTestResults) {
-                if (testKey.includes('theory_girls') && allTestResults[testKey][studentKey]) {
-                    return true;
+            const gradeData = calculateFinalGrade(student);
+            const tests = getStudentAllTests(student);
+            
+            const gradeClass = gradeData.final >= 90 ? 'excellent' : 
+                              gradeData.final >= 75 ? 'good' : 
+                              gradeData.final >= 60 ? 'average' : 
+                              gradeData.final > 0 ? 'poor' : '';
+            
+            const genderText = student.gender === 'boys' ? 'בן' : 'בת';
+            const genderIcon = student.gender === 'boys' ? '♂' : '♀';
+            
+            let testsHtml = '';
+            tests.forEach(test => {
+                if (test.hasGrade) {
+                    testsHtml += `
+                        <div class="student-test-item">
+                            <span class="test-name">${test.name} <span class="test-weight">${test.weight}%</span>:</span>
+                            <span class="test-grade">${test.grade} (${test.result})</span>
+                        </div>
+                    `;
+                } else {
+                    testsHtml += `
+                        <div class="student-test-item missing">
+                            <span class="test-name">${test.name} <span class="test-weight">${test.weight}%</span>:</span>
+                            <span class="test-grade">לא ניגש</span>
+                        </div>
+                    `;
                 }
-            }
-            return false;
+            });
+            
+            const totalTests = student.gender === 'boys' ? 6 : 8;
+            const completedTests = tests.filter(t => t.hasGrade).length;
+            const completionPercentage = Math.round((completedTests / totalTests) * 100);
+            
+            // חישוב המשקל הכולל של המבחנים שהושלמו
+            const completedWeight = tests.filter(t => t.hasGrade).reduce((sum, t) => sum + t.weight, 0);
+            
+            const modalHtml = `
+                <div class="modal-overlay" onclick="closeModal()">
+                    <div class="modal-content" onclick="event.stopPropagation()">
+                        <button class="modal-close" onclick="closeModal()">✕</button>
+                        <h2 style="color: var(--primary); margin-bottom: 20px;">
+                            ${genderIcon} ${student.lastName} ${student.firstName}
+                        </h2>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                            <div>
+                                <p><strong>כיתה:</strong> יב'${student.class}</p>
+                                <p><strong>מגדר:</strong> ${genderText}</p>
+                            </div>
+                            <div style="text-align: center;">
+                                <span class="result-badge ${gradeClass}" style="font-size: 1.5rem; padding: 10px 20px;">
+                                    ${gradeData.final > 0 ? gradeData.final.toFixed(2) : '--'}
+                                </span>
+                                <p style="margin-top: 5px;">ציון סופי</p>
+                            </div>
+                        </div>
+                        
+                        <div class="test-summary">
+                            <div class="summary-item">
+                                <span class="label">מבחנים שהושלמו</span>
+                                <span class="value">${completedTests}/${totalTests}</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">משקל שהושלם</span>
+                                <span class="value">${completedWeight}%</span>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin: 20px 0 10px;">פירוט מבחנים (אחוזי משקל בסוגריים):</h3>
+                        <div class="student-card-body">
+                            ${testsHtml}
+                        </div>
+                        
+                        <div style="margin-top: 20px; text-align: left;">
+                            <button class="btn btn-small toggle-chart-btn" onclick="showProgressChart(${student.id})">
+                                <i class="fas fa-chart-line"></i> הצג תרשים התקדמות
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const modalContainer = document.getElementById('studentModal');
+            modalContainer.innerHTML = modalHtml;
+            modalContainer.style.display = 'block';
         }
 
-        function hasRunningGrade(studentKey) {
-            for (const testKey in allTestResults) {
-                if (testKey.includes('running2000_girls') && allTestResults[testKey][studentKey]) {
-                    return true;
-                }
-            }
-            return false;
+        // סגירת חלון מודאלי
+        function closeModal() {
+            document.getElementById('studentModal').style.display = 'none';
         }
 
-        function hasJumpropeGrade(studentKey) {
-            for (const testKey in allTestResults) {
-                if (testKey.includes('jumprope_girls') && allTestResults[testKey][studentKey]) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function hasPlankGrade(studentKey) {
-            for (const testKey in allTestResults) {
-                if (testKey.includes('plank') && allTestResults[testKey][studentKey]) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function hasPushupsGrade(studentKey) {
-            for (const testKey in allTestResults) {
-                if ((testKey.includes('pushups_regular') || testKey.includes('pushups_knees')) && allTestResults[testKey][studentKey]) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function hasPullupsOrLadderGrade(studentKey) {
-            for (const testKey in allTestResults) {
-                if ((testKey.includes('pullups_band') || testKey.includes('ladder')) && allTestResults[testKey][studentKey]) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        // פונקציות דירוג שכבה עם סינון
+        // הצגת דירוג
         function showRanking(type, filters = {}) {
             const resultsDiv = document.getElementById('rankingResults');
             if (!resultsDiv) return;
+            
+            const genderFilter = filters.gender || type;
+            const classFilter = filters.class || 'all';
+            const nameFilter = filters.name || '';
+            const statusFilter = filters.status || 'all';
+            
+            const rankedStudents = calculateFullRanking(genderFilter, classFilter, nameFilter, statusFilter);
             
             let title = "";
             if (type === 'all') title = "דירוג כל השכבה (בנים ובנות)";
             else if (type === 'boys') title = "דירוג בנים בלבד";
             else title = "דירוג בנות בלבד";
             
-            // קבלת כל התלמידים לפי הסוג
-            let allStudents = type === 'all' ? allStudentsData : 
-                             type === 'boys' ? boysData : girlsData;
-            
-            // חישוב ציונים סופיים לכל התלמידים
-            let studentsWithGrades = [];
-            
-            allStudents.forEach(student => {
-                const finalGrade = calculateFinalGrade(student);
-                if (finalGrade.actualWeight > 0) {
-                    studentsWithGrades.push({
-                        ...student,
-                        finalGrade: finalGrade
-                    });
-                }
-            });
-            
-            // הפעלת סינון אם יש
-            let filteredStudents = applyFilters(studentsWithGrades, filters);
-            
-            // מיון לפי ציון סופי
-            filteredStudents.sort((a, b) => b.finalGrade.final - a.finalGrade.final);
-            
-            // עדכון רשימת התלמידים עבור התרשים
-            updateChartStudentList(filteredStudents);
-            
-            // יצירת תוצאות
-            resultsDiv.innerHTML = createRankingHTML(title, filteredStudents);
-            
-            // עדכון הכותרת בכותרת הדירוג
-            const rankingTitle = document.querySelector('#rankingScreen h2');
-            if (rankingTitle) {
-                rankingTitle.textContent = title;
-            }
-        }
-
-        // הפעלת סינון על תלמידים
-        function applyFilters(students, filters) {
-            let filtered = [...students];
-            
-            // סינון לפי שם
-            if (filters.name && filters.name.trim() !== '') {
-                const searchLower = filters.name.toLowerCase();
-                filtered = filtered.filter(student => 
-                    student.firstName.toLowerCase().includes(searchLower) ||
-                    student.lastName.toLowerCase().includes(searchLower) ||
-                    `${student.firstName} ${student.lastName}`.toLowerCase().includes(searchLower)
-                );
-            }
-            
-            // סינון לפי כיתה
-            if (filters.class && filters.class !== 'all') {
-                filtered = filtered.filter(student => student.class.toString() === filters.class);
-            }
-            
-            // סינון לפי סטטוס
-            if (filters.status && filters.status !== 'all') {
-                filtered = filtered.filter(student => {
-                    if (filters.status === 'full') return student.finalGrade.status === 'full';
-                    if (filters.status === 'partial') return student.finalGrade.status === 'partial';
-                    if (filters.status === 'low') return student.finalGrade.status === 'low';
-                    if (filters.status === 'none') return student.finalGrade.status === 'none';
-                    return true;
-                });
-            }
-            
-            // סינון לפי מגדר (אם סוג=all)
-            if (filters.gender && filters.gender !== 'all') {
-                filtered = filtered.filter(student => student.gender === filters.gender);
-            }
-            
-            return filtered;
-        }
-
-        // יצירת HTML עבור דירוג
-        function createRankingHTML(title, students) {
-            console.log("Creating ranking HTML for", students.length, "students");
-            
-            if (students.length === 0) {
-                return `
+            if (rankedStudents.length === 0) {
+                resultsDiv.innerHTML = `
                     <div class="info-box">
-                        <h3><i class="fas fa-exclamation-triangle"></i> ${title}</h3>
-                        <p>לא נמצאו תלמידים העומדים בקריטריונים של הסינון.</p>
-                        <p>נסה לשנות את פרמטרי הסינון או להזין ציונים עבור תלמידים אלו.</p>
-                        <button class="btn btn-primary" onclick="resetFiltersHandler()">
-                            <i class="fas fa-redo"></i> אפס סינון
-                        </button>
+                        <h3><i class="fas fa-info-circle"></i> ${title}</h3>
+                        <p class="no-results">לא נמצאו תלמידים מתאימים לסינון זה</p>
                     </div>
                 `;
-            }
-            
-            // אם יש תלמידים, יצירת רשימה
-            let searchResults = '';
-            const filters = {
-                name: document.getElementById('filterName') ? document.getElementById('filterName').value : '',
-                class: document.getElementById('filterClass') ? document.getElementById('filterClass').value : 'all'
-            };
-            
-            if (filters.name && filters.name.trim() !== '') {
-                searchResults = `<div class="search-results">נמצאו ${students.length} תוצאות עבור "${filters.name}"</div>`;
+                return;
             }
             
             let html = `
                 <div class="info-box">
-                    <h3><i class="fas fa-chart-bar"></i> ${title}</h3>
-                    <p>סה"כ ${students.length} תלמידים עם ציונים</p>
-                    ${searchResults}
+                    <h3><i class="fas fa-info-circle"></i> ${title}</h3>
+                    <p>סה"כ תלמידים: ${rankedStudents.length} | 
+                       <span class="excellent" style="padding: 2px 8px;">מלא: ${rankedStudents.filter(s => s.status === 'full').length}</span> | 
+                       <span class="good" style="padding: 2px 8px;">חלקי: ${rankedStudents.filter(s => s.status === 'partial').length}</span> | 
+                       <span class="average" style="padding: 2px 8px;">מועט: ${rankedStudents.filter(s => s.status === 'low').length}</span> | 
+                       <span class="poor" style="padding: 2px 8px;">ללא: ${rankedStudents.filter(s => s.status === 'none').length}</span>
+                    </p>
                 </div>
                 
-                <div class="student-ranking-list">
-                    ${students.map((student, index) => createStudentCardHTML(student, index)).join('')}
-                </div>
-                
-                <div class="info-box" style="margin-top: 20px;">
-                    <h4><i class="fas fa-info-circle"></i> הסבר על חישוב הציון הסופי:</h4>
-                    <p>הציון הסופי מחושב לפי משקולות המבחנים:</p>
-                    <table class="weights-table">
+                <table class="ranking-table">
+                    <thead>
                         <tr>
-                            <td><strong>מבחן עיוני:</strong></td>
-                            <td>20% מהציון הסופי</td>
+                            <th>דירוג</th>
+                            <th>שם מלא</th>
+                            <th>כיתה</th>
+                            <th>מגדר</th>
+                            <th>ציון סופי</th>
+                            <th>מבחנים</th>
+                            <th>סטטוס</th>
+                            <th>פירוט</th>
                         </tr>
-                        <tr>
-                            <td><strong>ריצת 2,000 מטר:</strong></td>
-                            <td>20% מהציון הסופי</td>
-                        </tr>
-                        <tr>
-                            <td><strong>דלגית:</strong></td>
-                            <td>15% מהציון הסופי</td>
-                        </tr>
-                        <tr>
-                            <td><strong>שכיבות שמיכה (ברכיים או מלא):</strong></td>
-                            <td>15% מהציון הסופי</td>
-                        </tr>
-                        <tr>
-                            <td><strong>מתח עם גומיה או מעבר סולם:</strong></td>
-                            <td>15% מהציון הסופי</td>
-                        </tr>
-                        <tr>
-                            <td><strong>פלאנק:</strong></td>
-                            <td>15% מהציון הסופי</td>
-                        </tr>
-                    </table>
-                    <p class="final-grade"><strong>הערה:</strong> תלמידים עם ציונים חסרים מקבלים ציון יחסי למה שיש. הסטטוס "מלא" יופיע רק כאשר יש ציונים בכל 6 המבחנים.</p>
-                </div>
+                    </thead>
+                    <tbody>
             `;
             
-            return html;
-        }
-
-        // יצירת כרטיס תלמיד
-        function createStudentCardHTML(student, index) {
-            const statusTexts = {
-                'full': 'מלא',
-                'partial': 'חלקי',
-                'low': 'מועט',
-                'none': 'ללא'
-            };
-            
-            const statusClasses = {
-                'full': 'excellent',
-                'partial': 'good',
-                'low': 'average',
-                'none': 'poor'
-            };
-            
-            const statusText = statusTexts[student.finalGrade.status] || 'ללא';
-            const statusClass = statusClasses[student.finalGrade.status] || 'poor';
-            
-            // קבלת כל הציונים של התלמיד
-            const studentTests = getStudentTests(student);
-            
-            return `
-                <div class="student-card">
-                    <div class="student-card-header">
-                        <div>
-                            <h3 style="margin: 0; display: flex; align-items: center; gap: 10px;">
-                                <span class="rank-number">${index + 1}</span>
-                                ${index < 3 ? '<i class="fas fa-crown" style="color: gold;"></i>' : ''}
-                                <span>${student.lastName} ${student.firstName}</span>
-                                <span style="font-size: 0.9rem; color: #666; margin-right: 10px;">יב'${student.class}</span>
-                            </h3>
-                            <p style="margin: 5px 0 0 0; color: #666;">
-                                ${student.gender === 'boys' ? 'בן' : 'בת'} | 
-                                <span class="result-badge ${statusClass}">${statusText}</span> | 
-                                ${Math.round(student.finalGrade.actualWeight * 100)}% מהציונים
-                            </p>
-                        </div>
-                        <div>
-                            <span class="result-badge ${
-                                student.finalGrade.final >= 90 ? 'excellent' : 
-                                student.finalGrade.final >= 75 ? 'good' : 
-                                student.finalGrade.final >= 60 ? 'average' : 'poor'
-                            }" style="font-size: 1.2rem;">
-                                ${student.finalGrade.final.toFixed(1)}
-                            </span>
-                            <button class="toggle-chart-btn" onclick="showProgressChart(${student.id})">
-                                <i class="fas fa-chart-line"></i> הצג גרף
+            rankedStudents.forEach((student, index) => {
+                const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : '';
+                const genderIcon = student.gender === 'boys' ? '♂' : '♀';
+                const genderText = student.gender === 'boys' ? 'בן' : 'בת';
+                const totalTests = student.gender === 'boys' ? 6 : 8;
+                
+                let statusText = '';
+                let statusClass = '';
+                if (student.status === 'full') {
+                    statusText = 'מלא';
+                    statusClass = 'excellent';
+                } else if (student.status === 'partial') {
+                    statusText = 'חלקי';
+                    statusClass = 'good';
+                } else if (student.status === 'low') {
+                    statusText = 'מועט';
+                    statusClass = 'average';
+                } else {
+                    statusText = 'ללא';
+                    statusClass = 'poor';
+                }
+                
+                let gradeClass = '';
+                if (student.finalGrade >= 90) gradeClass = 'excellent';
+                else if (student.finalGrade >= 75) gradeClass = 'good';
+                else if (student.finalGrade >= 60) gradeClass = 'average';
+                else if (student.finalGrade > 0) gradeClass = 'poor';
+                
+                html += `
+                    <tr class="${rankClass}">
+                        <td><strong>#${index + 1}</strong></td>
+                        <td><strong>${student.lastName} ${student.firstName}</strong></td>
+                        <td>יב'${student.class}</td>
+                        <td>${genderIcon} ${genderText}</td>
+                        <td><span class="result-badge ${gradeClass}">${student.finalGrade > 0 ? student.finalGrade.toFixed(2) : '--'}</span></td>
+                        <td>${student.testCount} / ${totalTests}</td>
+                        <td><span class="result-badge ${statusClass}">${statusText}</span></td>
+                        <td>
+                            <button class="btn btn-small toggle-chart-btn" onclick="showStudentDetails(${student.id})">
+                                <i class="fas fa-search"></i> הצג
                             </button>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card-body">
-                        ${studentTests.map(test => `
-                            <div class="student-test-item">
-                                <span class="test-name">${test.name}:</span>
-                                <span class="test-grade ${test.grade >= 90 ? 'excellent' : test.grade >= 75 ? 'good' : test.grade >= 60 ? 'average' : 'poor'}">
-                                    ${test.grade}
-                                </span>
-                            </div>
-                        `).join('')}
-                    </div>
-                    
-                    ${!student.finalGrade.hasAllGrades && student.finalGrade.missingGrades.length > 0 ? `
-                    <div style="margin-top: 10px; padding: 10px; background: #fff3cd; border-radius: 4px;">
-                        <small><strong>חסרים:</strong> ${student.finalGrade.missingGrades.join(', ')}</small>
-                    </div>
-                    ` : ''}
-                </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                    </tbody>
+                </table>
             `;
-        }
-
-        // קבלת כל הציונים של תלמיד
-        function getStudentTests(student) {
-            const studentKey = `${student.lastName}_${student.firstName}`;
-            const tests = [];
             
-            // רשימת מבחנים לפי מגדר
-            const testTypes = student.gender === 'boys' ? [
-                { id: 'theory', name: 'מבחן עיוני' },
-                { id: 'running2000', name: 'ריצת 2,000 מטר' },
-                { id: 'jumprope', name: 'דלגית' },
-                { id: 'pushups', name: 'שכיבות שמיכה' },
-                { id: 'pullups', name: 'מתח' },
-                { id: 'medicineball', name: 'ריצת כדורי כוח' }
-            ] : [
-                { id: 'theory_girls', name: 'מבחן עיוני' },
-                { id: 'running2000_girls', name: 'ריצת 2,000 מטר' },
-                { id: 'jumprope_girls', name: 'דלגית' },
-                { id: 'pushups_knees', name: 'שכיבות שמיכה ברכיים' },
-                { id: 'pushups_regular', name: 'שכיבות שמיכה רגיל' },
-                { id: 'pullups_band', name: 'מתח עם גומיה' },
-                { id: 'ladder', name: 'מעבר סולם' },
-                { id: 'plank', name: 'פלאנק' }
-            ];
+            resultsDiv.innerHTML = html;
             
-            // חיפוש ציונים
-            testTypes.forEach(testType => {
-                let foundGrade = null;
-                
-                for (const testKey in allTestResults) {
-                    if (testKey.includes(testType.id) && allTestResults[testKey][studentKey]) {
-                        foundGrade = allTestResults[testKey][studentKey].grade;
-                        break;
-                    }
-                }
-                
-                // לבנות, אם יש גם ברכיים וגם רגיל, נציג את שניהם? לא, נציג את הגבוה או את הרגיל אם יש
-                if (student.gender === 'girls' && testType.id === 'pushups_regular' && foundGrade !== null) {
-                    // כבר טופל
-                } else if (student.gender === 'girls' && testType.id === 'pushups_knees' && foundGrade !== null) {
-                    // לא נוסיף כי כבר יש regular? או שנוסיף?
-                    // בוא נוסיף רק אם אין regular
-                    let hasRegular = false;
-                    for (const testKey in allTestResults) {
-                        if (testKey.includes('pushups_regular') && allTestResults[testKey][studentKey]) {
-                            hasRegular = true;
-                            break;
-                        }
-                    }
-                    if (hasRegular) {
-                        return; // לא נוסיף knees כי יש regular
-                    }
-                }
-                
-                // לבנות, אם יש גם מתח עם גומיה וגם מעבר סולם, נציג רק את הגבוה
-                if (student.gender === 'girls' && testType.id === 'pullups_band' && foundGrade !== null) {
-                    // נוסיף
-                } else if (student.gender === 'girls' && testType.id === 'ladder' && foundGrade !== null) {
-                    // נוסיף רק אם אין pullups_band
-                    let hasPullupsBand = false;
-                    for (const testKey in allTestResults) {
-                        if (testKey.includes('pullups_band') && allTestResults[testKey][studentKey]) {
-                            hasPullupsBand = true;
-                            break;
-                        }
-                    }
-                    if (hasPullupsBand) {
-                        return; // לא נוסיף ladder כי יש pullups_band
-                    }
-                }
-                
-                tests.push({
-                    name: testType.name,
-                    grade: foundGrade !== null ? foundGrade : '--'
+            // עדכון תיבת החיפוש
+            const chartStudentSelect = document.getElementById('chartStudentSelect');
+            if (chartStudentSelect) {
+                chartStudentSelect.innerHTML = '<option value="">בחר תלמיד...</option>';
+                rankedStudents.forEach(student => {
+                    const option = document.createElement('option');
+                    option.value = student.id;
+                    option.textContent = `${student.lastName} ${student.firstName} (יב'${student.class})`;
+                    chartStudentSelect.appendChild(option);
                 });
-            });
-            
-            return tests;
+            }
         }
 
-        // עדכון רשימת התלמידים עבור התרשים
-        function updateChartStudentList(students) {
-            const selectElement = document.getElementById('chartStudentSelect');
-            if (!selectElement) return;
+        // חישוב דירוג מלא
+        function calculateFullRanking(genderFilter = 'all', classFilter = 'all', nameFilter = '', statusFilter = 'all') {
+            let studentsToRank = [];
             
-            selectElement.innerHTML = '<option value="">בחר תלמיד...</option>';
-            
-            students.forEach(student => {
-                const option = document.createElement('option');
-                option.value = student.id;
-                option.textContent = `${student.lastName} ${student.firstName} - יב'${student.class}`;
-                selectElement.appendChild(option);
-            });
-        }
-
-        // הצגת תרשים התקדמות
-        function showProgressChart(studentId) {
-            const student = allStudentsData.find(s => s.id === studentId);
-            if (!student) return;
-            
-            // הצגת חלון התרשים
-            const chartContainer = document.getElementById('progressChartContainer');
-            chartContainer.style.display = 'block';
-            
-            // עדכון בחירת התלמיד
-            const selectElement = document.getElementById('chartStudentSelect');
-            if (selectElement) {
-                selectElement.value = studentId;
+            if (genderFilter === 'all') {
+                studentsToRank = [...boysData, ...girlsData];
+            } else if (genderFilter === 'boys') {
+                studentsToRank = [...boysData];
+            } else {
+                studentsToRank = [...girlsData];
             }
             
-            // יצירת התרשים
-            createProgressChart(student);
+            // סינון לפי כיתה
+            if (classFilter !== 'all') {
+                const classNum = parseInt(classFilter);
+                studentsToRank = studentsToRank.filter(s => s.class === classNum);
+            }
             
-            // גלילה לחלון התרשים
-            chartContainer.scrollIntoView({ behavior: 'smooth' });
+            // סינון לפי שם
+            if (nameFilter && nameFilter.trim() !== '') {
+                const searchTerm = nameFilter.trim().toLowerCase();
+                studentsToRank = studentsToRank.filter(s => 
+                    s.firstName.toLowerCase().includes(searchTerm) || 
+                    s.lastName.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // חישוב ציונים וסינון לפי סטטוס
+            const rankedStudents = studentsToRank.map(student => {
+                const gradeData = calculateFinalGrade(student);
+                let status = 'none';
+                if (gradeData.count >= (student.gender === 'boys' ? 5 : 6)) status = 'full';
+                else if (gradeData.count >= 3) status = 'partial';
+                else if (gradeData.count > 0) status = 'low';
+                
+                return {
+                    ...student,
+                    finalGrade: gradeData.final,
+                    testCount: gradeData.count,
+                    status: status,
+                    weightedAverage: gradeData.weighted
+                };
+            });
+            
+            // סינון לפי סטטוס
+            let filteredStudents = rankedStudents;
+            if (statusFilter !== 'all') {
+                filteredStudents = rankedStudents.filter(s => s.status === statusFilter);
+            }
+            
+            // מיון לפי ציון סופי (גבוה לנמוך)
+            filteredStudents.sort((a, b) => b.finalGrade - a.finalGrade);
+            
+            return filteredStudents;
         }
 
-        // יצירת תרשים התקדמות
-        function createProgressChart(student) {
-            const canvas = document.getElementById('progressChart');
-            if (!canvas) return;
+        // פונקציות דירוג - מימוש מלא
+        function showRankingWithFilters(type) {
+            const filters = {
+                name: document.getElementById('filterName').value,
+                class: document.getElementById('filterClass').value,
+                status: document.getElementById('filterStatus').value,
+                gender: type
+            };
+            showRanking(type, filters);
+        }
+
+        function applyFiltersHandler() {
+            const filters = {
+                name: document.getElementById('filterName').value,
+                class: document.getElementById('filterClass').value,
+                status: document.getElementById('filterStatus').value,
+                gender: document.getElementById('filterGender').value
+            };
             
-            // השמדת תרשים קיים אם יש
+            let currentRankingType = 'all';
+            if (document.getElementById('rankingBoysBtn').classList.contains('active')) {
+                currentRankingType = 'boys';
+            } else if (document.getElementById('rankingGirlsBtn').classList.contains('active')) {
+                currentRankingType = 'girls';
+            }
+            
+            if (filters.gender && filters.gender !== 'all') {
+                currentRankingType = filters.gender;
+            }
+            
+            document.querySelectorAll('#rankingScreen .btn-group .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            if (currentRankingType === 'boys') {
+                document.getElementById('rankingBoysBtn').classList.add('active');
+            } else if (currentRankingType === 'girls') {
+                document.getElementById('rankingGirlsBtn').classList.add('active');
+            } else {
+                document.getElementById('rankingAllBtn').classList.add('active');
+            }
+            
+            showRanking(currentRankingType, filters);
+        }
+
+        function resetFiltersHandler() {
+            document.getElementById('filterName').value = '';
+            document.getElementById('filterClass').value = 'all';
+            document.getElementById('filterStatus').value = 'all';
+            document.getElementById('filterGender').value = 'all';
+            document.getElementById('clearNameBtn').style.display = 'none';
+            
+            let currentRankingType = 'all';
+            if (document.getElementById('rankingBoysBtn').classList.contains('active')) {
+                currentRankingType = 'boys';
+            } else if (document.getElementById('rankingGirlsBtn').classList.contains('active')) {
+                currentRankingType = 'girls';
+            }
+            
+            document.querySelectorAll('#rankingScreen .btn-group .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            if (currentRankingType === 'boys') {
+                document.getElementById('rankingBoysBtn').classList.add('active');
+            } else if (currentRankingType === 'girls') {
+                document.getElementById('rankingGirlsBtn').classList.add('active');
+            } else {
+                document.getElementById('rankingAllBtn').classList.add('active');
+            }
+            
+            showRanking(currentRankingType, {});
+        }
+
+        function showProgressChart(studentId) {
+            const student = allStudentsData.find(s => s.id === parseInt(studentId));
+            if (!student) {
+                showNotification('תלמיד לא נמצא', 'error');
+                return;
+            }
+            
+            document.getElementById('progressChartContainer').style.display = 'block';
+            
+            // איסוף ציונים לתרשים
+            const labels = [];
+            const data = [];
+            const tests = getStudentAllTests(student).filter(t => t.hasGrade);
+            
+            tests.forEach(test => {
+                labels.push(`${test.name} (${test.weight}%)`);
+                data.push(test.grade);
+            });
+            
+            if (labels.length === 0) {
+                showNotification('אין נתונים להצגה בתרשים', 'warning');
+                return;
+            }
+            
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            
             if (currentChart) {
                 currentChart.destroy();
             }
             
-            // קבלת נתוני התלמיד
-            const studentTests = getStudentTests(student);
-            const testNames = studentTests.map(test => test.name);
-            const testGrades = studentTests.map(test => test.grade === '--' ? 0 : test.grade);
-            
-            // יצירת התרשים
-            const ctx = canvas.getContext('2d');
             const chartType = document.getElementById('chartTypeSelect').value;
             
             currentChart = new Chart(ctx, {
                 type: chartType,
                 data: {
-                    labels: testNames,
+                    labels: labels,
                     datasets: [{
-                        label: `ציוני ${student.firstName} ${student.lastName}`,
-                        data: testGrades,
-                        backgroundColor: [
-                            'rgba(54, 162, 235, 0.6)',
-                            'rgba(75, 192, 192, 0.6)',
-                            'rgba(255, 206, 86, 0.6)',
-                            'rgba(255, 99, 132, 0.6)',
-                            'rgba(153, 102, 255, 0.6)',
-                            'rgba(255, 159, 64, 0.6)',
-                            'rgba(199, 199, 199, 0.6)',
-                            'rgba(83, 102, 255, 0.6)'
-                        ],
-                        borderColor: [
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)',
-                            'rgba(199, 199, 199, 1)',
-                            'rgba(83, 102, 255, 1)'
-                        ],
-                        borderWidth: 2
+                        label: `${student.lastName} ${student.firstName} - ציונים`,
+                        data: data,
+                        backgroundColor: chartType === 'radar' ? 'rgba(52, 152, 219, 0.2)' : 'rgba(52, 152, 219, 0.5)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(52, 152, 219, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(52, 152, 219, 1)'
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: chartType === 'radar' ? {} : {
+                    scales: chartType !== 'radar' ? {
                         y: {
                             beginAtZero: true,
                             max: 100,
@@ -3604,29 +3976,17 @@
                                 display: true,
                                 text: 'ציון'
                             }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'מבחנים'
-                            }
                         }
-                    },
+                    } : undefined,
                     plugins: {
-                        title: {
-                            display: true,
-                            text: `התקדמות ${student.firstName} ${student.lastName} - כיתה יב'${student.class}`,
-                            font: {
-                                size: 16
-                            }
-                        },
                         legend: {
-                            display: chartType !== 'radar'
+                            display: true,
+                            position: 'top'
                         },
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    return `ציון: ${context.parsed.y || context.raw}`;
+                                    return `ציון: ${context.raw}`;
                                 }
                             }
                         }
@@ -3635,53 +3995,21 @@
             });
         }
 
-        // בדיקת דוגמת חישוב ציון סופי לבנות
-        function testGirlsCalculationExample() {
-            console.log("=== בדיקת דוגמת חישוב ציון סופי לבנות ===");
+        // אתחול המערכת
+        function initSystem() {
+            updateTotalCount();
+            setupEventListeners();
+            loadTheoryGrades();
             
-            // דוגמת הציונים:
-            const exampleGrades = {
-                theory: 80,
-                running: 82,
-                jumprope: 65,
-                pushups_regular: 100, // שכיבות שמיכה מלא
-                pullups_band: 90, // מתח עם גומיה
-                plank: 100
-            };
-            
-            console.log("דוגמת ציונים:");
-            console.log("- עיוני: 80 (20%)");
-            console.log("- ריצת 2,000: 82 (20%)");
-            console.log("- דלגית: 65 (15%)");
-            console.log("- שכיבות שמיכה מלא: 100 (15%)");
-            console.log("- מתח עם גומיה: 90 (15%)");
-            console.log("- פלאנק: 100 (15%)");
-            
-            // חישוב:
-            const total = 
-                (80 * 0.20) + 
-                (82 * 0.20) + 
-                (65 * 0.15) + 
-                (100 * 0.15) + 
-                (90 * 0.15) + 
-                (100 * 0.15);
-            
-            console.log("\nחישוב:");
-            console.log("80 × 0.20 = 16");
-            console.log("82 × 0.20 = 16.4");
-            console.log("65 × 0.15 = 9.75");
-            console.log("100 × 0.15 = 15");
-            console.log("90 × 0.15 = 13.5");
-            console.log("100 × 0.15 = 15");
-            console.log("\nסך הכל: 16 + 16.4 + 9.75 + 15 + 13.5 + 15 =", total);
-            console.log("ציון סופי מעוגל:", Math.round(total));
-            
-            showNotification("דוגמת חישוב נבדקה - ראה קונסול", "info");
+            console.log('System initialized with', allStudentsData.length, 'students');
+            console.log('Test images loaded:', Object.keys(testImages).length, 'images');
+            console.log('Girls running table loaded with', girlsRunning2000Table.length, 'entries');
+            console.log('Plank table loaded with', plankTable.length, 'entries');
+            showNotification(`מערכת מוכנה: ${girlsData.length} תלמידות ו-${boysData.length} תלמידים`, 'success');
         }
 
         // הגדרת אירועי לחיצה
         function setupEventListeners() {
-            // כפתורים במסך הראשי
             document.getElementById('boysBtn').addEventListener('click', () => selectGender('boys'));
             document.getElementById('girlsBtn').addEventListener('click', () => selectGender('girls'));
             document.getElementById('rankingBtn').addEventListener('click', () => {
@@ -3689,7 +4017,6 @@
                 showRanking('all', {});
             });
             
-            // כפתורי חזרה
             document.getElementById('backFromClassBtn').addEventListener('click', () => showScreen('mainScreen'));
             document.getElementById('homeFromClassBtn').addEventListener('click', () => showScreen('mainScreen'));
             
@@ -3708,61 +4035,47 @@
             document.getElementById('backFromRankingBtn').addEventListener('click', () => showScreen('mainScreen'));
             document.getElementById('homeFromRankingBtn').addEventListener('click', () => showScreen('mainScreen'));
             
-            // כפתורי דירוג
             document.getElementById('rankingAllBtn').addEventListener('click', () => {
-                showRanking('all', {});
-                // עדכון מצב פעיל
-                document.querySelectorAll('#rankingScreen .btn-group .btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
+                showRankingWithFilters('all');
+                document.querySelectorAll('#rankingScreen .btn-group .btn').forEach(btn => btn.classList.remove('active'));
                 document.getElementById('rankingAllBtn').classList.add('active');
             });
+            
             document.getElementById('rankingBoysBtn').addEventListener('click', () => {
-                showRanking('boys', {});
-                // עדכון מצב פעיל
-                document.querySelectorAll('#rankingScreen .btn-group .btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
+                showRankingWithFilters('boys');
+                document.querySelectorAll('#rankingScreen .btn-group .btn').forEach(btn => btn.classList.remove('active'));
                 document.getElementById('rankingBoysBtn').classList.add('active');
             });
+            
             document.getElementById('rankingGirlsBtn').addEventListener('click', () => {
-                showRanking('girls', {});
-                // עדכון מצב פעיל
-                document.querySelectorAll('#rankingScreen .btn-group .btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
+                showRankingWithFilters('girls');
+                document.querySelectorAll('#rankingScreen .btn-group .btn').forEach(btn => btn.classList.remove('active'));
                 document.getElementById('rankingGirlsBtn').classList.add('active');
             });
             
-            // סינון מתקדם
             document.getElementById('applyFiltersBtn').addEventListener('click', applyFiltersHandler);
             document.getElementById('resetFiltersBtn').addEventListener('click', resetFiltersHandler);
+            
             document.getElementById('filterName').addEventListener('input', function() {
                 const clearBtn = document.getElementById('clearNameBtn');
                 clearBtn.style.display = this.value ? 'block' : 'none';
             });
+            
             document.getElementById('clearNameBtn').addEventListener('click', function() {
                 document.getElementById('filterName').value = '';
                 this.style.display = 'none';
             });
             
-            // תרשים התקדמות
             document.getElementById('chartStudentSelect').addEventListener('change', function() {
                 if (this.value) {
-                    const student = allStudentsData.find(s => s.id === parseInt(this.value));
-                    if (student) {
-                        createProgressChart(student);
-                    }
+                    showProgressChart(this.value);
                 }
             });
             
             document.getElementById('chartTypeSelect').addEventListener('change', function() {
                 const selectElement = document.getElementById('chartStudentSelect');
                 if (selectElement.value) {
-                    const student = allStudentsData.find(s => s.id === parseInt(selectElement.value));
-                    if (student) {
-                        createProgressChart(student);
-                    }
+                    showProgressChart(selectElement.value);
                 }
             });
             
@@ -3770,120 +4083,24 @@
                 document.getElementById('progressChartContainer').style.display = 'none';
             });
             
-            // כפתורי בדיקה
             document.getElementById('debugGirlsBtn').addEventListener('click', debugGirlsData);
             document.getElementById('debugBoysBtn').addEventListener('click', debugBoysData);
             document.getElementById('debugSystemBtn').addEventListener('click', debugSystem);
             document.getElementById('loadTheoryBtn').addEventListener('click', loadTheoryGrades);
-            document.getElementById('testPushupsBtn').addEventListener('click', () => {
-                console.log("טבלת שכיבות שמיכה נבדקת:");
-                console.log("55 שכיבות ->", getScoreFromPushupsTable(55));
-                console.log("30 שכיבות ->", getScoreFromPushupsTable(30));
-                console.log("15 שכיבות ->", getScoreFromPushupsTable(15));
-                showNotification("טבלת שכיבות נבדקה - ראה קונסול", "info");
-            });
+            document.getElementById('testPushupsBtn').addEventListener('click', testPushups);
             document.getElementById('testConversionTablesBtn').addEventListener('click', testConversionTables);
             document.getElementById('testGirlsTableBtn').addEventListener('click', testGirlsTable);
             document.getElementById('testGirlsRunningBtn').addEventListener('click', testGirlsRunningRules);
             document.getElementById('testCalculationBtn').addEventListener('click', testGirlsCalculationExample);
             
-            // כפתור שמירה
             document.getElementById('saveResultsBtn').addEventListener('click', saveResults);
-        }
-
-        // טיפול בסינון מתקדם
-        function applyFiltersHandler() {
-            const filters = {
-                name: document.getElementById('filterName').value,
-                class: document.getElementById('filterClass').value,
-                status: document.getElementById('filterStatus').value,
-                gender: document.getElementById('filterGender').value
-            };
             
-            console.log("Applying filters:", filters);
-            
-            // קביעת סוג הדירוג הנוכחי
-            let currentRankingType = 'all';
-            if (document.getElementById('rankingBoysBtn').classList.contains('active')) {
-                currentRankingType = 'boys';
-            } else if (document.getElementById('rankingGirlsBtn').classList.contains('active')) {
-                currentRankingType = 'girls';
-            }
-            
-            // אם סינון לפי מגדר מופעל, שנה את סוג הדירוג
-            if (filters.gender && filters.gender !== 'all') {
-                currentRankingType = filters.gender;
-            }
-            
-            // הסר את הכיתה הפעילה מכל הכפתורים והוסף לכפתור הנוכחי
-            document.querySelectorAll('#rankingScreen .btn-group .btn').forEach(btn => {
-                btn.classList.remove('active');
+            // סגירת מודאל בלחיצה על Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
             });
-            
-            if (currentRankingType === 'boys') {
-                document.getElementById('rankingBoysBtn').classList.add('active');
-            } else if (currentRankingType === 'girls') {
-                document.getElementById('rankingGirlsBtn').classList.add('active');
-            } else {
-                document.getElementById('rankingAllBtn').classList.add('active');
-            }
-            
-            showRanking(currentRankingType, filters);
-        }
-
-        // איפוס סינון
-        function resetFiltersHandler() {
-            document.getElementById('filterName').value = '';
-            document.getElementById('filterClass').value = 'all';
-            document.getElementById('filterStatus').value = 'all';
-            document.getElementById('filterGender').value = 'all';
-            document.getElementById('clearNameBtn').style.display = 'none';
-            
-            // קביעת סוג הדירוג הנוכחי
-            let currentRankingType = 'all';
-            if (document.getElementById('rankingBoysBtn').classList.contains('active')) {
-                currentRankingType = 'boys';
-            } else if (document.getElementById('rankingGirlsBtn').classList.contains('active')) {
-                currentRankingType = 'girls';
-            }
-            
-            // עדכון מצב פעיל
-            document.querySelectorAll('#rankingScreen .btn-group .btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            if (currentRankingType === 'boys') {
-                document.getElementById('rankingBoysBtn').classList.add('active');
-            } else if (currentRankingType === 'girls') {
-                document.getElementById('rankingGirlsBtn').classList.add('active');
-            } else {
-                document.getElementById('rankingAllBtn').classList.add('active');
-            }
-            
-            showRanking(currentRankingType, {});
-        }
-
-        // אתחול המערכת
-        function initSystem() {
-            // עדכון ספירת תלמידים
-            updateTotalCount();
-            
-            // הגדרת אירועים
-            setupEventListeners();
-            
-            // טעינת ציוני מבחן עיוני אוטומטית
-            loadTheoryGrades();
-            
-            console.log('System initialized with', allStudentsData.length, 'students');
-            console.log('Conversion tables loaded:');
-            console.log('- Medicine Ball:', medicineBallTable.length, 'entries');
-            console.log('- Running 2000m:', running2000Table.length, 'entries');
-            console.log('- Jump Rope:', jumpRopeTable.length, 'entries');
-            console.log('- Pullups:', pullupsTable.length, 'entries');
-            console.log('- Pushups:', pushupsTable.length, 'entries');
-            console.log('- Girls Table:', girlsConversionTable.length, 'entries');
-            
-            showNotification(`מערכת מוכנה: ${girlsData.length} תלמידות ו-${boysData.length} תלמידים`, 'success');
         }
 
         // הפעלת המערכת
