@@ -6,6 +6,7 @@
     <title>בגרות בחנ"ג תיכון אחד העם תשפ"ו</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         :root {
             --primary: #2c3e50;
@@ -46,6 +47,23 @@
             color: white;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .header-logo {
+            width: 100px;
+            height: auto;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header-text {
+            text-align: center;
         }
         
         header h1 {
@@ -131,6 +149,15 @@
         .btn-danger {
             background: var(--danger);
             color: white;
+        }
+        
+        .btn-excel {
+            background: #1d6f42;
+            color: white;
+        }
+        
+        .btn-excel:hover {
+            background: #145530;
         }
         
         .btn-back {
@@ -429,11 +456,29 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
+        .filters-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filters-header h3 {
+            color: var(--primary);
+            margin: 0;
+            white-space: nowrap;
+        }
+        
+        .filters-header .search-wrapper {
+            flex: 1;
+            min-width: 300px;
+        }
+        
         .filters-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            margin-top: 15px;
         }
         
         .filter-group {
@@ -448,7 +493,6 @@
         }
         
         .search-container {
-            margin: 20px 0;
             position: relative;
         }
         
@@ -873,6 +917,48 @@
             box-shadow: none;
         }
         
+        /* חלון אישור יציאה - מתוקן */
+        .exit-modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px 25px;
+            max-width: 380px;
+            width: 90%;
+            margin: 0 auto;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        
+        .exit-modal-content h3 {
+            color: var(--warning);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .exit-modal-content p {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            color: #333;
+        }
+        
+        .exit-modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .exit-modal-buttons .btn {
+            min-width: 110px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            margin: 0;
+        }
+        
         @media (max-width: 768px) {
             .btn {
                 min-width: 100%;
@@ -892,6 +978,15 @@
             
             th, td {
                 padding: 8px 10px;
+            }
+            
+            .filters-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filters-header .search-wrapper {
+                width: 100%;
             }
             
             .filters-grid {
@@ -935,14 +1030,24 @@
                 flex-direction: column;
                 gap: 5px;
             }
+            
+            .exit-modal-buttons .btn {
+                min-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>בגרות בחנ"ג</h1>
-            <h2>תיכון אחד העם תשפ"ו</h2>
+            <img src="https://1haam-pt.mashov.info/wp-content/uploads/sites/186/2023/05/%D7%9C%D7%95%D7%92%D7%953-%D7%94%D7%92%D7%A8-%D7%90%D7%95%D7%92%D7%93.png" 
+                 alt="לוגו תיכון אחד העם" 
+                 class="header-logo"
+                 onerror="this.src='https://via.placeholder.com/100?text=לוגו'">
+            <div class="header-text">
+                <h1>בגרות בחנ"ג</h1>
+                <h2>תיכון אחד העם תשפ"ו</h2>
+            </div>
         </header>
         
         <!-- מסך ראשי עם אפשרויות -->
@@ -1059,12 +1164,17 @@
         
         <!-- מסך דירוג שכבה -->
         <div id="rankingScreen" class="screen">
-            <button class="btn btn-back" id="backFromRankingBtn">
-                <i class="fas fa-arrow-right"></i> חזרה למסך הראשי
-            </button>
-            <button class="btn btn-main-home" id="homeFromRankingBtn" style="margin-right: 10px;">
-                <i class="fas fa-home"></i> חזרה למסך ראשי
-            </button>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn btn-back" id="backFromRankingBtn">
+                    <i class="fas fa-arrow-right"></i> חזרה למסך הראשי
+                </button>
+                <button class="btn btn-main-home" id="homeFromRankingBtn">
+                    <i class="fas fa-home"></i> חזרה למסך ראשי
+                </button>
+                <button class="btn btn-excel" id="exportExcelBtn">
+                    <i class="fas fa-file-excel"></i> ייצוא לאקסל
+                </button>
+            </div>
             <h2>דירוג שכבה יב'</h2>
             <div class="info-box">
                 <h3><i class="fas fa-info-circle"></i> חישוב ציונים סופיים</h3>
@@ -1086,10 +1196,9 @@
             
             <!-- סינון מתקדם -->
             <div class="filters-container">
-                <h3><i class="fas fa-filter"></i> סינון מתקדם</h3>
-                <div class="filters-grid">
-                    <div class="filter-group">
-                        <label for="filterName">חיפוש לפי שם:</label>
+                <div class="filters-header">
+                    <h3><i class="fas fa-filter"></i> סינון מתקדם</h3>
+                    <div class="search-wrapper">
                         <div class="search-container">
                             <i class="fas fa-search search-icon"></i>
                             <input type="text" id="filterName" class="search-input" placeholder="שם פרטי או משפחה...">
@@ -1098,7 +1207,9 @@
                             </button>
                         </div>
                     </div>
-                    
+                </div>
+                
+                <div class="filters-grid">
                     <div class="filter-group">
                         <label for="filterClass">סינון לפי כיתה:</label>
                         <select id="filterClass">
@@ -1119,10 +1230,17 @@
                     </div>
                     
                     <div class="filter-group">
-                        <label for="filterStatus">סינון לפי סטטוס:</label>
+                        <label for="filterStatus">סינון לפי סטטוס מבחנים:</label>
                         <select id="filterStatus">
                             <option value="all">כל הסטטוסים</option>
                             <option value="full">מלא (כל הציונים)</option>
+                            <option value="8">מבחנים 8 מתוך 8</option>
+                            <option value="7">מבחנים 7 מתוך 8</option>
+                            <option value="6">מבחנים 6 מתוך 8</option>
+                            <option value="5">מבחנים 5 מתוך 8</option>
+                            <option value="4">מבחנים 4 מתוך 8</option>
+                            <option value="3">מבחנים 3 מתוך 8</option>
+                            <option value="below3">מתחת ל-3 מבחנים</option>
                             <option value="partial">חלקי (50% ומעלה)</option>
                             <option value="low">מועט (פחות מ-50%)</option>
                             <option value="none">ללא ציונים</option>
@@ -1181,7 +1299,7 @@
     <!-- חלון מודאלי לפרטי תלמיד -->
     <div id="studentModal" style="display: none;"></div>
 
-    <!-- חלון אישור יציאה -->
+    <!-- חלון אישור יציאה - מעוצב מחדש -->
     <div id="exitConfirmModal" style="display: none;"></div>
 
     <script>
@@ -1196,10 +1314,50 @@
         let hasUnsavedChanges = false;
         
         // ============================================
+        // טעינה / שמירה מ-localStorage
+        // ============================================
+        
+        function loadFromLocalStorage() {
+            try {
+                const saved = localStorage.getItem('bagrutResults');
+                if (saved) {
+                    allTestResults = JSON.parse(saved);
+                    console.log('נטענו נתונים מ-localStorage:', Object.keys(allTestResults).length, 'מבחנים');
+                }
+            } catch (e) {
+                console.error('שגיאה בטעינת נתונים:', e);
+            }
+        }
+        
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem('bagrutResults', JSON.stringify(allTestResults));
+                console.log('נשמרו נתונים ל-localStorage');
+            } catch (e) {
+                console.error('שגיאה בשמירת נתונים:', e);
+            }
+        }
+        
+        const originalSaveAllResults = window.saveAllResults;
+        window.saveAllResults = function() {
+            if (originalSaveAllResults) {
+                originalSaveAllResults();
+            }
+            saveToLocalStorage();
+        };
+        
+        const originalSaveSingleResult = window.saveSingleResult;
+        window.saveSingleResult = function(studentId) {
+            if (originalSaveSingleResult) {
+                originalSaveSingleResult(studentId);
+            }
+            saveToLocalStorage();
+        };
+        
+        // ============================================
         // טבלאות המרה מהקובץ האקסל
         // ============================================
         
-        // טבלת המרה עבור ריצה עם כדורי כוח (זמן בשניות → ציון)
         const medicineBallTable = [
             {time: 30, score: 100},
             {time: 29.5, score: 99},
@@ -1244,7 +1402,6 @@
             {time: 10, score: 30}
         ];
         
-        // טבלת המרה עבור ריצת 2,000 מטר (זמן בפורמט MM:SS → ציון) - לבנים
         const running2000Table = [
             {time: "07:00", score: 100},
             {time: "07:03", score: 99},
@@ -1319,7 +1476,6 @@
             {time: "14:05", score: 30}
         ];
         
-        // טבלת המרה לבנות - ריצת 2,000 מטר לפי הקובץ שצורף
         const girlsRunning2000Table = [
             {score: 100, time: "10:00-10:30"},
             {score: 99, time: ""},
@@ -1371,10 +1527,9 @@
             {score: 53, time: ""},
             {score: 52, time: ""},
             {score: 51, time: ""},
-            {score: 50, time: "17:01:00"}  // 17:01 ומעלה מניב ציון 50
+            {score: 50, time: "17:01:00"}
         ];
         
-        // טבלת המרה לפלאנק לפי הקובץ
         const plankTable = [
             {score: 100, time: 100},
             {score: 99, time: 99},
@@ -1449,7 +1604,6 @@
             {score: 30, time: 30}
         ];
         
-        // טבלת המרה עבור דלגית (כמות → ציון)
         const jumpRopeTable = [
             {count: 150, score: 100},
             {count: 149, score: 99},
@@ -1514,7 +1668,6 @@
             {count: 50, score: 40}
         ];
         
-        // טבלת המרה עבור מתח (כמות → ציון)
         const pullupsTable = [
             {count: 16, score: 100},
             {count: 15, score: 96},
@@ -1534,7 +1687,6 @@
             {count: 1, score: 50}
         ];
         
-        // טבלת המרה עבור שכיבות סמיכה (כמות → ציון) - תוקן השם
         const pushupsTable = [
             {count: 55, score: 100},
             {count: 54, score: 98},
@@ -1586,159 +1738,81 @@
             {count: 8, score: 30}
         ];
         
-        // ============================================
-        // טבלת המרה עבור בנות מהקובץ האקסל - לשאר המבחנים
-        // ============================================
         const girlsConversionTable = [
-            // ניקוד 100
             {score: 100, jumprope: 150, pullups_band: 14, pushups_knees: 35, pushups_regular: 15, ladder: 10},
-            // ניקוד 99
             {score: 99, jumprope: 149},
-            // ניקוד 98
             {score: 98, jumprope: 148, pushups_knees: 34},
-            // ניקוד 97
             {score: 97, jumprope: 146},
-            // ניקוד 96
             {score: 96, jumprope: 144, pullups_band: 13, pushups_knees: 33},
-            // ניקוד 95
             {score: 95, jumprope: 142, pushups_regular: 14, ladder: 9},
-            // ניקוד 94
             {score: 94, jumprope: 140, pushups_knees: 32},
-            // ניקוד 93
             {score: 93, jumprope: 138, pullups_band: 12},
-            // ניקוד 92
             {score: 92, jumprope: 136, pushups_knees: 31},
-            // ניקוד 91
             {score: 91, jumprope: 135},
-            // ניקוד 90
             {score: 90, jumprope: 133, pullups_band: 11, pushups_knees: 30, pushups_regular: 13, ladder: 8},
-            // ניקוד 89
             {score: 89, jumprope: 132},
-            // ניקוד 88
             {score: 88, jumprope: 130, pushups_knees: 29},
-            // ניקוד 87
             {score: 87, jumprope: 128, pullups_band: 10},
-            // ניקוד 86
             {score: 86, jumprope: 127, pushups_knees: 28},
-            // ניקוד 85
             {score: 85, jumprope: 125, pullups_band: 9, pushups_regular: 12, ladder: 7},
-            // ניקוד 84
             {score: 84, jumprope: 124, pushups_knees: 27},
-            // ניקוד 83
             {score: 83, jumprope: 121},
-            // ניקוד 82
             {score: 82, jumprope: 118, pushups_knees: 26},
-            // ניקוד 81
             {score: 81, jumprope: 115},
-            // ניקוד 80
             {score: 80, jumprope: 112, pullups_band: 8, pushups_knees: 25, pushups_regular: 11},
-            // ניקוד 79
             {score: 79, jumprope: 110},
-            // ניקוד 78
             {score: 78, jumprope: 108, pushups_knees: 24},
-            // ניקוד 77
             {score: 77, jumprope: 106, pullups_band: 7},
-            // ניקוד 76
             {score: 76, jumprope: 103, pushups_knees: 23},
-            // ניקוד 75
             {score: 75, jumprope: 100, pullups_band: 6, pushups_regular: 10, ladder: 6},
-            // ניקוד 74
             {score: 74, jumprope: 98, pushups_knees: 22},
-            // ניקוד 73
             {score: 73, jumprope: 96},
-            // ניקוד 72
             {score: 72, jumprope: 94, pushups_knees: 21},
-            // ניקוד 71
             {score: 71, jumprope: 92},
-            // ניקוד 70
             {score: 70, jumprope: 90, pullups_band: 5, pushups_knees: 20, pushups_regular: 9},
-            // ניקוד 69
             {score: 69, jumprope: 88},
-            // ניקוד 68
             {score: 68, jumprope: 86, pushups_knees: 19},
-            // ניקוד 67
             {score: 67, jumprope: 84},
-            // ניקוד 66
             {score: 66, jumprope: 83, pushups_knees: 18},
-            // ניקוד 65
             {score: 65, jumprope: 81, pullups_band: 4, pushups_regular: 8, ladder: 5},
-            // ניקוד 64
             {score: 64, jumprope: 79, pushups_knees: 17},
-            // ניקוד 63
             {score: 63, jumprope: 77},
-            // ניקוד 62
             {score: 62, jumprope: 75, pushups_knees: 16},
-            // ניקוד 61
             {score: 61, jumprope: 73},
-            // ניקוד 60
             {score: 60, jumprope: 72, pullups_band: 3, pushups_knees: 15, pushups_regular: 7},
-            // ניקוד 59
             {score: 59, jumprope: 71},
-            // ניקוד 58
             {score: 58, jumprope: 70, pushups_knees: 14},
-            // ניקוד 57
             {score: 57, jumprope: 68},
-            // ניקוד 56
             {score: 56, jumprope: 66, pushups_knees: 13},
-            // ניקוד 55
             {score: 55, jumprope: 64, pullups_band: 2, pushups_regular: 6, ladder: 4},
-            // ניקוד 54
             {score: 54, jumprope: 62, pushups_knees: 12},
-            // ניקוד 53
             {score: 53, jumprope: 60},
-            // ניקוד 52
             {score: 52, jumprope: 58, pushups_knees: 11},
-            // ניקוד 51
             {score: 51, jumprope: 56},
-            // ניקוד 50
             {score: 50, jumprope: 54, pullups_band: 1, pushups_knees: 10, pushups_regular: 5},
-            // ניקוד 49
             {score: 49, jumprope: 52},
-            // ניקוד 48
             {score: 48, jumprope: 50, pushups_knees: 9},
-            // ניקוד 47
             {score: 47, jumprope: 48},
-            // ניקוד 46
             {score: 46, jumprope: 46, pushups_knees: 8},
-            // ניקוד 45
             {score: 45, jumprope: 44, pushups_regular: 4, ladder: 3},
-            // ניקוד 44
             {score: 44, jumprope: 42, pushups_knees: 7},
-            // ניקוד 43
             {score: 43, jumprope: 40},
-            // ניקוד 42
             {score: 42, jumprope: 38, pushups_knees: 6},
-            // ניקוד 41
             {score: 41, jumprope: 36},
-            // ניקוד 40
             {score: 40, jumprope: 34, pushups_knees: 5, pushups_regular: 3},
-            // ניקוד 39
             {score: 39, jumprope: 32},
-            // ניקוד 38
             {score: 38, jumprope: 30, pushups_knees: 4},
-            // ניקוד 37
             {score: 37, jumprope: 28},
-            // ניקוד 36
             {score: 36, jumprope: 26, pushups_knees: 3},
-            // ניקוד 35
             {score: 35, jumprope: 24, pushups_regular: 2, ladder: 2},
-            // ניקוד 34
             {score: 34, jumprope: 22, pushups_knees: 2},
-            // ניקוד 33
             {score: 33, jumprope: 20, pushups_regular: 1, ladder: 1},
-            // ניקוד 32
             {score: 32, jumprope: 18, pushups_knees: 1},
-            // ניקוד 31
             {score: 31, jumprope: 16},
-            // ניקוד 30
             {score: 30, jumprope: 14, pullups_band: "ניסיון", pushups_knees: "ניסיון", pushups_regular: "ניסיון", ladder: "ניסיון"}
         ];
 
-        // ============================================
-        // נתוני התלמידות (girlsData) - כל הנתונים מהקובץ המקורי
-        // ============================================
         const girlsData = [
-            // כיתה 1 - 15 תלמידות
             {id: 47, lastName: "בן עמי", firstName: "רומי", grade: "יב", class: 1, gender: "girls"},
             {id: 66, lastName: "גופמן", firstName: "ליאן", grade: "יב", class: 1, gender: "girls"},
             {id: 73, lastName: "גפה", firstName: "עופרי", grade: "יב", class: 1, gender: "girls"},
@@ -1754,8 +1828,6 @@
             {id: 243, lastName: "פניז'ל", firstName: "סיון", grade: "יב", class: 1, gender: "girls"},
             {id: 250, lastName: "פתאל", firstName: "מאי", grade: "יב", class: 1, gender: "girls"},
             {id: 296, lastName: "שפירא", firstName: "נוגה", grade: "יב", class: 1, gender: "girls"},
-
-            // כיתה 2 - 17 תלמידות
             {id: 3, lastName: "אברהם", firstName: "ליבי", grade: "יב", class: 2, gender: "girls"},
             {id: 5, lastName: "אגסי", firstName: "אגם", grade: "יב", class: 2, gender: "girls"},
             {id: 40, lastName: "בכר", firstName: "גאיה", grade: "יב", class: 2, gender: "girls"},
@@ -1773,8 +1845,6 @@
             {id: 269, lastName: "רואס", firstName: "אגם", grade: "יב", class: 2, gender: "girls"},
             {id: 283, lastName: "שחף", firstName: "רומי", grade: "יב", class: 2, gender: "girls"},
             {id: 302, lastName: "תוריק", firstName: "תהל", grade: "יב", class: 2, gender: "girls"},
-
-            // כיתה 3 - 20 תלמידות
             {id: 9, lastName: "אהרון", firstName: "שני", grade: "יב", class: 3, gender: "girls"},
             {id: 31, lastName: "בדור", firstName: "נועה", grade: "יב", class: 3, gender: "girls"},
             {id: 39, lastName: "בירנבאום", firstName: "נועם", grade: "יב", class: 3, gender: "girls"},
@@ -1794,8 +1864,6 @@
             {id: 220, lastName: "עדני", firstName: "הילה", grade: "יב", class: 3, gender: "girls"},
             {id: 268, lastName: "רהב", firstName: "מיקה", grade: "יב", class: 3, gender: "girls"},
             {id: 276, lastName: "רפופורט", firstName: "מעיין", grade: "יב", class: 3, gender: "girls"},
-
-            // כיתה 4 - 8 תלמידות
             {id: 54, lastName: "ברוך", firstName: "נגה", grade: "יב", class: 4, gender: "girls"},
             {id: 88, lastName: "הובר-לרנר", firstName: "נעמה", grade: "יב", class: 4, gender: "girls"},
             {id: 92, lastName: "הלר", firstName: "יערה", grade: "יב", class: 4, gender: "girls"},
@@ -1804,16 +1872,12 @@
             {id: 242, lastName: "פנחס", firstName: "עדן", grade: "יב", class: 4, gender: "girls"},
             {id: 247, lastName: "פרידמן", firstName: "אלונה", grade: "יב", class: 4, gender: "girls"},
             {id: 295, lastName: "שנדיבין", firstName: "אביגיל", grade: "יב", class: 4, gender: "girls"},
-
-            // כיתה 5 - 6 תלמידות
             {id: 18, lastName: "אייזמן", firstName: "שיראל", grade: "יב", class: 5, gender: "girls"},
             {id: 27, lastName: "ארניה", firstName: "נויה", grade: "יב", class: 5, gender: "girls"},
             {id: 178, lastName: "מגרי", firstName: "הלל", grade: "יב", class: 5, gender: "girls"},
             {id: 275, lastName: "ריכטר", firstName: "ארבל אסתר", grade: "יב", class: 5, gender: "girls"},
             {id: 282, lastName: "שורשי", firstName: "מאיה", grade: "יב", class: 5, gender: "girls"},
             {id: 286, lastName: "שחר", firstName: "מאיה", grade: "יב", class: 5, gender: "girls"},
-
-            // כיתה 6 - 12 תלמידות
             {id: 29, lastName: "באביאן", firstName: "אגם", grade: "יב", class: 6, gender: "girls"},
             {id: 67, lastName: "גורביץ", firstName: "ליהיא", grade: "יב", class: 6, gender: "girls"},
             {id: 69, lastName: "גלנץ", firstName: "אופק", grade: "יב", class: 6, gender: "girls"},
@@ -1826,8 +1890,6 @@
             {id: 260, lastName: "קורן", firstName: "עלמה", grade: "יב", class: 6, gender: "girls"},
             {id: 270, lastName: "רובין", firstName: "אגם", grade: "יב", class: 6, gender: "girls"},
             {id: 278, lastName: "שבתאי", firstName: "מיקה", grade: "יב", class: 6, gender: "girls"},
-
-            // כיתה 7 - 16 תלמידות
             {id: 1, lastName: "אביטן", firstName: "נעמה", grade: "יב", class: 7, gender: "girls"},
             {id: 28, lastName: "אשורי", firstName: "רון", grade: "יב", class: 7, gender: "girls"},
             {id: 77, lastName: "גרשון", firstName: "שירה", grade: "יב", class: 7, gender: "girls"},
@@ -1844,24 +1906,18 @@
             {id: 236, lastName: "פולישוק", firstName: "רז", grade: "יב", class: 7, gender: "girls"},
             {id: 267, lastName: "קרן", firstName: "שירה", grade: "יב", class: 7, gender: "girls"},
             {id: 289, lastName: "שיפרמן", firstName: "דנה", grade: "יב", class: 7, gender: "girls"},
-
-            // כיתה 8 - 6 תלמידות
             {id: 4, lastName: "אברהם", firstName: "שי", grade: "יב", class: 8, gender: "girls"},
             {id: 16, lastName: "אחיאל", firstName: "ליהי", grade: "יב", class: 8, gender: "girls"},
             {id: 82, lastName: "דנון", firstName: "עדן", grade: "יב", class: 8, gender: "girls"},
             {id: 116, lastName: "חלפון", firstName: "מאיה", grade: "יב", class: 8, gender: "girls"},
             {id: 290, lastName: "שלמה", firstName: "אגם", grade: "יב", class: 8, gender: "girls"},
             {id: 298, lastName: "שריקי", firstName: "רוני", grade: "יב", class: 8, gender: "girls"},
-
-            // כיתה 9 - 6 תלמידות
             {id: 14, lastName: "אוריול", firstName: "מישל", grade: "יב", class: 9, gender: "girls"},
             {id: 89, lastName: "הורוביץ", firstName: "אור", grade: "יב", class: 9, gender: "girls"},
             {id: 115, lastName: "חלפון", firstName: 'ליאל', grade: "יב", class: 9, gender: "girls"},
             {id: 222, lastName: "עזרא", firstName: "הדר", grade: "יב", class: 9, gender: "girls"},
             {id: 230, lastName: "ענית", firstName: "הילה", grade: "יב", class: 9, gender: "girls"},
             {id: 262, lastName: "קורצ'מינסקי", firstName: "מרים", grade: "יב", class: 9, gender: "girls"},
-
-            // כיתה 10 - 16 תלמידות
             {id: 6, lastName: "אגסי", firstName: "רותם", grade: "יב", class: 10, gender: "girls"},
             {id: 13, lastName: "אופיר", firstName: "ליה", grade: "יב", class: 10, gender: "girls"},
             {id: 42, lastName: "בלוקור", firstName: "דריה", grade: "יב", class: 10, gender: "girls"},
@@ -1878,22 +1934,14 @@
             {id: 272, lastName: "רוזנטל", firstName: "ירדן", grade: "יב", class: 10, gender: "girls"},
             {id: 279, lastName: "שובל", firstName: "אביב", grade: "יב", class: 10, gender: "girls"},
             {id: 294, lastName: "שמש", firstName: "מורן", grade: "יב", class: 10, gender: "girls"},
-
-            // כיתה 11 - 2 תלמידות
             {id: 191, lastName: "מכלין", firstName: "יעל", grade: "יב", class: 11, gender: "girls"},
             {id: 231, lastName: "עסיס", firstName: "אושר", grade: "יב", class: 11, gender: "girls"},
-
-            // כיתה 12 - 3 תלמידות
             {id: 49, lastName: "בנבנישתי", firstName: "טליה", grade: "יב", class: 12, gender: "girls"},
             {id: 171, lastName: "ליפוביץ", firstName: "אמילי", grade: "יב", class: 12, gender: "girls"},
             {id: 271, lastName: "רוזנטל", firstName: "דבורה", grade: "יב", class: 12, gender: "girls"}
         ];
 
-        // ============================================
-        // נתוני התלמידים (boysData) - כל הנתונים מהקובץ המקורי
-        // ============================================
         const boysData = [
-            // כיתה 1 - 18 תלמידים
             {id: 2, lastName: 'אביצור', firstName: 'איל', class: 1, gender: 'boys'},
             {id: 41, lastName: 'בלום', firstName: 'ניר', class: 1, gender: 'boys'},
             {id: 81, lastName: 'דולב', firstName: 'אריאל', class: 1, gender: 'boys'},
@@ -1912,8 +1960,6 @@
             {id: 259, lastName: 'קורן', firstName: 'זוהר', class: 1, gender: 'boys'},
             {id: 264, lastName: 'קרדה', firstName: 'עמית', class: 1, gender: 'boys'},
             {id: 297, lastName: 'שר', firstName: 'יובל', class: 1, gender: 'boys'},
-
-            // כיתה 2 - 13 תלמידים
             {id: 8, lastName: 'אהרון', firstName: 'עידן', class: 2, gender: 'boys'},
             {id: 57, lastName: 'ברכל', firstName: 'רון', class: 2, gender: 'boys'},
             {id: 87, lastName: 'הדר', firstName: 'עומר', class: 2, gender: 'boys'},
@@ -1927,8 +1973,6 @@
             {id: 256, lastName: 'קולטניק', firstName: 'ניר', class: 2, gender: 'boys'},
             {id: 300, lastName: 'שרצר', firstName: 'נועם', class: 2, gender: 'boys'},
             {id: 301, lastName: 'ששון', firstName: 'שלו', class: 2, gender: 'boys'},
-
-            // כיתה 3 - 15 תלמידים
             {id: 10, lastName: 'אהרוני', firstName: 'רותם', class: 3, gender: 'boys'},
             {id: 21, lastName: 'אליהו', firstName: 'גיא', class: 3, gender: 'boys'},
             {id: 22, lastName: 'אליהו', firstName: 'עידן', class: 3, gender: 'boys'},
@@ -1943,8 +1987,6 @@
             {id: 142, lastName: 'ינדרזבסקי', firstName: 'אנדרי', class: 3, gender: 'boys'},
             {id: 245, lastName: 'פסטרנק', firstName: 'רותם', class: 3, gender: 'boys'},
             {id: 288, lastName: 'שיינפלד', firstName: 'עומר', class: 3, gender: 'boys'},
-
-            // כיתה 4 - 17 תלמידים
             {id: 20, lastName: 'אלון', firstName: 'עידו', class: 4, gender: 'boys'},
             {id: 23, lastName: 'אלשיץ', firstName: 'יונתן', class: 4, gender: 'boys'},
             {id: 38, lastName: 'בינחס', firstName: 'תומר', class: 4, gender: 'boys'},
@@ -1961,8 +2003,6 @@
             {id: 261, lastName: 'קורסיה', firstName: 'שגיא סעדיה', class: 4, gender: 'boys'},
             {id: 263, lastName: 'קטנוב', firstName: 'זיו', class: 4, gender: 'boys'},
             {id: 274, lastName: 'רון', firstName: 'אופק', class: 4, gender: 'boys'},
-
-            // כיתה 5 - 11 תלמידים
             {id: 15, lastName: 'אורין', firstName: 'עמית', class: 5, gender: 'boys'},
             {id: 25, lastName: 'ארביט', firstName: 'עידן', class: 5, gender: 'boys'},
             {id: 44, lastName: 'בלס', firstName: 'עידן', class: 5, gender: 'boys'},
@@ -1973,8 +2013,6 @@
             {id: 246, lastName: 'פפרני', firstName: 'ירין', class: 5, gender: 'boys'},
             {id: 253, lastName: 'צור', firstName: 'עומר', class: 5, gender: 'boys'},
             {id: 257, lastName: 'קונסטנטינוב', firstName: 'דראל', class: 5, gender: 'boys'},
-
-            // כיתה 6 - 16 תלמידים
             {id: 26, lastName: 'ארגי', firstName: 'אורי', class: 6, gender: 'boys'},
             {id: 34, lastName: 'ביטון', firstName: 'אביתר', class: 6, gender: 'boys'},
             {id: 95, lastName: 'הרונגי', firstName: 'יהונתן', class: 6, gender: 'boys'},
@@ -1991,8 +2029,6 @@
             {id: 266, lastName: 'קרמון', firstName: 'טל', class: 6, gender: 'boys'},
             {id: 277, lastName: 'רפפורט', firstName: 'עידן', class: 6, gender: 'boys'},
             {id: 284, lastName: 'שחר', firstName: 'איתי', class: 6, gender: 'boys'},
-
-            // כיתה 7 - 15 תלמידים
             {id: 76, lastName: 'גרונר', firstName: 'נועם', class: 7, gender: 'boys'},
             {id: 107, lastName: 'זינגר', firstName: 'עופר', class: 7, gender: 'boys'},
             {id: 127, lastName: 'טנר', firstName: 'שחק', class: 7, gender: 'boys'},
@@ -2007,8 +2043,6 @@
             {id: 281, lastName: 'שוורץ', firstName: 'כפיר', class: 7, gender: 'boys'},
             {id: 285, lastName: 'שחר', firstName: 'יואב', class: 7, gender: 'boys'},
             {id: 303, lastName: 'תורתי', firstName: 'אורן', class: 7, gender: 'boys'},
-
-            // כיתה 8 - 19 תלמידים
             {id: 11, lastName: 'אוחנה', firstName: 'טהר', class: 8, gender: 'boys'},
             {id: 35, lastName: 'ביטון', firstName: 'עידן', class: 8, gender: 'boys'},
             {id: 48, lastName: 'בן רפאל', firstName: 'עידן', class: 8, gender: 'boys'},
@@ -2027,8 +2061,6 @@
             {id: 213, lastName: 'סימן טוב', firstName: 'עמית', class: 8, gender: 'boys'},
             {id: 217, lastName: 'סער', firstName: 'אופק', class: 8, gender: 'boys'},
             {id: 255, lastName: 'קוירנסקי', firstName: 'בן', class: 8, gender: 'boys'},
-
-            // כיתה 9 - 13 תלמידים
             {id: 30, lastName: 'בבס', firstName: 'שקד', class: 9, gender: 'boys'},
             {id: 33, lastName: 'ביבי', firstName: 'סהר יוסף', class: 9, gender: 'boys'},
             {id: 43, lastName: 'בלוקור', firstName: 'סטפן', class: 9, gender: 'boys'},
@@ -2042,8 +2074,6 @@
             {id: 249, lastName: 'פרלס', firstName: 'איל', class: 9, gender: 'boys'},
             {id: 287, lastName: 'שיזף', firstName: 'נדב', class: 9, gender: 'boys'},
             {id: 293, lastName: 'שמואלי', firstName: 'שי', class: 9, gender: 'boys'},
-
-            // כיתה 10 - 17 תלמידים
             {id: 17, lastName: 'איזדורפר', firstName: 'יואב', class: 10, gender: 'boys'},
             {id: 19, lastName: 'איצקוביץ', firstName: 'אורן', class: 10, gender: 'boys'},
             {id: 36, lastName: 'בייגל', firstName: 'אפיק', class: 10, gender: 'boys'},
@@ -2060,8 +2090,6 @@
             {id: 235, lastName: 'פדר', firstName: 'איליי', class: 10, gender: 'boys'},
             {id: 238, lastName: 'פתאל', firstName: 'רועי', class: 10, gender: 'boys'},
             {id: 291, lastName: 'שם טוב', firstName: 'עומר', class: 10, gender: 'boys'},
-
-            // כיתה 11 - 10 תלמידים
             {id: 50, lastName: 'בנימין בר', firstName: 'דור', class: 11, gender: 'boys'},
             {id: 84, lastName: 'דנישבסקי', firstName: 'נדב', class: 11, gender: 'boys'},
             {id: 130, lastName: 'טריושקין', firstName: 'ליאור', class: 11, gender: 'boys'},
@@ -2071,8 +2099,6 @@
             {id: 170, lastName: 'ליפוביץ', firstName: 'איתן', class: 11, gender: 'boys'},
             {id: 244, lastName: 'פנקרטוב', firstName: 'חיים רמי', class: 11, gender: 'boys'},
             {id: 265, lastName: 'קריספין', firstName: 'בן', class: 11, gender: 'boys'},
-
-            // כיתה 12 - 8 תלמידים
             {id: 12, lastName: 'אוספובט', firstName: 'אריאל', class: 12, gender: 'boys'},
             {id: 32, lastName: 'בורשטיין', firstName: 'דב עמיחי', class: 12, gender: 'boys'},
             {id: 37, lastName: 'בילי', firstName: 'יונתן', class: 12, gender: 'boys'},
@@ -2081,14 +2107,8 @@
             {id: 229, lastName: 'עמיעז', firstName: 'רומי שמעון', class: 12, gender: 'boys'}
         ];
 
-        // ============================================
-        // נתוני כל התלמידים
-        // ============================================
         let allStudentsData = [...boysData, ...girlsData];
 
-        // ============================================
-        // נתוני מבחן עיוני מהקובץ
-        // ============================================
         const theoryGradesData = [
             {firstName: 'עמית', lastName: 'זיו', class: 2, score: 71},
             {firstName: 'יונתן', lastName: 'קורין', class: 1, score: 100},
@@ -2350,19 +2370,13 @@
             {firstName: 'איל', lastName: 'פרלס', class: 9, score: 54}
         ];
 
-        // ============================================
-        // ✅ מילון תמונות מעודכן עם כל הקישורים החדשים
-        // ============================================
         const testImages = {
-            // מבחנים לתלמידים (בנים)
             'pullups': 'https://images.unsplash.com/photo-1605296867424-35fc25c9212a?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80',
             'pushups': 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80',
             'jumprope': 'https://portavozdigital.com/wp-content/uploads/2020/10/saltar-la-cuerda-1024x693.jpg',
             'medicineball': 'https://www.snoridgecrossfit.com/wp-content/uploads/2016/08/SnoRidge-CrossFit_Med-Ball-Run.jpg',
             'running2000': 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80',
             'theory': 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80',
-            
-            // מבחנים לתלמידות
             'running2000_girls': 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?ixlib=rb-1.2.1&auto=format&fit=crop&w=640&q=80',
             'jumprope_girls': 'https://portavozdigital.com/wp-content/uploads/2020/10/saltar-la-cuerda-1024x693.jpg',
             'pullups_band': 'https://d3m9l0v76dty0.cloudfront.net/system/photos/6300796/original/7f22d442d4c6d178d271b77816c4ba89.webp',
@@ -2374,10 +2388,181 @@
         };
 
         // ============================================
-        // פונקציות המערכת (כולן גלובליות)
+        // פונקציית ייצוא לאקסל - מתוקנת
+        // ============================================
+        window.exportToExcel = function() {
+            try {
+                const allRankedStudents = calculateFullRanking('all', 'all', '', 'all');
+                
+                if (allRankedStudents.length === 0) {
+                    showNotification('אין נתונים לייצוא', 'warning');
+                    return;
+                }
+                
+                const excelData = [];
+                
+                // כותרת כללית
+                excelData.push(['דוח ציוני בגרות בחנ"ג - תיכון אחד העם תשפ"ו']);
+                excelData.push(['נוצר בתאריך: ' + new Date().toLocaleDateString('he-IL')]);
+                excelData.push([]);
+                
+                // כותרות העמודות - כל המבחנים האפשריים
+                excelData.push([
+                    'מספר',
+                    'שם משפחה',
+                    'שם פרטי',
+                    'כיתה',
+                    'מגדר',
+                    'ציון סופי',
+                    'מספר מבחנים',
+                    'סטטוס',
+                    'מבחן עיוני',
+                    'ריצת 2000 מטר',
+                    'דלגית',
+                    'שכיבות סמיכה',
+                    'מתח',
+                    'ריצת כדורי כוח',
+                    'פלאנק',
+                    'מתח עם גומיה',
+                    'מעבר סולם',
+                    'שכיבות סמיכה ברכיים',
+                    'שכיבות סמיכה רגיל'
+                ]);
+                
+                allRankedStudents.forEach((student, index) => {
+                    const tests = getStudentAllTests(student);
+                    
+                    // איתחול כל הציונים כריקים
+                    let theoryGrade = '';
+                    let running2000Grade = '';
+                    let jumpropeGrade = '';
+                    let pushupsGrade = ''; // לבנים
+                    let pullupsGrade = ''; // לבנים
+                    let medicineballGrade = ''; // לבנים
+                    let plankGrade = ''; // לבנות
+                    let pullupsBandGrade = ''; // לבנות
+                    let ladderGrade = ''; // לבנות
+                    let pushupsKneesGrade = ''; // לבנות
+                    let pushupsRegularGrade = ''; // לבנות
+                    
+                    // מילוי ציונים לפי סוג המבחן
+                    tests.forEach(test => {
+                        if (!test.hasGrade) return;
+                        
+                        const testName = test.name;
+                        const grade = test.grade;
+                        
+                        if (testName.includes('עיוני')) {
+                            theoryGrade = grade;
+                        } else if (testName.includes('ריצת 2,000')) {
+                            running2000Grade = grade;
+                        } else if (testName.includes('דלגית')) {
+                            jumpropeGrade = grade;
+                        } else if (testName === 'שכיבות סמיכה' && student.gender === 'boys') {
+                            pushupsGrade = grade;
+                        } else if (testName === 'מתח' && student.gender === 'boys') {
+                            pullupsGrade = grade;
+                        } else if (testName.includes('כדורי כוח')) {
+                            medicineballGrade = grade;
+                        } else if (testName === 'פלאנק') {
+                            plankGrade = grade;
+                        } else if (testName === 'מתח עם גומיה') {
+                            pullupsBandGrade = grade;
+                        } else if (testName === 'מעבר סולם') {
+                            ladderGrade = grade;
+                        } else if (testName === 'שכיבות סמיכה ברכיים') {
+                            pushupsKneesGrade = grade;
+                        } else if (testName === 'שכיבות סמיכה רגיל') {
+                            pushupsRegularGrade = grade;
+                        } else if (testName === 'שכיבות סמיכה' && student.gender === 'girls') {
+                            // לבנות - נכניס לשכיבות רגיל
+                            pushupsRegularGrade = grade;
+                        }
+                    });
+                    
+                    excelData.push([
+                        index + 1,
+                        student.lastName,
+                        student.firstName,
+                        `יב'${student.class}`,
+                        student.gender === 'boys' ? 'בן' : 'בת',
+                        student.finalGrade > 0 ? student.finalGrade.toFixed(2) : '',
+                        student.testCount,
+                        student.status === 'full' ? 'מלא' : 
+                        student.status === 'partial' ? 'חלקי' : 
+                        student.status === 'low' ? 'מועט' : 'ללא',
+                        theoryGrade,
+                        running2000Grade,
+                        jumpropeGrade,
+                        pushupsGrade,
+                        pullupsGrade,
+                        medicineballGrade,
+                        plankGrade,
+                        pullupsBandGrade,
+                        ladderGrade,
+                        pushupsKneesGrade,
+                        pushupsRegularGrade
+                    ]);
+                });
+                
+                // הוספת שורה ריקה
+                excelData.push([]);
+                
+                // מקרא
+                excelData.push(['מקרא:']);
+                excelData.push(['* מבחן עיוני - משותף']);
+                excelData.push(['* ריצת 2000 מטר - משותף']);
+                excelData.push(['* דלגית - משותף']);
+                excelData.push(['* שכיבות סמיכה - בנים בלבד']);
+                excelData.push(['* מתח - בנים בלבד']);
+                excelData.push(['* ריצת כדורי כוח - בנים בלבד']);
+                excelData.push(['* פלאנק - בנות בלבד']);
+                excelData.push(['* מתח עם גומיה - בנות בלבד']);
+                excelData.push(['* מעבר סולם - בנות בלבד']);
+                excelData.push(['* שכיבות סמיכה ברכיים - בנות בלבד']);
+                excelData.push(['* שכיבות סמיכה רגיל - בנות בלבד']);
+                
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.aoa_to_sheet(excelData);
+                
+                // עיצוב רוחב עמודות
+                const colWidths = [
+                    { wch: 8 },   // מספר
+                    { wch: 15 },  // שם משפחה
+                    { wch: 15 },  // שם פרטי
+                    { wch: 8 },   // כיתה
+                    { wch: 6 },   // מגדר
+                    { wch: 10 },  // ציון סופי
+                    { wch: 12 },  // מספר מבחנים
+                    { wch: 10 },  // סטטוס
+                    { wch: 12 },  // עיוני
+                    { wch: 12 },  // ריצת 2000
+                    { wch: 10 },  // דלגית
+                    { wch: 12 },  // שכיבות (בנים)
+                    { wch: 10 },  // מתח
+                    { wch: 12 },  // כדורי כוח
+                    { wch: 10 },  // פלאנק
+                    { wch: 12 },  // מתח גומיה
+                    { wch: 10 },  // סולם
+                    { wch: 15 },  // שכיבות ברכיים
+                    { wch: 15 }   // שכיבות רגיל
+                ];
+                ws['!cols'] = colWidths;
+                
+                XLSX.utils.book_append_sheet(wb, ws, 'ציונים מלאים');
+                XLSX.writeFile(wb, `ציוני_בגרות_חנג_${new Date().toLocaleDateString('he-IL').replace(/\//g, '-')}.xlsx`);
+                
+                showNotification('קובץ אקסל נוצר בהצלחה עם כל המבחנים!', 'success');
+            } catch (error) {
+                console.error('שגיאה בייצוא לאקסל:', error);
+                showNotification('שגיאה בייצוא לאקסל: ' + error.message, 'error');
+            }
+        };
+
+        // ============================================
+        // פונקציות המערכת
         // ============================================
         
-        // הצגת התראות
         function showNotification(message, type = 'success') {
             const notificationArea = document.getElementById('notificationArea');
             if (!notificationArea) return;
@@ -2398,21 +2583,21 @@
             }, 5000);
         }
 
-        // חלון אישור יציאה
+        // חלון אישור יציאה - מעוצב מחדש
         function showExitConfirmModal(callback) {
             const modalHtml = `
                 <div class="modal-overlay" id="exitConfirmOverlay">
-                    <div class="modal-content" style="max-width: 400px;">
+                    <div class="exit-modal-content">
                         <h3 style="color: var(--warning); margin-bottom: 20px;">
                             <i class="fas fa-exclamation-triangle"></i> שמירת שינויים
                         </h3>
-                        <p style="margin-bottom: 20px;">האם לשמור שינויים לפני היציאה?</p>
-                        <div style="display: flex; gap: 10px; justify-content: center;">
+                        <p style="margin-bottom: 25px; font-size: 1.1rem;">האם לשמור שינויים לפני היציאה?</p>
+                        <div class="exit-modal-buttons">
                             <button class="btn btn-success" onclick="confirmExitWithSave()">
-                                <i class="fas fa-check"></i> כן
+                                <i class="fas fa-check"></i> כן, שמור
                             </button>
                             <button class="btn btn-danger" onclick="confirmExitWithoutSave()">
-                                <i class="fas fa-times"></i> לא
+                                <i class="fas fa-times"></i> לא, צא
                             </button>
                             <button class="btn btn-secondary" onclick="cancelExit()">
                                 <i class="fas fa-ban"></i> ביטול
@@ -2426,7 +2611,6 @@
             modalContainer.innerHTML = modalHtml;
             modalContainer.style.display = 'block';
             
-            // שמירת callback
             window.exitCallback = callback;
         }
 
@@ -2453,12 +2637,10 @@
             document.getElementById('exitConfirmModal').style.display = 'none';
         }
 
-        // בדיקה אם יש שינויים שלא נשמרו
         function checkUnsavedChangesAndNavigate(targetScreen) {
             if (hasUnsavedChanges) {
                 showExitConfirmModal((saved) => {
                     if (saved) {
-                        // כבר נשמר בפונקציה confirmExitWithSave
                     } else {
                         hasUnsavedChanges = false;
                         showScreen(targetScreen);
@@ -2469,7 +2651,6 @@
             }
         }
 
-        // ניווט בין מסכים
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(screen => {
                 screen.classList.remove('active');
@@ -2477,7 +2658,6 @@
             document.getElementById(screenId).classList.add('active');
         }
 
-        // ניווט עם בדיקת שינויים
         function navigateToScreen(screenId) {
             if (screenId === 'mainScreen') {
                 checkUnsavedChangesAndNavigate('mainScreen');
@@ -2492,14 +2672,12 @@
             }
         }
 
-        // בחירת מגדר
         window.selectGender = function(gender) {
             currentGender = gender;
             updateClassScreen();
             navigateToScreen('classScreen');
         }
 
-        // עדכון מסך הכיתות
         function updateClassScreen() {
             const title = document.getElementById('classScreenTitle');
             const grid = document.getElementById('classesGrid');
@@ -2539,7 +2717,6 @@
             }
         }
 
-        // בחירת כיתה
         window.selectClass = function(classNum) {
             currentClass = classNum;
             
@@ -2558,7 +2735,6 @@
             navigateToScreen('testScreen');
         }
 
-        // קבלת אייקון למבחן
         function getTestIcon(testId) {
             const icons = {
                 'pullups': 'dumbbell',
@@ -2579,7 +2755,6 @@
             return icons[testId] || 'running';
         }
 
-        // ניקוי נתוני מבחן ספציפי
         window.clearTestData = function(testId, event) {
             event.stopPropagation();
             const testName = getTestNameFromId(testId);
@@ -2587,6 +2762,7 @@
                 const testKey = `${currentGender}_${currentClass}_${testId}`;
                 if (allTestResults[testKey]) {
                     delete allTestResults[testKey];
+                    saveToLocalStorage();
                     showNotification(`נמחקו כל הציונים של ${testName} מכיתה יב'${currentClass}`, 'success');
                     updateTestScreen();
                 } else {
@@ -2595,7 +2771,6 @@
             }
         }
 
-        // קבלת שם מבחן לפי מזהה
         function getTestNameFromId(testId) {
             const testNames = {
                 'pullups': 'מתח',
@@ -2616,7 +2791,6 @@
             return testNames[testId] || testId;
         }
 
-        // עדכון מסך המבחנים (עם תמונות)
         function updateTestScreen() {
             const title = document.getElementById('testScreenTitle');
             if (title) {
@@ -2692,7 +2866,6 @@
             if (hasUnsavedChanges) {
                 showExitConfirmModal((saved) => {
                     if (saved) {
-                        // כבר נשמר
                         currentTest = testId;
                         currentTestType = testType;
                         loadResultsTable();
@@ -2712,20 +2885,17 @@
             }
         }
 
-        // פונקציה לעדכון תוצאת ריצה באמצעות כפתורי חצים (לבנות) - חץ למעלה להגדלה, חץ למטה לשיפור
         window.adjustRunningResult = function(studentId, direction) {
             const inputElement = document.getElementById(`result_${studentId}`);
             if (!inputElement) return;
             
             let currentValue = inputElement.value;
             
-            // אם אין ערך, נתחיל מערך התחלתי
             if (!currentValue) {
                 currentValue = "10:00";
                 inputElement.value = currentValue;
             }
             
-            // המרת הערך הנוכחי לשניות לצורך חישוב
             let totalSeconds = 0;
             if (currentValue.includes(':')) {
                 const parts = currentValue.split(':');
@@ -2733,36 +2903,30 @@
                 const seconds = parseInt(parts[1]) || 0;
                 totalSeconds = minutes * 60 + seconds;
             } else {
-                // אם הוזן ללא נקודתיים, נניח שזה דקות
                 totalSeconds = parseInt(currentValue) * 60;
             }
             
-            // הוספה או הפחתה של 1 שנייה - חץ למעלה מגדיל, חץ למטה מקטין
             if (direction === 'up') {
-                totalSeconds += 1; // חץ למעלה = הגדלת הזמן (תוצאה גרועה יותר)
+                totalSeconds += 1;
             } else {
-                totalSeconds -= 1; // חץ למטה = הקטנת הזמן (תוצאה טובה יותר)
+                totalSeconds -= 1;
             }
             
-            // הגבלת טווח (לא פחות מ-5 דקות, לא יותר מ-25 דקות)
-            if (totalSeconds < 300) totalSeconds = 300; // 5:00
-            if (totalSeconds > 1500) totalSeconds = 1500; // 25:00
+            if (totalSeconds < 300) totalSeconds = 300;
+            if (totalSeconds > 1500) totalSeconds = 1500;
             
-            // המרה חזרה לפורמט MM:SS (ללא 0 מיותר בהתחלה)
             const newMinutes = Math.floor(totalSeconds / 60);
             const newSeconds = totalSeconds % 60;
             const newValue = `${newMinutes}:${newSeconds.toString().padStart(2, '0')}`;
             
             inputElement.value = newValue;
             
-            // עדכון הציון
             const student = students.find(s => s.id === studentId);
             if (student) {
                 updateSingleResult(studentId, newValue);
             }
         }
 
-        // שמירת תוצאה בודדת
         window.saveSingleResult = function(studentId) {
             const resultInput = document.getElementById(`result_${studentId}`);
             const gradeElement = document.getElementById(`grade_${studentId}`);
@@ -2790,13 +2954,11 @@
                     firstName: student.firstName
                 };
                 
-                // עדכון כפתור השמירה
                 if (saveButton) {
                     saveButton.innerHTML = '<i class="fas fa-check"></i>';
                     saveButton.classList.add('saved');
                 }
                 
-                // עדכון סטטוס
                 const statusElement = document.getElementById(`status_${studentId}`);
                 if (statusElement) {
                     statusElement.textContent = 'נשמר';
@@ -2805,12 +2967,12 @@
                 
                 showNotification(`התוצאה עבור ${student.firstName} ${student.lastName} נשמרה`, 'success');
                 hasUnsavedChanges = false;
+                saveToLocalStorage();
             } else {
                 showNotification('לא הוזנה תוצאה', 'warning');
             }
         }
 
-        // עדכון תוצאה בודדת
         window.updateSingleResult = function(studentId, value) {
             const gradeElement = document.getElementById(`grade_${studentId}`);
             const statusElement = document.getElementById(`status_${studentId}`);
@@ -2828,7 +2990,6 @@
                 statusElement.textContent = 'טעון שמירה';
                 statusElement.style.color = '#f39c12';
                 
-                // איפוס כפתור השמירה
                 if (saveButton) {
                     saveButton.innerHTML = '<i class="fas fa-save"></i>';
                     saveButton.classList.remove('saved');
@@ -2841,7 +3002,6 @@
                 statusElement.textContent = 'ממתין להזנה';
                 statusElement.style.color = '#666';
                 
-                // איפוס כפתור השמירה
                 if (saveButton) {
                     saveButton.innerHTML = '<i class="fas fa-save"></i>';
                     saveButton.classList.remove('saved');
@@ -2849,12 +3009,10 @@
             }
         }
 
-        // עדכון תוצאה (פונקציית עזר לשמירה על תאימות)
         window.updateResult = function(studentId, value, lastName, firstName) {
             updateSingleResult(studentId, value);
         }
 
-        // טעינת טבלת התוצאות (עם תמונה גדולה ועמודת שמירה)
         function loadResultsTable() {
             const title = document.getElementById('resultsScreenTitle');
             if (title) {
@@ -2876,7 +3034,6 @@
             const testKey = `${currentGender}_${currentClass}_${currentTest}`;
             const existingResults = allTestResults[testKey] || {};
             
-            // הערה מיוחדת למבחן ריצת 2,000 מטר (גם לבנים וגם לבנות)
             const isRunningTest = currentTest === 'running2000' || currentTest === 'running2000_girls';
             const isGirlsRunning = currentTest === 'running2000_girls';
             
@@ -2933,7 +3090,6 @@
                         <td>
                 `;
                 
-                // הוספת כפתורי חצים רק למבחן ריצת 2,000 מטר של בנות
                 if (isGirlsRunning) {
                     html += `
                             <div class="result-controls">
@@ -2954,7 +3110,6 @@
                             <span class="time-note">חץ למעלה להגדלת הזמן בשנייה, חץ למטה לשיפור הזמן בשנייה</span>
                     `;
                 } else if (isRunningTest) {
-                    // ריצת 2,000 לבנים - ללא כפתורים אבל עם אותה הערה
                     html += `
                             <input type="text" 
                                    id="result_${student.id}" 
@@ -2965,7 +3120,6 @@
                                    oninput="updateSingleResult(${student.id}, this.value)">
                     `;
                 } else {
-                    // מבחנים רגילים
                     html += `
                             <input type="${currentTest === 'plank' ? 'number' : 'number'}" 
                                    id="result_${student.id}" 
@@ -3019,13 +3173,10 @@
             tableDiv.innerHTML = html;
         }
 
-        // חישוב ציון מתוך טבלאות המרה
         function calculateGradeFromTable(value, testType) {
-            // המרת הערך למספר או שמירה כמחרוזת (לזמן ריצה)
             let numericValue;
             
             if (testType === 'running2000_girls' && currentGender === 'girls') {
-                // שימוש בטבלה המיוחדת לבנות מהקובץ
                 return getGirlsRunningScore(value);
             }
             
@@ -3035,13 +3186,12 @@
                 numericValue = parseFloat(value);
                 if (isNaN(numericValue)) return 0;
                 
-                // חיפוש בטבלת הפלאנק
                 for (const item of plankTable) {
                     if (numericValue >= item.time) {
                         return item.score;
                     }
                 }
-                return 30; // ברירת מחדל
+                return 30;
             } else {
                 numericValue = parseFloat(value);
                 if (isNaN(numericValue)) return 0;
@@ -3072,14 +3222,11 @@
             return 0;
         }
 
-        // פונקציה לחישוב ציון ריצה לבנות לפי הטבלה מהקובץ (מעודכן)
         function getGirlsRunningScore(timeStr) {
             if (!timeStr || timeStr === '') return 0;
             
-            // ניקוי הפורמט
             let cleanTime = timeStr.toString().trim().replace('״', '').replace('"', '').replace("'", ':');
             
-            // אם אין נקודתיים, ננסה להמיר
             if (!cleanTime.includes(':')) {
                 if (cleanTime.length === 3) {
                     cleanTime = `${cleanTime[0]}:${cleanTime.substring(1)}`;
@@ -3101,22 +3248,17 @@
             
             const totalSeconds = minutes * 60 + seconds;
             
-            // בדיקה מיוחדת - מתחת ל-10:00 מניב ציון 100
             if (totalSeconds < 10 * 60) {
                 return 100;
             }
             
-            // בדיקה מיוחדת - 17:01 ומעלה מניב ציון 50
             if (totalSeconds >= 17*60+1) {
                 return 50;
             }
             
-            // חיפוש בטבלה - הטבלה בנויה לפי טווחים
             for (const item of girlsRunning2000Table) {
-                // דלג על ערכים ריקים
                 if (!item.time || item.time === "") continue;
                 
-                // אם זה טווח (כמו "10:00-10:30")
                 if (item.time.includes('-')) {
                     const [start, end] = item.time.split('-');
                     const startMinutes = parseInt(start.split(':')[0]) || 0;
@@ -3131,33 +3273,27 @@
                         return item.score;
                     }
                 } 
-                // אם זה זמן בודד (כמו "17:01:00")
                 else {
                     const timeParts = item.time.split(':');
                     const timeMinutes = parseInt(timeParts[0]) || 0;
                     const timeSeconds = parseInt(timeParts[1]) || 0;
                     const timeTotal = timeMinutes * 60 + timeSeconds;
                     
-                    // עבור זמן בודד, נחזיר ציון אם הזמן גדול או שווה
                     if (totalSeconds >= timeTotal) {
                         return item.score;
                     }
                 }
             }
             
-            // אם לא נמצא, נחזיר 50 (ברירת מחדל)
             return 50;
         }
 
-        // פונקציות עזר לחישוב ציונים
         function getGirlsScoreFromTable(testName, value) {
             if (!value || value === '') return 0;
             
             const numericValue = parseFloat(value);
             
             for (const row of girlsConversionTable) {
-                let matches = false;
-                
                 switch(testName) {
                     case 'jumprope_girls':
                         if (row.jumprope && numericValue >= row.jumprope) {
@@ -3281,7 +3417,6 @@
             return 30;
         }
 
-        // שמירת כל התוצאות
         window.saveAllResults = function() {
             const testKey = `${currentGender}_${currentClass}_${currentTest}`;
             
@@ -3316,13 +3451,11 @@
                         savedCount++;
                     }
                     
-                    // עדכון כפתור השמירה
                     if (saveButton) {
                         saveButton.innerHTML = '<i class="fas fa-check"></i>';
                         saveButton.classList.add('saved');
                     }
                     
-                    // עדכון סטטוס
                     const statusElement = document.getElementById(`status_${student.id}`);
                     if (statusElement) {
                         statusElement.textContent = 'נשמר';
@@ -3356,9 +3489,9 @@
             
             showNotification(message, 'success');
             hasUnsavedChanges = false;
+            saveToLocalStorage();
         }
 
-        // טעינת ציוני מבחן עיוני
         window.loadTheoryGrades = function() {
             let loadedCount = 0;
             let errorCount = 0;
@@ -3404,11 +3537,11 @@
                 }
             });
             
+            saveToLocalStorage();
             showNotification(`נטענו ${loadedCount} ציוני מבחן עיוני! ${errorCount > 0 ? `(${errorCount} לא נמצאו)` : ''}`, 'success');
             updateTotalCount();
         }
 
-        // עדכון ספירת תלמידים
         function updateTotalCount() {
             const element = document.getElementById('totalStudentsCount');
             if (element) {
@@ -3416,7 +3549,6 @@
             }
         }
 
-        // פונקציות בדיקה
         window.debugGirlsData = function() {
             console.log("=== נתוני בנות ===");
             console.log("סה\"כ תלמידות:", girlsData.length);
@@ -3473,11 +3605,6 @@
             showNotification("דוגמת חישוב נבדקה - ראה קונסול", "info");
         }
 
-        // ============================================
-        // פונקציות דירוג
-        // ============================================
-        
-        // פונקציה לקבלת משקל של מבחן לבנות
         function getGirlsTestWeight(testName, studentTests) {
             const weights = {
                 'theory_girls': 20,
@@ -3486,19 +3613,14 @@
                 'plank': 15
             };
             
-            // קבוצת שכיבות סמיכה (ברכיים או רגיל) - 15%
             if (testName === 'pushups_knees' || testName === 'pushups_regular') {
-                // בדיקה אם יש שכיבות סמיכה אחרות
                 const hasOtherPushups = (testName === 'pushups_knees' && studentTests.some(t => t.name.includes('שכיבות סמיכה (רגיל)'))) ||
                                        (testName === 'pushups_regular' && studentTests.some(t => t.name.includes('שכיבות סמיכה (ברכיים)')));
                 
-                // אם יש גם ברכיים וגם רגיל, כל אחד שוקל 15% אבל רק אחד נספר בציון הסופי
                 return hasOtherPushups ? 15 : 15;
             }
             
-            // קבוצת מתח/סולם (מתח עם גומיה או מעבר סולם) - 15%
             if (testName === 'pullups_band' || testName === 'ladder') {
-                // בדיקה אם יש מתח/סולם אחר
                 const hasOther = (testName === 'pullups_band' && studentTests.some(t => t.name.includes('מעבר סולם'))) ||
                                 (testName === 'ladder' && studentTests.some(t => t.name.includes('מתח עם גומיה')));
                 
@@ -3508,14 +3630,12 @@
             return weights[testName] || 0;
         }
 
-        // חישוב ציון סופי לתלמיד - משופר לבנות
         function calculateFinalGrade(student) {
             let totalWeight = 0;
             let weightedSum = 0;
             let testCount = 0;
             
             if (student.gender === 'boys') {
-                // בנים: ריצה (20%) + עיוני (20%) + דלגית (15%) + שכיבות (15%) + מתח (15%) + כדורי כוח (15%)
                 const weights = {
                     'running2000': 20,
                     'theory': 20,
@@ -3540,14 +3660,10 @@
                     }
                 }
             } else {
-                // בנות: עיוני (20%) + ריצה (20%) + דלגית (15%) + שכיבות סמיכה (ברכיים או מלא - 15%) + מתח עם גומיה או מעבר סולם (15%) + פלאנק (15%)
-                
-                // מעקב אחרי אילו קבוצות כבר נספרו
                 let pushupsCounted = false;
                 let upperBodyCounted = false;
                 
                 for (let classNum = 1; classNum <= 12; classNum++) {
-                    // בדיקת עיוני
                     const theoryKey = `girls_${classNum}_theory_girls`;
                     if (allTestResults[theoryKey]) {
                         const studentKey = `${student.lastName}_${student.firstName}`;
@@ -3559,7 +3675,6 @@
                         }
                     }
                     
-                    // בדיקת ריצה
                     const runningKey = `girls_${classNum}_running2000_girls`;
                     if (allTestResults[runningKey]) {
                         const studentKey = `${student.lastName}_${student.firstName}`;
@@ -3571,7 +3686,6 @@
                         }
                     }
                     
-                    // בדיקת דלגית
                     const jumpropeKey = `girls_${classNum}_jumprope_girls`;
                     if (allTestResults[jumpropeKey]) {
                         const studentKey = `${student.lastName}_${student.firstName}`;
@@ -3583,7 +3697,6 @@
                         }
                     }
                     
-                    // בדיקת פלאנק
                     const plankKey = `girls_${classNum}_plank`;
                     if (allTestResults[plankKey]) {
                         const studentKey = `${student.lastName}_${student.firstName}`;
@@ -3595,7 +3708,6 @@
                         }
                     }
                     
-                    // בדיקת שכיבות סמיכה (ברכיים) - רק אם עוד לא נספרה קבוצת שכיבות
                     if (!pushupsCounted) {
                         const pushupsKneesKey = `girls_${classNum}_pushups_knees`;
                         if (allTestResults[pushupsKneesKey]) {
@@ -3610,7 +3722,6 @@
                         }
                     }
                     
-                    // בדיקת שכיבות סמיכה (רגיל) - רק אם עוד לא נספרה קבוצת שכיבות
                     if (!pushupsCounted) {
                         const pushupsRegularKey = `girls_${classNum}_pushups_regular`;
                         if (allTestResults[pushupsRegularKey]) {
@@ -3625,7 +3736,6 @@
                         }
                     }
                     
-                    // בדיקת מתח עם גומיה - רק אם עוד לא נספרה קבוצת פלג גוף עליון
                     if (!upperBodyCounted) {
                         const pullupsBandKey = `girls_${classNum}_pullups_band`;
                         if (allTestResults[pullupsBandKey]) {
@@ -3640,7 +3750,6 @@
                         }
                     }
                     
-                    // בדיקת מעבר סולם - רק אם עוד לא נספרה קבוצת פלג גוף עליון
                     if (!upperBodyCounted) {
                         const ladderKey = `girls_${classNum}_ladder`;
                         if (allTestResults[ladderKey]) {
@@ -3659,12 +3768,10 @@
             
             if (totalWeight === 0) return { final: 0, count: 0, weighted: 0 };
             
-            // חישוב יחסי - מנרמל ל-100%
             const finalGrade = Math.round(weightedSum / totalWeight * 100) / 100;
             return { final: finalGrade, count: testCount, weighted: weightedSum / totalWeight };
         }
 
-        // פונקציה לקבלת כל הציונים של תלמיד עם אחוזי משקל
         function getStudentAllTests(student) {
             const tests = [];
             
@@ -3720,7 +3827,6 @@
                     { id: 'ladder', name: 'מעבר סולם', baseWeight: 15, group: 'upper' }
                 ];
                 
-                // איסוף כל הציונים הקיימים
                 const existingTests = [];
                 testIds.forEach(test => {
                     for (let classNum = 1; classNum <= 12; classNum++) {
@@ -3744,24 +3850,18 @@
                     }
                 });
                 
-                // הוספת כל המבחנים עם חישוב משקל נכון
                 testIds.forEach(test => {
                     const existing = existingTests.find(t => t.id === test.id);
                     
                     if (existing) {
-                        // מצאנו מבחן קיים
                         let weight = test.baseWeight;
                         
-                        // בדיקה אם זו קבוצה עם מספר אפשרויות
                         if (test.group === 'pushups') {
-                            // בדיקה אם יש שכיבות נוספות בקבוצה
                             const hasOtherPushups = existingTests.some(t => 
                                 t.group === 'pushups' && t.id !== test.id && t.hasGrade
                             );
-                            // אם יש עוד שכיבות, עדיין כל אחת שוקלת 15% אבל רק אחת נספרת בציון
                             weight = 15;
                         } else if (test.group === 'upper') {
-                            // בדיקה אם יש מתח/סולם נוסף בקבוצה
                             const hasOtherUpper = existingTests.some(t => 
                                 t.group === 'upper' && t.id !== test.id && t.hasGrade
                             );
@@ -3776,7 +3876,6 @@
                             hasGrade: true
                         });
                     } else {
-                        // מבחן חסר
                         tests.push({
                             name: test.name,
                             grade: null,
@@ -3788,7 +3887,6 @@
                 });
             }
             
-            // מיון לפי ציון (גבוה לנמוך) כשהמבחנים עם ציון קודמים
             tests.sort((a, b) => {
                 if (a.hasGrade && !b.hasGrade) return -1;
                 if (!a.hasGrade && b.hasGrade) return 1;
@@ -3799,7 +3897,6 @@
             return tests;
         }
 
-        // הצגת פרטי תלמיד בחלון מודאלי - עם אחוזי משקל
         window.showStudentDetails = function(studentId) {
             const student = allStudentsData.find(s => s.id === studentId);
             if (!student) {
@@ -3839,9 +3936,6 @@
             
             const totalTests = student.gender === 'boys' ? 6 : 8;
             const completedTests = tests.filter(t => t.hasGrade).length;
-            const completionPercentage = Math.round((completedTests / totalTests) * 100);
-            
-            // חישוב המשקל הכולל של המבחנים שהושלמו
             const completedWeight = tests.filter(t => t.hasGrade).reduce((sum, t) => sum + t.weight, 0);
             
             const modalHtml = `
@@ -3895,12 +3989,10 @@
             modalContainer.style.display = 'block';
         }
 
-        // סגירת חלון מודאלי
         window.closeModal = function() {
             document.getElementById('studentModal').style.display = 'none';
         }
 
-        // הצגת דירוג
         function showRanking(type, filters = {}) {
             const resultsDiv = document.getElementById('rankingResults');
             if (!resultsDiv) return;
@@ -4007,7 +4099,6 @@
             
             resultsDiv.innerHTML = html;
             
-            // עדכון תיבת החיפוש
             const chartStudentSelect = document.getElementById('chartStudentSelect');
             if (chartStudentSelect) {
                 chartStudentSelect.innerHTML = '<option value="">בחר תלמיד...</option>';
@@ -4020,7 +4111,6 @@
             }
         }
 
-        // חישוב דירוג מלא
         function calculateFullRanking(genderFilter = 'all', classFilter = 'all', nameFilter = '', statusFilter = 'all') {
             let studentsToRank = [];
             
@@ -4032,13 +4122,11 @@
                 studentsToRank = [...girlsData];
             }
             
-            // סינון לפי כיתה
             if (classFilter !== 'all') {
                 const classNum = parseInt(classFilter);
                 studentsToRank = studentsToRank.filter(s => s.class === classNum);
             }
             
-            // סינון לפי שם
             if (nameFilter && nameFilter.trim() !== '') {
                 const searchTerm = nameFilter.trim().toLowerCase();
                 studentsToRank = studentsToRank.filter(s => 
@@ -4047,13 +4135,37 @@
                 );
             }
             
-            // חישוב ציונים וסינון לפי סטטוס
             const rankedStudents = studentsToRank.map(student => {
                 const gradeData = calculateFinalGrade(student);
                 let status = 'none';
-                if (gradeData.count >= (student.gender === 'boys' ? 5 : 6)) status = 'full';
-                else if (gradeData.count >= 3) status = 'partial';
-                else if (gradeData.count > 0) status = 'low';
+                
+                const totalPossibleTests = student.gender === 'boys' ? 6 : 8;
+                
+                if (gradeData.count >= totalPossibleTests) {
+                    status = 'full';
+                } else if (gradeData.count >= 6) {
+                    status = '8';
+                } else if (gradeData.count >= 5) {
+                    status = '7';
+                } else if (gradeData.count >= 4) {
+                    status = '6';
+                } else if (gradeData.count >= 3) {
+                    status = '5';
+                } else if (gradeData.count >= 2) {
+                    status = '4';
+                } else if (gradeData.count >= 1) {
+                    status = '3';
+                } else if (gradeData.count > 0) {
+                    status = 'low';
+                } else {
+                    status = 'none';
+                }
+                
+                if (gradeData.count >= 4 && gradeData.count <= 7) {
+                    status = gradeData.count.toString();
+                } else if (gradeData.count < 3 && gradeData.count > 0) {
+                    status = 'below3';
+                }
                 
                 return {
                     ...student,
@@ -4064,19 +4176,23 @@
                 };
             });
             
-            // סינון לפי סטטוס
             let filteredStudents = rankedStudents;
             if (statusFilter !== 'all') {
-                filteredStudents = rankedStudents.filter(s => s.status === statusFilter);
+                if (statusFilter === 'below3') {
+                    filteredStudents = rankedStudents.filter(s => s.testCount < 3 && s.testCount > 0);
+                } else if (['8', '7', '6', '5', '4', '3'].includes(statusFilter)) {
+                    const count = parseInt(statusFilter);
+                    filteredStudents = rankedStudents.filter(s => s.testCount === count);
+                } else {
+                    filteredStudents = rankedStudents.filter(s => s.status === statusFilter);
+                }
             }
             
-            // מיון לפי ציון סופי (גבוה לנמוך)
             filteredStudents.sort((a, b) => b.finalGrade - a.finalGrade);
             
             return filteredStudents;
         }
 
-        // פונקציות דירוג - מימוש מלא
         function showRankingWithFilters(type) {
             const filters = {
                 name: document.getElementById('filterName').value,
@@ -4159,7 +4275,6 @@
             
             document.getElementById('progressChartContainer').style.display = 'block';
             
-            // איסוף ציונים לתרשים
             const labels = [];
             const data = [];
             const tests = getStudentAllTests(student).filter(t => t.hasGrade);
@@ -4228,8 +4343,9 @@
             });
         }
 
-        // אתחול המערכת
         function initSystem() {
+            loadFromLocalStorage();
+            
             updateTotalCount();
             setupEventListeners();
             loadTheoryGrades();
@@ -4241,7 +4357,6 @@
             showNotification(`מערכת מוכנה: ${girlsData.length} תלמידות ו-${boysData.length} תלמידים`, 'success');
         }
 
-        // הגדרת אירועי לחיצה
         function setupEventListeners() {
             document.getElementById('boysBtn').addEventListener('click', function() { selectGender('boys'); });
             document.getElementById('girlsBtn').addEventListener('click', function() { selectGender('girls'); });
@@ -4267,6 +4382,8 @@
             
             document.getElementById('backFromRankingBtn').addEventListener('click', function() { navigateToScreen('mainScreen'); });
             document.getElementById('homeFromRankingBtn').addEventListener('click', function() { navigateToScreen('mainScreen'); });
+            
+            document.getElementById('exportExcelBtn').addEventListener('click', exportToExcel);
             
             document.getElementById('rankingAllBtn').addEventListener('click', function() {
                 showRankingWithFilters('all');
@@ -4328,7 +4445,6 @@
             
             document.getElementById('saveAllResultsBtn').addEventListener('click', saveAllResults);
             
-            // סגירת מודאל בלחיצה על Escape
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     closeModal();
@@ -4336,7 +4452,6 @@
                 }
             });
             
-            // מניעת יציאה לא מכוונת עם הודעת אזהרה
             window.addEventListener('beforeunload', function(e) {
                 if (hasUnsavedChanges) {
                     e.preventDefault();
@@ -4345,7 +4460,6 @@
             });
         }
 
-        // הפעלת המערכת
         document.addEventListener('DOMContentLoaded', initSystem);
     </script>
 </body>
