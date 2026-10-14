@@ -229,7 +229,7 @@ TESTS.forEach((t, i) => {
       ${inputHtml(t)}
       <button class="btn" onclick="calc('${t.id}')">חשבי ציון</button>
       ${t.beep ? `<p class="note">יש להזין שלב ומקטע בנפרד, למשל שלב 5 מקטע 3 (5/3).</p>` : ''}
-      ${t.plank ? `<p class="note">ציון 100 = החזקה של 84 שניות + 8 עליות וירידות.</p>` : ''}
+      ${t.plank ? `<p class="note">עד 84 שניות: הציון = מספר השניות (מינימום 40). אחרי 84 שניות: כל עלייה וירידה מלאה (יד-יד, מרפק-מרפק) = 2 נקודות, ירידה בלבד = נקודה אחת. מקסימום 100.</p>` : ''}
     </div>
     <div class="result" id="${t.id}-res"></div>
     <div class="grid2">
@@ -264,7 +264,7 @@ TESTS.forEach((t, i) => {
 function inputHtml(t){
   if (t.time) return `<label>זמן ריצה (דקות:שניות):<span class="time"><input type="number" id="run-m" min="0" placeholder="דק'"> : <input type="number" id="run-s" min="0" max="59" placeholder="שנ'"></span></label>`;
   if (t.beep) return `<label>שלב:<input type="number" id="beep-l" min="1" max="20"></label><label>מקטע:<input type="number" id="beep-s" min="1" max="15"></label>`;
-  if (t.plank) return `<label>זמן החזקה (שניות):<input type="number" id="plank-v" min="0"></label><label>עליות וירידות:<input type="number" id="plank-u" min="0" value="0"></label>`;
+  if (t.plank) return `<label>זמן החזקה (שניות):<input type="number" id="plank-v" min="0"></label><label>עליות וירידות מלאות:<input type="number" id="plank-u" min="0" max="8" value="0"></label><label>ירידה נוספת בלבד:<select id="plank-d"><option value="0">לא</option><option value="1">כן</option></select></label>`;
   return `<label>מספר ${t.unit}:<input type="number" id="${t.id}-v" min="0"></label>`;
 }
 
@@ -284,14 +284,18 @@ function getValue(id){
   const t = TESTS.find(x => x.id === id);
   if (t.time){ const m = +document.getElementById('run-m').value || 0, s = +document.getElementById('run-s').value || 0; if (!m && !s) return null; return {v:m*60+s, label:`${m}:${String(s).padStart(2,'0')}`}; }
   if (t.beep){ const l = +document.getElementById('beep-l').value, s = +document.getElementById('beep-s').value; if (!l || !s) return null; return {v:l + s/100, l, s, label:`${l}/${s}`}; }
-  if (t.plank){ const v = document.getElementById('plank-v').value; if (v === '') return null; const u = +document.getElementById('plank-u').value || 0; return {v:+v, u, label:`${v} שנ'${u ? ' + ' + u + ' עליות' : ''}`}; }
+  if (t.plank){ const v = document.getElementById('plank-v').value; if (v === '') return null; const u = Math.max(0, +document.getElementById('plank-u').value || 0), d = +document.getElementById('plank-d').value || 0; return {v:+v, u, d, label:`${v} שנ'${u ? ' + ' + u + ' עליות וירידות' : ''}${d ? ' + ירידה' : ''}`}; }
   const v = document.getElementById(id + '-v').value; if (v === '') return null; return {v:+v, label:v};
 }
 function computeScore(id, val){
   const t = TESTS.find(x => x.id === id);
   if (t.time){ if (val.v <= 0) return null; for (const [max, sc] of RUN) if (val.v <= max) return sc; return 50; }
   if (t.beep){ for (const [l, s, sc] of BEEP) if (val.l > l || (val.l === l && val.s >= s)) return sc; return 'attempt'; }
-  if (t.plank){ if (val.v >= 84 && val.u >= 8) return 100; if (val.v >= 84) return 84; if (val.v >= 40) return Math.floor(val.v); return 'below'; }
+  if (t.plank){
+    if (val.v >= 84) return Math.min(100, 84 + 2 * (val.u || 0) + (val.d ? 1 : 0)); // 2 נק' לכל עלייה וירידה, נק' אחת לירידה בלבד
+    if (val.v >= 40) return Math.floor(val.v);
+    return 'below';
+  }
   const table = t.grade ? pushTable() : t.table;
   const sc = scoreCount(table, val.v);
   return sc === null ? (val.v > 0 || id !== 'rope' ? 30 : null) : sc;
@@ -313,7 +317,15 @@ function fullTable(t){
   let rows;
   if (t.time) rows = ROWS.filter(r => r[COL.run]).map(r => [r[0], r[COL.run].replace('17:01+', '17:01 ומעלה')]);
   else if (t.beep) rows = BEEP.map(([l,s,sc]) => [sc, `${l}/${s}`]);
-  else if (t.plank) rows = [[100,'84 שניות + 8 עליות וירידות'],[84,'84 שניות'],[80,'80 שניות'],[60,'60 שניות'],[50,'50 שניות'],[40,'40 שניות']];
+  else if (t.plank) {
+    rows = [];
+    for (let u = 8; u >= 0; u--){
+      rows.push([84 + 2*u, u ? `84 שניות + ${u} עליות וירידות` : '84 שניות']);
+      if (u > 0) rows.push([84 + 2*(u-1) + 1, `84 שניות + ${u-1 ? (u-1) + ' עליות וירידות + ' : ''}ירידה`]);
+    }
+    rows = rows.filter(r => r[0] <= 100);
+    rows.push([80,'80 שניות'],[70,'70 שניות'],[60,'60 שניות'],[50,'50 שניות'],[40,'40 שניות']);
+  }
   else { const tb = t.grade ? pushTable() : t.table; rows = tb.map(([v,sc]) => [sc, v]); if (t.id !== 'rope') rows.push([30, 'ניסיון']); }
   document.getElementById(t.id + '-full').innerHTML = `<div class="scorewrap"><table class="scoretbl"><tr><th>ציון</th><th>תוצאה</th></tr>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</table></div>`;
 }
